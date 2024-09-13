@@ -12,6 +12,8 @@ import Animated, { FadeInUp, FadeInDown } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
 
 const SignupScreen = () => {
@@ -23,7 +25,7 @@ const SignupScreen = () => {
   const [emailVerify, setEmailVerify] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const handleName = (e) => {
     const nameVar = e.nativeEvent.text;
@@ -39,7 +41,9 @@ const SignupScreen = () => {
     const emailVar = e.nativeEvent.text;
     setEmail(emailVar);
     setEmailVerify(false);
-    if (/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(emailVar)) {
+
+    // Regex to check for either @go.olemiss.edu or @olemiss.edu
+    if (/^[\w.%+-]+@(go\.)?olemiss\.edu$/.test(emailVar)) {
       setEmail(emailVar);
       setEmailVerify(true);
     }
@@ -49,11 +53,15 @@ const SignupScreen = () => {
     const passwordVar = e.nativeEvent.text;
     setPassword(passwordVar);
     setPasswordVerify(false);
-    if (/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(passwordVar)) {
-      setPassword(passwordVar);
+
+    // Regex to check if the password has at least 6 characters and contains a number
+    if (/^(?=.*\d).{6,}$/.test(passwordVar)) {
       setPasswordVerify(true);
     }
   };
+
+  // Check if all fields are verified
+  const isFormValid = nameVerify && emailVerify && passwordVerify;
 
   return (
     <SafeAreaView className="bg-white h-full w-full">
@@ -90,22 +98,45 @@ const SignupScreen = () => {
         </View>
 
         {/* form */}
-        <View className="flex items-center mx-4 space-y-4">
+        <View className="flex items-center mx-4 space-y-3">
           <Animated.View
             entering={FadeInDown.duration(1000).springify()}
-            className="bg-black/5 p-5 rounded-2xl w-full flex-row"
+            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
           >
+            <FontAwesome
+              name="user-o"
+              color="#420475"
+              style={styles.smallIcon}
+              size={20}
+            />
             <TextInput
               placeholder="Full Name"
               placeholderTextColor={"gray"}
               onChange={(e) => handleName(e)}
+              style={styles.textInput}
             />
+            {name.length < 1 ? null : nameVerify ? (
+              <Feather
+                style={styles.verifyIcon}
+                name="check-circle"
+                color="green"
+                size={20}
+              />
+            ) : (
+              <Error
+                style={styles.verifyIcon}
+                name="error"
+                color="red"
+                size={20}
+              />
+            )}
           </Animated.View>
           {name.length < 1 ? null : nameVerify ? null : (
             <Text
               style={{
-                marginLeft: 20,
                 color: "red",
+                fontSize: 12,
+                marginLeft: -100,
               }}
             >
               Name should be more then 1 characters.
@@ -113,54 +144,94 @@ const SignupScreen = () => {
           )}
           <Animated.View
             entering={FadeInDown.duration(1000).springify()}
-            className="bg-black/5 p-5 rounded-2xl w-full"
+            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
           >
+            <Fontisto
+              name="email"
+              color="#420475"
+              style={styles.smallIcon}
+              size={20}
+            />
             <TextInput
-              placeholder="Email"
+              style={styles.textInput}
+              placeholder="Email (olemiss.edu)"
               placeholderTextColor={"gray"}
               onChange={(e) => handleEmail(e)}
             />
+            {email.length < 1 ? null : emailVerify ? (
+              <Feather name="check-circle" color="green" size={20} />
+            ) : (
+              <Error name="error" color="red" size={20} />
+            )}
           </Animated.View>
           {email.length < 1 ? null : emailVerify ? null : (
             <Text
               style={{
-                marginLeft: 20,
+                marginLeft: 10,
                 color: "red",
+                fontSize: 12,
               }}
             >
-              Enter your Olemiss Email Address
+              Email must be an @olemiss.edu or @go.olemiss.edu address
             </Text>
           )}
 
           <Animated.View
             entering={FadeInDown.delay(200).duration(1000).springify()}
-            className="bg-black/5 p-5 rounded-2xl w-full"
+            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
           >
+            <FontAwesome
+              name="lock"
+              color="#420475"
+              style={styles.smallIcon}
+              size={20}
+            />
             <TextInput
+              style={styles.textInput}
               placeholder="Password"
               placeholderTextColor={"gray"}
               onChange={(e) => handlePassword(e)}
               secureTextEntry={showPassword}
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <FontAwesome name="eye" />
+              {password.length < 1 ? null : !showPassword ? (
+                <Feather
+                  name="eye-off"
+                  style={{ marginRight: -10 }}
+                  color={passwordVerify ? "green" : "red"}
+                  size={23}
+                />
+              ) : (
+                <Feather
+                  name="eye"
+                  style={{ marginRight: -10 }}
+                  color={passwordVerify ? "green" : "red"}
+                  size={23}
+                />
+              )}
             </TouchableOpacity>
           </Animated.View>
           {password.length < 1 ? null : passwordVerify ? null : (
             <Text
               style={{
-                marginLeft: 20,
+                marginLeft: 10,
                 color: "red",
+                fontSize: 12,
               }}
             >
-              Password must contain at least 6 characters.
+              Password must be at least 6 characters and include a number
             </Text>
           )}
           <Animated.View
             entering={FadeInDown.duration(1000).delay(400).springify()}
             className="w-full"
           >
-            <TouchableOpacity className="w-full bg-indigo-800 p-3 rounded-2xl mb-3">
+            <TouchableOpacity
+              className={`w-full p-3 rounded-2xl mb-3 ${
+                isFormValid ? "bg-indigo-800" : "bg-indigo-400"
+              }`}
+              disabled={!isFormValid}
+            >
               <Text className="text-white font-bold text-xl text-center">
                 Sign Up
               </Text>
@@ -184,10 +255,11 @@ const SignupScreen = () => {
 export default SignupScreen;
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 18,
-  },
   smallIcon: {
     marginRight: 10,
+  },
+  verifyIcon: {},
+  textInput: {
+    flex: 1,
   },
 });
