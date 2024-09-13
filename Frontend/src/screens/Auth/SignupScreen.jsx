@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -15,6 +16,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
+import axios from "axios";
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -26,6 +28,28 @@ const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+
+  const handleSubmit = () => {
+    const userData = { name: name, email, password };
+    if (nameVerify && emailVerify && passwordVerify) {
+      axios
+        .post("http://192.168.0.94:5001/register", userData)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.status == "ok") {
+            Alert.alert("Registered Successfully!");
+            navigation.navigate("Login");
+          } else {
+            Alert.alert(res.data.data);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      Alert.alert("Fill mandatory details");
+    }
+  };
 
   const handleName = (e) => {
     const nameVar = e.nativeEvent.text;
@@ -231,6 +255,7 @@ const SignupScreen = () => {
                 isFormValid ? "bg-indigo-800" : "bg-indigo-400"
               }`}
               disabled={!isFormValid}
+              onPress={handleSubmit}
             >
               <Text className="text-white font-bold text-xl text-center">
                 Sign Up

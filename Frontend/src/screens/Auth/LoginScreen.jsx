@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -15,6 +16,7 @@ import RadioGroup from "react-native-radio-buttons-group";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
+import axios from "axios";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -49,9 +51,7 @@ const LoginScreen = () => {
 
   const isFormValid = emailVerify && passwordVerify;
 
-  const getSelectedUserType = () => {
-    return selectedId === "1" ? "user" : "admin";
-  };
+  const isAdmin = selectedId === "1" ? false : true;
 
   const handleEmail = (e) => {
     const emailVar = e.nativeEvent.text;
@@ -76,7 +76,23 @@ const LoginScreen = () => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    console.log(email, password, isAdmin);
+    const userData = { email, password, isAdmin };
+    axios
+      .post("http://192.168.0.94:5001/login", userData)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status == "ok") {
+          navigation.navigate("Home");
+        } else {
+          Alert.alert(res.data.data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <SafeAreaView className="bg-white h-full w-full">
