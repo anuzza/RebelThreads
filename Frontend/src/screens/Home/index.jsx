@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 
 const HomeScreen = () => {
   return (
     <View>
-      <Text>index</Text>
+      <Text>Home Screen</Text>
     </View>
   );
 };
