@@ -61,9 +61,9 @@ function DrawerContent(props) {
                   style={{ marginTop: 5 }}
                 />
                 <View style={{ marginLeft: 10, flexDirection: "column" }}>
-                  <Title style={styles.title}>Adarsh</Title>
+                  <Title style={styles.title}>Anna</Title>
                   <Text style={styles.caption} numberOfLines={1}>
-                    adarshthakur210@gmail.com
+                    anna@olemiss.edu
                   </Text>
                 </View>
               </View>
