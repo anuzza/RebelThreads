@@ -10,8 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const DrawerList = [
   { icon: "home-outline", label: "Home", navigateTo: "Home" },
   { icon: "account-multiple", label: "Profile", navigateTo: "Profile" },
-  { icon: "account-group", label: "User", navigateTo: "User" },
-  { icon: "bookshelf", label: "Library", navigateTo: "" },
+  { icon: "account-group", label: "Saved", navigateTo: "Saved" },
+  { icon: "bookshelf", label: "My Listings", navigateTo: "MyListings" },
+  { icon: "bookshelf", label: "My Requests", navigateTo: "MyRequests" },
 ];
 const DrawerLayout = ({ icon, label, navigateTo }) => {
   const navigation = useNavigation();
@@ -41,11 +42,13 @@ const DrawerItems = (props) => {
 };
 function DrawerContent(props) {
   const navigation = useNavigation();
-  function signOut() {
+
+  signOut = () => {
     AsyncStorage.setItem("isLoggedIn", "");
     AsyncStorage.setItem("token", "");
-    navigation.navigate("LoginUser");
-  }
+    navigation.navigate("Login");
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -76,7 +79,7 @@ function DrawerContent(props) {
       </DrawerContentScrollView>
       <View style={styles.bottomDrawerSection}>
         <DrawerItem
-          onPress={() => signOut()}
+          onPress={signOut}
           icon={({ color, size }) => (
             <Icon name="exit-to-app" color={color} size={size} />
           )}

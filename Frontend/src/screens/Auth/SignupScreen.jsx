@@ -35,7 +35,6 @@ const SignupScreen = () => {
       axios
         .post("http://192.168.0.94:5001/register", userData)
         .then((res) => {
-          console.log(res.data);
           if (res.data.status == "ok") {
             Alert.alert("Registered Successfully!");
             navigation.navigate("Login");
@@ -44,7 +43,7 @@ const SignupScreen = () => {
           }
         })
         .catch((e) => {
-          console.log(e);
+          Alert.alert(e);
         });
     } else {
       Alert.alert("Fill mandatory details");

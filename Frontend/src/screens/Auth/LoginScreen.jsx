@@ -17,6 +17,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -77,20 +78,20 @@ const LoginScreen = () => {
   };
 
   const handleSubmit = () => {
-    console.log(email, password, isAdmin);
     const userData = { email, password, isAdmin };
     axios
       .post("http://192.168.0.94:5001/login", userData)
       .then((res) => {
-        console.log(res.data);
         if (res.data.status == "ok") {
-          navigation.navigate("Home");
+          AsyncStorage.setItem("token", res.data.data);
+          AsyncStorage.setItem("isLoggedIn", JSON.stringify(true));
+          navigation.navigate("LoginHome");
         } else {
           Alert.alert(res.data.data);
         }
       })
       .catch((e) => {
-        console.log(e);
+        Alert.alert(e);
       });
   };
 
