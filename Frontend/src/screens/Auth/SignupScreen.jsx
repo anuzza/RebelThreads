@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -87,192 +88,197 @@ const SignupScreen = () => {
   const isFormValid = nameVerify && emailVerify && passwordVerify;
 
   return (
-    <SafeAreaView className="bg-white h-full w-full">
-      <StatusBar style="light" />
-      <Image
-        className="h-[600] w-full absolute"
-        source={require("../../assets/images/background.png")}
-      />
-
-      {/* lights */}
-      <View className="flex-row justify-around w-full absolute">
-        <Animated.Image
-          entering={FadeInUp.delay(200).duration(1000).springify()}
-          className="h-[225] w-[90]"
-          source={require("../../assets/images/light.png")}
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      automaticallyAdjustKeyboardInsets="true"
+    >
+      <SafeAreaView className="bg-white h-full w-full">
+        <StatusBar style="light" />
+        <Image
+          className="h-[600] w-full absolute"
+          source={require("../../assets/images/background.png")}
         />
-        <Animated.Image
-          entering={FadeInUp.delay(400).duration(1000).springify()}
-          className="h-[160] w-[65]"
-          source={require("../../assets/images/light.png")}
-        />
-      </View>
 
-      {/* title and form */}
-      <View className="h-full w-full flex justify-around pt-40 pb-2">
-        {/* Title */}
-        <View className="flex items-center">
-          <Animated.Text
-            entering={FadeInUp.delay(800).duration(1000).springify()}
-            className="text-white font-bold tracking-wider text-5xl"
-          >
-            Sign Up
-          </Animated.Text>
+        {/* lights */}
+        <View className="flex-row justify-around w-full absolute">
+          <Animated.Image
+            entering={FadeInUp.delay(200).duration(1000).springify()}
+            className="h-[225] w-[90]"
+            source={require("../../assets/images/light.png")}
+          />
+          <Animated.Image
+            entering={FadeInUp.delay(400).duration(1000).springify()}
+            className="h-[160] w-[65]"
+            source={require("../../assets/images/light.png")}
+          />
         </View>
 
-        {/* form */}
-        <View className="flex items-center mx-4 space-y-3">
-          <Animated.View
-            entering={FadeInDown.duration(1000).springify()}
-            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
-          >
-            <FontAwesome
-              name="user-o"
-              color="#420475"
-              style={styles.smallIcon}
-              size={20}
-            />
-            <TextInput
-              placeholder="Full Name"
-              placeholderTextColor={"gray"}
-              onChange={(e) => handleName(e)}
-              style={styles.textInput}
-            />
-            {name.length < 1 ? null : nameVerify ? (
-              <Feather
-                style={styles.verifyIcon}
-                name="check-circle"
-                color="green"
-                size={20}
-              />
-            ) : (
-              <Error
-                style={styles.verifyIcon}
-                name="error"
-                color="red"
-                size={20}
-              />
-            )}
-          </Animated.View>
-          {name.length < 1 ? null : nameVerify ? null : (
-            <Text
-              style={{
-                color: "red",
-                fontSize: 12,
-                marginLeft: -100,
-              }}
+        {/* title and form */}
+        <View className="h-full w-full flex justify-around pt-40 pb-2">
+          {/* Title */}
+          <View className="flex items-center">
+            <Animated.Text
+              entering={FadeInUp.delay(800).duration(1000).springify()}
+              className="text-white font-bold tracking-wider text-5xl"
             >
-              Name should be more then 1 characters.
-            </Text>
-          )}
-          <Animated.View
-            entering={FadeInDown.duration(1000).springify()}
-            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
-          >
-            <Fontisto
-              name="email"
-              color="#420475"
-              style={styles.smallIcon}
-              size={20}
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Email (olemiss.edu)"
-              placeholderTextColor={"gray"}
-              onChange={(e) => handleEmail(e)}
-            />
-            {email.length < 1 ? null : emailVerify ? (
-              <Feather name="check-circle" color="green" size={20} />
-            ) : (
-              <Error name="error" color="red" size={20} />
-            )}
-          </Animated.View>
-          {email.length < 1 ? null : emailVerify ? null : (
-            <Text
-              style={{
-                marginLeft: 10,
-                color: "red",
-                fontSize: 12,
-              }}
-            >
-              Email must be an @olemiss.edu or @go.olemiss.edu address
-            </Text>
-          )}
+              Sign Up
+            </Animated.Text>
+          </View>
 
-          <Animated.View
-            entering={FadeInDown.delay(200).duration(1000).springify()}
-            className="bg-black/5 p-4 rounded-2xl w-full flex-row"
-          >
-            <FontAwesome
-              name="lock"
-              color="#420475"
-              style={styles.smallIcon}
-              size={20}
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Password"
-              placeholderTextColor={"gray"}
-              onChange={(e) => handlePassword(e)}
-              secureTextEntry={showPassword}
-            />
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              {password.length < 1 ? null : !showPassword ? (
+          {/* form */}
+          <View className="flex items-center mx-4 space-y-3">
+            <Animated.View
+              entering={FadeInDown.duration(1000).springify()}
+              className="bg-black/5 p-4 rounded-2xl w-full flex-row"
+            >
+              <FontAwesome
+                name="user-o"
+                color="#420475"
+                style={styles.smallIcon}
+                size={20}
+              />
+              <TextInput
+                placeholder="Full Name"
+                placeholderTextColor={"gray"}
+                onChange={(e) => handleName(e)}
+                style={styles.textInput}
+              />
+              {name.length < 1 ? null : nameVerify ? (
                 <Feather
-                  name="eye-off"
-                  style={{ marginRight: -10 }}
-                  color={passwordVerify ? "green" : "red"}
-                  size={23}
+                  style={styles.verifyIcon}
+                  name="check-circle"
+                  color="green"
+                  size={20}
                 />
               ) : (
-                <Feather
-                  name="eye"
-                  style={{ marginRight: -10 }}
-                  color={passwordVerify ? "green" : "red"}
-                  size={23}
+                <Error
+                  style={styles.verifyIcon}
+                  name="error"
+                  color="red"
+                  size={20}
                 />
               )}
-            </TouchableOpacity>
-          </Animated.View>
-          {password.length < 1 ? null : passwordVerify ? null : (
-            <Text
-              style={{
-                marginLeft: 10,
-                color: "red",
-                fontSize: 12,
-              }}
-            >
-              Password must be at least 6 characters and include a number
-            </Text>
-          )}
-          <Animated.View
-            entering={FadeInDown.duration(1000).delay(400).springify()}
-            className="w-full"
-          >
-            <TouchableOpacity
-              className={`w-full p-3 rounded-2xl mb-3 ${
-                isFormValid ? "bg-indigo-800" : "bg-indigo-400"
-              }`}
-              disabled={!isFormValid}
-              onPress={handleSubmit}
-            >
-              <Text className="text-white font-bold text-xl text-center">
-                Sign Up
+            </Animated.View>
+            {name.length < 1 ? null : nameVerify ? null : (
+              <Text
+                style={{
+                  color: "red",
+                  fontSize: 12,
+                  marginLeft: -100,
+                }}
+              >
+                Name should be more then 1 characters.
               </Text>
-            </TouchableOpacity>
-          </Animated.View>
-          <Animated.View
-            entering={FadeInDown.duration(1000).delay(400).springify()}
-            className="flex-row justify-center"
-          >
-            <Text>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.push("Login")}>
-              <Text className="text-blue-800 font-bold">Login</Text>
-            </TouchableOpacity>
-          </Animated.View>
+            )}
+            <Animated.View
+              entering={FadeInDown.duration(1000).springify()}
+              className="bg-black/5 p-4 rounded-2xl w-full flex-row"
+            >
+              <Fontisto
+                name="email"
+                color="#420475"
+                style={styles.smallIcon}
+                size={20}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Email (olemiss.edu)"
+                placeholderTextColor={"gray"}
+                onChange={(e) => handleEmail(e)}
+              />
+              {email.length < 1 ? null : emailVerify ? (
+                <Feather name="check-circle" color="green" size={20} />
+              ) : (
+                <Error name="error" color="red" size={20} />
+              )}
+            </Animated.View>
+            {email.length < 1 ? null : emailVerify ? null : (
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: "red",
+                  fontSize: 12,
+                }}
+              >
+                Email must be an @olemiss.edu or @go.olemiss.edu address
+              </Text>
+            )}
+
+            <Animated.View
+              entering={FadeInDown.delay(200).duration(1000).springify()}
+              className="bg-black/5 p-4 rounded-2xl w-full flex-row"
+            >
+              <FontAwesome
+                name="lock"
+                color="#420475"
+                style={styles.smallIcon}
+                size={20}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Password"
+                placeholderTextColor={"gray"}
+                onChange={(e) => handlePassword(e)}
+                secureTextEntry={showPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                {password.length < 1 ? null : !showPassword ? (
+                  <Feather
+                    name="eye-off"
+                    style={{ marginRight: -10 }}
+                    color={passwordVerify ? "green" : "red"}
+                    size={23}
+                  />
+                ) : (
+                  <Feather
+                    name="eye"
+                    style={{ marginRight: -10 }}
+                    color={passwordVerify ? "green" : "red"}
+                    size={23}
+                  />
+                )}
+              </TouchableOpacity>
+            </Animated.View>
+            {password.length < 1 ? null : passwordVerify ? null : (
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: "red",
+                  fontSize: 12,
+                }}
+              >
+                Password must be at least 6 characters and include a number
+              </Text>
+            )}
+            <Animated.View
+              entering={FadeInDown.duration(1000).delay(400).springify()}
+              className="w-full"
+            >
+              <TouchableOpacity
+                className={`w-full p-3 rounded-2xl mb-3 ${
+                  isFormValid ? "bg-indigo-800" : "bg-indigo-400"
+                }`}
+                disabled={!isFormValid}
+                onPress={handleSubmit}
+              >
+                <Text className="text-white font-bold text-xl text-center">
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </Animated.View>
+            <Animated.View
+              entering={FadeInDown.duration(1000).delay(400).springify()}
+              className="flex-row justify-center"
+            >
+              <Text>Already have an account? </Text>
+              <TouchableOpacity onPress={() => navigation.push("Login")}>
+                <Text className="text-blue-800 font-bold">Login</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 

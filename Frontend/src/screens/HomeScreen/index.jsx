@@ -9,7 +9,6 @@ const HomeScreen = () => {
   async function getData() {
     const token = await AsyncStorage.getItem("token");
 
-    console.log("token: ", token);
     axios
       .post("http://192.168.0.94:5001/userdata", { token: token })
       .then((res) => {
