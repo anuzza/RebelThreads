@@ -80,24 +80,18 @@ const LoginScreen = () => {
 
   const handleSubmit = () => {
     const userData = { email, password, isAdmin };
-    console.log("HERE1");
     axios
-      .post("http://192.168.0.94:5001/login", userData)
+      .post("http://localhost:5001/login", userData)
       .then((res) => {
-        console.log("HERE");
         if (res.data.status == "ok") {
           AsyncStorage.setItem("token", res.data.data);
-          AsyncStorage.setItem("isLoggedIn", JSON.stringify(true));
-          console.log("DONE");
-          navigation.navigate("LoginHome");
+          console.log("ok");
         } else {
-          console.log("ERROR");
-          Alert.alert(res.data.data);
+          Alert.alert(res.data.error);
         }
       })
       .catch((e) => {
         Alert.alert(e);
-        console.log("OOPS");
       });
   };
 

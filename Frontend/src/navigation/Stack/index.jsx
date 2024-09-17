@@ -12,11 +12,11 @@ import SignupScreen from "../../screens/Auth/SignupScreen";
 import HomeScreen from "../../screens/HomeScreen/index";
 import Icon from "react-native-vector-icons/Entypo";
 
-export const HomeStack = () => {
-  const Stack = createNativeStackNavigator();
+export const HomeStackScreen = () => {
+  const HomeStack = createNativeStackNavigator();
   const navigation = useNavigation();
   return (
-    <Stack.Navigator
+    <HomeStack.Navigator
       initialRouteName="Home"
       screenOptions={{
         statusBarColor: "#4338ca",
@@ -37,34 +37,29 @@ export const HomeStack = () => {
         },
       }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Saved" component={Saved} />
-      <Stack.Screen name="MyListings" component={MyListings} />
-      <Stack.Screen name="MyRequests" component={MyRequests} />
-      <Stack.Screen
-        name="LoginStack"
-        component={LoginStack}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Profile" component={ProfileScreen} />
+      <HomeStack.Screen name="Saved" component={Saved} />
+      <HomeStack.Screen name="MyListings" component={MyListings} />
+      <HomeStack.Screen name="MyRequests" component={MyRequests} />
+    </HomeStack.Navigator>
   );
 };
 
-export const LoginStack = () => {
-  const Stack = createNativeStackNavigator();
+export const LoginStackScreen = () => {
+  const LoginStack = createNativeStackNavigator();
+
   return (
-    <Stack.Navigator
+    <LoginStack.Navigator
       initialRouteName="Landing"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Landing" component={LandingScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="SignUp" component={SignupScreen} />
-      <Stack.Screen name="LoginHome" component={HomeScreen} />
-    </Stack.Navigator>
+      <LoginStack.Screen name="Landing" component={LandingScreen} />
+      <LoginStack.Screen name="Login" component={LoginScreen} />
+      <LoginStack.Screen name="SignUp" component={SignupScreen} />
+    </LoginStack.Navigator>
   );
 };
 

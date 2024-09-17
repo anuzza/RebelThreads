@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { Avatar, Title } from "react-native-paper";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -46,7 +46,6 @@ function DrawerContent(props) {
   signOut = () => {
     AsyncStorage.setItem("isLoggedIn", "");
     AsyncStorage.setItem("token", "");
-    navigation.navigate("Login");
   };
 
   return (

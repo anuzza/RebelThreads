@@ -4,9 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import AddListing from "../../screens/AddListing/index";
 import Requests from "../../screens/Requests/index";
-import { HomeStack } from "../Stack/StackNav";
+import { HomeStackScreen } from "../Stack/index";
 import Icon from "react-native-vector-icons/Ionicons";
-
 
 const TabNav = () => {
   const Tab = createBottomTabNavigator();
@@ -57,7 +56,7 @@ const TabNav = () => {
     >
       <Tab.Screen
         name="HomeTab"
-        component={HomeStack}
+        component={HomeStackScreen}
         options={{ headerShown: false, tabBarLabel: "Home" }}
       ></Tab.Screen>
       <Tab.Screen name="Add Listing" component={AddListing}></Tab.Screen>
