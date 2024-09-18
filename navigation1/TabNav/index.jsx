@@ -2,9 +2,9 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import AddListing from "../../screens/AddListing/index";
-import Requests from "../../screens/Requests/index";
-import { HomeStackScreen } from "../Stack/index";
+import AddListing from "../../Frontend/src/screens/AddListing/index";
+import Requests from "../../Frontend/src/screens/Requests/index";
+import { HomeStackScreen } from "../RootStackScreen/index";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const TabNav = () => {

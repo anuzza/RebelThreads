@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import Animated, { FadeInUp, FadeInDown } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -17,8 +18,8 @@ import RadioGroup from "react-native-radio-buttons-group";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import { login, clearErrors } from "../../redux/actions/auth";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -50,6 +51,10 @@ const LoginScreen = () => {
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
   const [selectedId, setSelectedId] = useState("1");
+  const dispatch = useDispatch();
+
+  const authLoading = useSelector((state) => state.auth.authLoading);
+  const error = useSelector((state) => state.auth.error);
 
   const isFormValid = emailVerify && passwordVerify;
 
@@ -78,21 +83,15 @@ const LoginScreen = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert(error.error || error);
+      dispatch(clearErrors());
+    }
+  }, [error]);
+
   const handleSubmit = () => {
-    const userData = { email, password, isAdmin };
-    axios
-      .post("http://localhost:5001/login", userData)
-      .then((res) => {
-        if (res.data.status == "ok") {
-          AsyncStorage.setItem("token", res.data.data);
-          console.log("ok");
-        } else {
-          Alert.alert(res.data.error);
-        }
-      })
-      .catch((e) => {
-        Alert.alert(e);
-      });
+    dispatch(login(email, password));
   };
 
   return (
@@ -237,9 +236,13 @@ const LoginScreen = () => {
                 disabled={!isFormValid}
                 onPress={handleSubmit}
               >
-                <Text className="text-white font-bold text-xl text-center">
-                  Login
-                </Text>
+                {!authLoading ? (
+                  <Text className="text-white font-bold text-xl text-center">
+                    Login
+                  </Text>
+                ) : (
+                  <ActivityIndicator color="#fff" />
+                )}
               </TouchableOpacity>
             </Animated.View>
             <Animated.View
@@ -247,7 +250,7 @@ const LoginScreen = () => {
               className="flex-row justify-center"
             >
               <Text>Don't have an account? </Text>
-              <TouchableOpacity onPress={() => navigation.push("SignUp")}>
+              <TouchableOpacity onPress={() => navigation.push("SignupScreen")}>
                 <Text className="text-blue-800 font-bold">SignUp</Text>
               </TouchableOpacity>
             </Animated.View>

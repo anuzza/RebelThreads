@@ -1,58 +1,89 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
-const signup = async (req, res) => {
-  const { name, email, password } = req.body;
-  const oldUser = await User.findOne({ email: email });
-
-  if (oldUser) {
-    return res.send({ data: "User already exists!" });
-  }
-
-  const encryptedPw = await bcrypt.hash(password, 10);
+const signupUser = async (req, res) => {
   try {
-    await User.create({
-      name: name,
-      email,
-      password: encryptedPw,
-    });
-    res.send({ status: "ok", data: "User Created" });
+    const user = new User(req.body);
+    await user.save();
+    const token = await user.generateAuthToken();
+    res.status(201).send({ user, token });
   } catch (error) {
-    res.send({ status: "error", data: error });
-  }
-};
-
-const login = async (req, res) => {
-  const { email, password, isAdmin } = req.body;
-
-  // Check if the user exists
-  const oldUser = await User.findOne({ email: email, isAdmin });
-
-  if (!oldUser) {
-    if (!isAdmin) {
-      return res.send({ error: "User does not exist!" });
-    } else {
-      return res.send({ error: "Admin does not exist!" });
+    let validationErrors = {};
+    if (error.errors || error.code === 11000) {
+      if (error.errors) {
+        if (error.errors.name) {
+          validationErrors.error = "Name is required";
+        }
+        if (error.errors.email) {
+          switch (error.errors.email.kind) {
+            case "user defined":
+              validationErrors.error =
+                error.errors.email.properties.message;
+              break;
+            default:
+              validationErrors.error = "Email is required";
+          }
+        }
+        if (error.errors.password) {
+          switch (error.errors.password.kind) {
+            case "minlength":
+              validationErrors.error =
+                "Password must be 6 characters long";
+              break;
+            case "required":
+              validationErrors.error = "Password is required";
+              break;
+            default:
+              validationErrors.error =
+                "Cannot contain the word password";
+          }
+        }
+      } else {
+        validationErrors.error = "User already exists";
+      }
+      return res.status(400).send(validationErrors);
     }
-  }
-
-  // Check if the password is correct
-  const isPasswordMatch = await bcrypt.compare(password, oldUser.password);
-  if (!isPasswordMatch) {
-    return res.send({ error: "Invalid credentials!" }); // Send invalid credentials message
-  }
-
-  // Generate JWT token if password is correct
-  const token = jwt.sign({ email: oldUser.email }, process.env.JWT_SECRET);
-
-  if (res.status(201)) {
-    return res.send({ status: "ok", data: token });
-  } else {
-    return res.send({ error: "error" });
+    return res.status(500).send({ error: error.message });
   }
 };
 
-const getUserInfo = async (req, res) => {
+const loginUser = async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+
+    const token = await user.generateAuthToken();
+
+
+    res.send({ user, token });
+  } catch (error) {
+    if (error.message?.includes("timed out")) {
+      return res.status(400).send({ error: "Network error" });
+    }
+    if (error.toString().includes("Error: ")) {
+      return res.status(400).send({
+        error: error.toString().split("Error: ")[1],
+      });
+    }
+
+    return res.status(500).send({ error: error.message });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    await User.updateOne(
+      { _id: req.user._id },
+      { tokens: req.user.tokens.filter((token) => token.token !== req.token) }
+    );
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+};
+
+const getLoggedInUserInfo = async (req, res) => {
   try {
     const user = req.user;
     res.send(user);
@@ -62,7 +93,8 @@ const getUserInfo = async (req, res) => {
 };
 
 module.exports = {
-  login,
-  signup,
-  getUserInfo,
+  signupUser,
+  loginUser,
+  getLoggedInUserInfo,
+  logoutUser,
 };

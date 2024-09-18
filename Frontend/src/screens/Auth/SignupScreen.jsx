@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import Animated, { FadeInUp, FadeInDown } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +18,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { signup, clearErrors } from "../../redux/actions/auth";
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -30,22 +32,12 @@ const SignupScreen = () => {
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
 
+  const authLoading = useSelector((state) => state.auth.authLoading);
+  const dispatch = useDispatch();
+
   const handleSubmit = () => {
-    const userData = { name: name, email, password };
     if (nameVerify && emailVerify && passwordVerify) {
-      axios
-        .post("http://192.168.0.94:5001/register", userData)
-        .then((res) => {
-          if (res.data.status == "ok") {
-            Alert.alert("Registered Successfully!");
-            navigation.navigate("Login");
-          } else {
-            Alert.alert(res.data.data);
-          }
-        })
-        .catch((e) => {
-          Alert.alert(e);
-        });
+      dispatch(signup(name, email, password));
     } else {
       Alert.alert("Fill mandatory details");
     }
@@ -261,9 +253,13 @@ const SignupScreen = () => {
                 disabled={!isFormValid}
                 onPress={handleSubmit}
               >
-                <Text className="text-white font-bold text-xl text-center">
-                  Sign Up
-                </Text>
+                {!authLoading ? (
+                  <Text className="text-white font-bold text-xl text-center">
+                    Sign Up
+                  </Text>
+                ) : (
+                  <ActivityIndicator color="#fff" />
+                )}
               </TouchableOpacity>
             </Animated.View>
             <Animated.View
@@ -271,7 +267,7 @@ const SignupScreen = () => {
               className="flex-row justify-center"
             >
               <Text>Already have an account? </Text>
-              <TouchableOpacity onPress={() => navigation.push("Login")}>
+              <TouchableOpacity onPress={() => navigation.push("LoginScreen")}>
                 <Text className="text-blue-800 font-bold">Login</Text>
               </TouchableOpacity>
             </Animated.View>

@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import DrawerNav from "./src/navigation/Drawer/DrawerNav";
-import { LoginStackScreen } from "./src/navigation/Stack";
+import React from "react";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { CustomDefaultTheme } from "./src/themes/colors";
+import { Provider as PaperProvider } from "react-native-paper";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/store";
+import AppEntry from "./src/AppEntry";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  async function getData() {
-    const data = await AsyncStorage.getItem("token");
-    setIsLoggedIn(data !== "");
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default () => {
   return (
-    <NavigationContainer>
-      {isLoggedIn ? <DrawerNav /> : <LoginStackScreen />}
-    </NavigationContainer>
+    <ActionSheetProvider>
+      <PaperProvider theme={CustomDefaultTheme}>
+        <Provider store={store}>
+          <AppEntry />
+        </Provider>
+      </PaperProvider>
+    </ActionSheetProvider>
   );
-}
-
-export default App;
+};

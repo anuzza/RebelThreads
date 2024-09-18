@@ -18,35 +18,43 @@ const LandingScreen = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView className="bg-white h-full w-full" style={styles.container}>
-      <StatusBar style="light" />
-      <Animated.Image
+      <StatusBar style="dark" />
+      {/* <Animated.Image
         entering={FadeInUp.delay(200).duration(1000).springify()}
         className="h-[900] w-full absolute"
         source={require("../../assets/images/background.png")}
-      />
+      /> */}
 
       {/* lights */}
-      <View className="flex-row justify-around w-full absolute">
+      {/* <View className="flex-row justify-around w-full absolute">
         <Animated.Image
           entering={FadeInUp.delay(400).duration(1000).springify()}
           className="h-[225] w-[90]"
           source={require("../../assets/images/light.png")}
         />
+      </View> */}
+
+      <View className="flex items-center pt-5">
+        <Animated.Image
+          entering={FadeInUp.delay(200).duration(1000).springify()}
+          className="h-[300] w-full"
+          source={require("../../assets/images/splash.png")}
+        ></Animated.Image>
       </View>
 
-      <View className="h-full w-full flex justify-around">
+      <View className="h-full w-full flex">
         {/* Title */}
-        <View className="flex items-center pt-40">
+        <View className="flex items-center pt-10">
           <Animated.Text
-            entering={FadeInUp.delay(800).duration(1000).springify()}
-            className="text-white font-bold tracking-wider text-5xl"
+            entering={FadeInUp.delay(600).duration(1000).springify()}
+            className="font-bold tracking-wider text-5xl"
           >
             Welcome to RebelThreads
           </Animated.Text>
 
           <Animated.Text
-            entering={FadeInUp.delay(1200).duration(1000).springify()}
-            className="text-white text-xl text-center p-5"
+            entering={FadeInUp.delay(800).duration(1000).springify()}
+            className="text-xl text-center p-5"
           >
             Buy, sell, or give away clothes easily within the Ole Miss community
             — sustainable fashion made simple!
@@ -54,13 +62,13 @@ const LandingScreen = () => {
         </View>
 
         <Animated.View
-          entering={FadeInDown.delay(400).duration(1000).springify()}
-          className="w-full flex items-end"
+          entering={FadeInDown.delay(1000).duration(1000).springify()}
+          className="w-full flex items-end pt-20"
         >
           <TouchableOpacity
             style={styles.button}
             className="flex justify-center items-center"
-            onPress={() => navigation.push("Login")}
+            onPress={() => navigation.push("LoginScreen")}
           >
             <FontAwesome style={styles.arrow} name="arrow-right" size={30} />
           </TouchableOpacity>
