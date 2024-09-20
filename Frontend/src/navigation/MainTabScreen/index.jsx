@@ -4,10 +4,12 @@ import { Ionicons as Icon } from "@expo/vector-icons";
 import { HomeStackScreen } from "../RootStackScreen/StackScreens";
 import AddListing from "../../screens/AddListing/index";
 import Requests from "../../screens/Requests/index";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabScreen = ({ user }) => {
+  const navigation = useNavigation();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -15,12 +17,25 @@ const MainTabScreen = ({ user }) => {
         tabBarStyle: {
           backgroundColor: "#4338ca",
         },
+        headerStyle: {
+          backgroundColor: "#4338ca",
+        },
+        headerTintColor: "#FFF",
+        headerLeft: () => (
+          <Icon
+            name="menu-outline"
+            size={25}
+            color="#fff"
+            style={{ marginLeft: 16 }}
+            onPress={() => navigation.openDrawer()}
+          ></Icon>
+        ),
       }}
       initialRouteName="Home"
       shifting={false}
     >
       <Tab.Screen
-        name="HomeTab"
+        name="Home Tab"
         component={HomeStackScreen}
         options={{
           headerShown: false,
@@ -31,7 +46,7 @@ const MainTabScreen = ({ user }) => {
         }}
       />
       <Tab.Screen
-        name="SellTab"
+        name="Sell Tab"
         component={AddListing}
         options={{
           tabBarLabel: "Sell",
@@ -42,7 +57,7 @@ const MainTabScreen = ({ user }) => {
       />
 
       <Tab.Screen
-        name="FeedTab"
+        name="Requests Tab"
         component={Requests}
         options={{
           tabBarLabel: "Request",

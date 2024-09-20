@@ -13,6 +13,7 @@ import {
   horizontalAnimation,
   verticalAnimation,
 } from "../../constants/animation";
+import Saved from "../../screens/Saved";
 
 const AuthStack = createNativeStackNavigator();
 export const AuthStackScreen = () => (
@@ -75,5 +76,6 @@ export const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen name="MyRequests" component={MyRequests} />
 
     <HomeStack.Screen name="Profile" component={ProfileScreen} />
+    <HomeStack.Screen name="Saved" component={Saved} />
   </HomeStack.Navigator>
 );

@@ -54,7 +54,7 @@ export const DrawerContent = (props) => {
               iconName="home-sharp"
               label="Home"
               onPress={() => {
-                props.navigation.navigate("HomeTab", {
+                props.navigation.navigate("Home Tab", {
                   screen: "Home",
                 });
               }}
@@ -65,7 +65,7 @@ export const DrawerContent = (props) => {
                   iconName="bookmarks-sharp"
                   label="Saved"
                   onPress={() => {
-                    props.navigation.push("BookmarksScreen");
+                    props.navigation.push("Saved");
                     props.navigation.toggleDrawer();
                   }}
                 />

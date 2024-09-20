@@ -10,7 +10,7 @@ import {
 } from "../../screens/Admin";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import DetailsScreen from "../../screens/DetailsScreen";
-import ProfileScreen from "../../screens/ProfileScreen";
+import ProfileScreen from "../../screens/Profile";
 import { verticalAnimation } from "../../constants/animation";
 
 const AdminHomeStack = createNativeStackNavigator();
