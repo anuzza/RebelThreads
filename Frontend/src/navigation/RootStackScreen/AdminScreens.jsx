@@ -37,21 +37,6 @@ export const AdminHomeStackScreen = ({ navigation }) => (
         headerShown: true,
       }}
     />
-
-    <AdminHomeStack.Screen
-      name="Details"
-      options={{
-        headerShown: false,
-      }}
-      component={DetailsScreen}
-    />
-    <AdminHomeStack.Screen
-      name="Profile"
-      options={{
-        headerShown: false,
-      }}
-      component={ProfileScreen}
-    />
   </AdminHomeStack.Navigator>
 );
 

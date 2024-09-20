@@ -16,7 +16,6 @@ export const DrawerContent = (props) => {
 
   const signOut = () => {
     dispatch(signout(navigation));
-    navigation.navigate("Login");
   };
   return (
     <View style={{ flex: 1 }}>

@@ -63,7 +63,7 @@ const LandingScreen = () => {
 
         <Animated.View
           entering={FadeInDown.delay(1000).duration(1000).springify()}
-          className="w-full flex items-end pt-20"
+          className="w-full flex items-end pb-10"
         >
           <TouchableOpacity
             style={styles.button}

@@ -23,42 +23,17 @@ import { login, clearErrors } from "../../redux/actions/auth";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const radioButtons = useMemo(
-    () => [
-      {
-        id: "1",
-        label: "User",
-        value: "user",
-        color: "#6366f1",
-        size: "20",
-        labelStyle: styles.label,
-      },
-      {
-        id: "2",
-        label: "Admin",
-        value: "admin",
-        color: "#6366f1",
-        size: "20",
-        labelStyle: styles.label,
-      },
-    ],
-    []
-  );
-
   const [email, setEmail] = useState("");
   const [emailVerify, setEmailVerify] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
-  const [selectedId, setSelectedId] = useState("1");
   const dispatch = useDispatch();
 
   const authLoading = useSelector((state) => state.auth.authLoading);
   const error = useSelector((state) => state.auth.error);
 
   const isFormValid = emailVerify && passwordVerify;
-
-  const isAdmin = selectedId === "1" ? false : true;
 
   const handleEmail = (e) => {
     const emailVar = e.nativeEvent.text;
@@ -214,17 +189,6 @@ const LoginScreen = () => {
                 Password must be at least 6 characters and include a number
               </Text>
             )}
-            <Animated.View
-              entering={FadeInDown.delay(400).duration(1000).springify()}
-              className="w-full flex items-center"
-            >
-              <RadioGroup
-                radioButtons={radioButtons}
-                onPress={setSelectedId}
-                selectedId={selectedId}
-                layout="row"
-              />
-            </Animated.View>
 
             <Animated.View
               entering={FadeInDown.delay(400).duration(1000).springify()}
