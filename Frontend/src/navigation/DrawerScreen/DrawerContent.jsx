@@ -5,12 +5,19 @@ import { DrawerContentScrollView } from "@react-navigation/drawer";
 import CustomDrawerItem from "../../components/CustomDrawerItem";
 import { useDispatch } from "react-redux";
 import { signout } from "../../redux/actions/auth";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
 export const DrawerContent = (props) => {
   const user = props.user;
   const isAdmin = user && user.isAdmin === true;
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const signOut = () => {
+    dispatch(signout(navigation));
+    navigation.navigate("Login");
+  };
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -19,7 +26,7 @@ export const DrawerContent = (props) => {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <TouchableOpacity
                 onPress={() => {
-                  props.navigation.push("ProfileScreen");
+                  props.navigation.push("Profile");
                   props.navigation.toggleDrawer();
                 }}
               >
@@ -57,25 +64,25 @@ export const DrawerContent = (props) => {
               <>
                 <CustomDrawerItem
                   iconName="bookmarks-sharp"
-                  label="Bookmarks"
+                  label="Saved"
                   onPress={() => {
                     props.navigation.push("BookmarksScreen");
                     props.navigation.toggleDrawer();
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="book-sharp"
-                  label="Sold Books"
+                  iconName="pricetag"
+                  label="My Listings"
                   onPress={() => {
-                    props.navigation.push("SoldBooksScreen");
+                    props.navigation.push("MyListings");
                     props.navigation.toggleDrawer();
                   }}
                 />
                 <CustomDrawerItem
                   iconName="pricetag"
-                  label="Requested Books"
+                  label="My Requests"
                   onPress={() => {
-                    props.navigation.push("RequestedBooksScreen");
+                    props.navigation.push("MyRequests");
                     props.navigation.toggleDrawer();
                   }}
                 />
@@ -83,7 +90,7 @@ export const DrawerContent = (props) => {
                   iconName="person-sharp"
                   label="Profile"
                   onPress={() => {
-                    props.navigation.push("ProfileScreen");
+                    props.navigation.push("Profile");
                     props.navigation.toggleDrawer();
                   }}
                 />
@@ -123,7 +130,7 @@ export const DrawerContent = (props) => {
         <CustomDrawerItem
           iconName="log-out-sharp"
           label="Sign Out"
-          onPress={() => dispatch(signout())}
+          onPress={signOut}
         />
       </Drawer.Section>
     </View>

@@ -11,7 +11,6 @@ const MainTabScreen = ({ user }) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false,
         tabBarActiveTintColor: "#fff",
         tabBarStyle: {
           backgroundColor: "#4338ca",
@@ -24,6 +23,7 @@ const MainTabScreen = ({ user }) => {
         name="HomeTab"
         component={HomeStackScreen}
         options={{
+          headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <Icon name="home" color={color} size={26} />

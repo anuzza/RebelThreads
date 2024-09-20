@@ -16,8 +16,7 @@ const signupUser = async (req, res) => {
         if (error.errors.email) {
           switch (error.errors.email.kind) {
             case "user defined":
-              validationErrors.error =
-                error.errors.email.properties.message;
+              validationErrors.error = error.errors.email.properties.message;
               break;
             default:
               validationErrors.error = "Email is required";
@@ -26,15 +25,13 @@ const signupUser = async (req, res) => {
         if (error.errors.password) {
           switch (error.errors.password.kind) {
             case "minlength":
-              validationErrors.error =
-                "Password must be 6 characters long";
+              validationErrors.error = "Password must be 6 characters long";
               break;
             case "required":
               validationErrors.error = "Password is required";
               break;
             default:
-              validationErrors.error =
-                "Cannot contain the word password";
+              validationErrors.error = "Cannot contain the word password";
           }
         }
       } else {
@@ -55,10 +52,10 @@ const loginUser = async (req, res) => {
 
     const token = await user.generateAuthToken();
 
-
     res.send({ user, token });
   } catch (error) {
     if (error.message?.includes("timed out")) {
+      console.log("hello");
       return res.status(400).send({ error: "Network error" });
     }
     if (error.toString().includes("Error: ")) {

@@ -85,6 +85,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       Alert.alert(error.error || error);
       dispatch(clearErrors());
     }

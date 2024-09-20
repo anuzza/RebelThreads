@@ -9,8 +9,6 @@ import MyListings from "../../screens/MyListings/index";
 import MyRequests from "../../screens/My Requests/index";
 import { Ionicons as Icon } from "@expo/vector-icons";
 
-
-
 import {
   horizontalAnimation,
   verticalAnimation,
@@ -50,7 +48,10 @@ export const HomeStackScreen = ({ navigation }) => (
     screenOptions={{
       headerBackTitleVisible: false,
       ...verticalAnimation,
-      headerShown: false,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <HomeStack.Screen
@@ -58,21 +59,20 @@ export const HomeStackScreen = ({ navigation }) => (
       component={HomeScreen}
       options={{
         headerLeft: () => (
-          <Icon.Button
+          <Icon
             name="menu-outline"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
             onPress={() => navigation.openDrawer()}
-          ></Icon.Button>
+          ></Icon>
         ),
         headerShown: true,
       }}
     />
 
-    <HomeStack.Screen name="My Listings" component={MyListings} />
+    <HomeStack.Screen name="MyListings" component={MyListings} />
 
-    <HomeStack.Screen name="My Requests" component={MyRequests} />
+    <HomeStack.Screen name="MyRequests" component={MyRequests} />
 
     <HomeStack.Screen name="Profile" component={ProfileScreen} />
   </HomeStack.Navigator>

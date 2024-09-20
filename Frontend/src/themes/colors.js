@@ -6,16 +6,12 @@ export const CustomDefaultTheme = {
   ...NavigationDefaultTheme,
   ...PaperDefaultTheme,
   colors: {
-    ...NavigationDefaultTheme.colors,
-    ...PaperDefaultTheme.colors,
-
     accentColor: "#fff",
     primary: "#4338ca",
     silverSand: "#bebfc4",
     green: "#183c28",
     maize: "#eec643",
     orange: "#fa824c",
-    blue: "#3c91e6",
     lightGreen: "#a2d729",
 
     // Edge Cases
