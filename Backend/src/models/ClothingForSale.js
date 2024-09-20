@@ -32,6 +32,11 @@ const clothingForSaleSchema = new mongoose.Schema(
         trim: true,
         required: true,
       },
+      gender: {
+        type: String,
+        enum: ["male", "female", "unisex"],
+        required: true,
+      },
     },
     seller: {
       type: mongoose.Schema.Types.ObjectId,
