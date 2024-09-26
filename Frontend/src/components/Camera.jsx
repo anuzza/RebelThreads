@@ -9,7 +9,7 @@ import {
   StatusBar,
   Modal,
 } from "react-native";
-import { Camera } from "expo-camera";
+import { CameraView, CameraType } from "expo-camera";
 import { Ionicons as Icon } from "@expo/vector-icons";
 
 let camera;
@@ -22,8 +22,8 @@ const CameraComponent = ({
   //   const [hasPermission, setHasPermission] = useState(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [cameraType, setCameraType] = React.useState(Camera.Constants);
-  const [flashMode, setFlashMode] = React.useState("off");
+  const [facing, setFacing] = useState("back");
+  const [flashMode, setFlashMode] = useState("off");
 
   const startCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
@@ -73,10 +73,10 @@ const CameraComponent = ({
     }
   };
   const switchCamera = () => {
-    if (cameraType === "back") {
-      setCameraType("front");
+    if (facing === "back") {
+      setFacing("front");
     } else {
-      setCameraType("back");
+      setFacing("back");
     }
   };
 
@@ -100,8 +100,8 @@ const CameraComponent = ({
             retakePicture={retakePicture}
           />
         ) : (
-          <Camera
-            type={cameraType}
+          <CameraView
+            facing={facing}
             flashMode={flashMode}
             style={{ flex: 1 }}
             ref={(r) => {
@@ -178,7 +178,7 @@ const CameraComponent = ({
                 </TouchableOpacity>
               </View>
             </View>
-          </Camera>
+          </CameraView>
         )}
       </View>
     </Modal>

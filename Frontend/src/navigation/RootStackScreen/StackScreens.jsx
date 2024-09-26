@@ -10,7 +10,6 @@ import MyRequests from "../../screens/My Requests/index";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import {
   BaseScreen as UploadClothBaseScreen,
-  FinalScreen as UploadClothFinalScreen,
   CameraScreen as UploadClothCameraScreen,
   SecondaryScreen as UploadClothSecondaryScreen,
 } from "../../screens/AddListing";
@@ -105,7 +104,10 @@ export const AddListingStackScreen = ({ navigation }) => (
             size={25}
             color="#000"
             backgroundColor="#fff"
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              navigation.setParams({});
+              navigation.goBack();
+            }}
           ></Icon.Button>
         ),
       }}
@@ -119,21 +121,13 @@ export const AddListingStackScreen = ({ navigation }) => (
       }}
       component={UploadClothSecondaryScreen}
     />
-    {/* <AddListingStack.Screen
-      name="UploadClothFinalScreen"
-      options={{
-        title: "More Info",
-        headerShown: true,
-      }}
-      component={UploadClothFinalScreen}
-    /> */}
-    {/* <AddListingStack.Screen
+    <AddListingStack.Screen
       name="UploadClothCameraScreen"
       options={{
         title: "Finish",
         headerShown: true,
       }}
       component={UploadClothCameraScreen}
-    /> */}
+    />
   </AddListingStack.Navigator>
 );

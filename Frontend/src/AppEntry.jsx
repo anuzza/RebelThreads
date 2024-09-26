@@ -17,7 +17,6 @@ const AppEntry = () => {
   if (isLoading) {
     return <Loader loading={isLoading} />;
   }
-  console.log(user);
   return (
     <NavigationContainer>
       <RootStackScreen user={user} userToken={userToken} />

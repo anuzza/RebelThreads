@@ -40,10 +40,10 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
   const [deletedImages, setDeletedImages] = useState([]);
 
   useEffect(() => {
-    if (route?.params?.bookState) {
+    if (route?.params?.clothState) {
       setPictures(
-        route?.params?.bookState?.pictures
-          ? route.params.bookState.pictures.map((picture) => {
+        route?.params?.clothState?.pictures
+          ? route.params.clothState.pictures.map((picture) => {
               return { image: picture, selectedOrUploaded: false };
             })
           : []
@@ -108,20 +108,20 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     } else {
       setError("");
       const formData = new FormData();
-      const bookState = {
-        isbn: route?.params?.bookState?.isbn,
-        title: route?.params?.bookState?.title,
-        edition: route?.params?.bookState?.edition,
-        authors: route?.params.bookState?.authors,
-        amount: route?.params?.bookState?.amount,
-        condition: route?.params?.bookState?.condition,
-        course_name: route?.params?.bookState?.course_name,
-        course_code: route?.params?.bookState?.course_code,
+      const clothState = {
+        title: route?.params?.clothState?.title,
+        description: route?.params?.clothState?.description,
+        brand: route?.params?.clothState?.brand,
+        size: route?.params.clothState?.size,
+        price: route?.params?.clothState?.price,
+        condition: route?.params?.clothState?.condition,
+        category: route?.params?.clothState?.category,
+        gender: route?.params?.clothState?.gender,
       };
-      Object.keys(bookState).forEach((key) => {
-        formData.append(key, bookState[key]);
+      Object.keys(clothState).forEach((key) => {
+        formData.append(key, clothState[key]);
       });
-      if (!route?.params?.bookState?.id) {
+      if (!route?.params?.clothState?.id) {
         pictures.forEach((photo) => {
           formData.append("files", {
             name: photo.image.uri,
@@ -148,16 +148,16 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
 
       try {
         setLoading(true);
-        if (route?.params?.bookState?.id) {
-          await axios.patch(`/sales/${route.params.bookState.id}`, formData);
+        if (route?.params?.clothState?.id) {
+          await axios.patch(`/sales/${route.params.clothState.id}`, formData);
           setLoading(false);
-          Alert.alert("Book Updated succesfully!");
+          Alert.alert("cloth Updated succesfully!");
         } else {
           await axios.post("/sales/", formData);
           setLoading(false);
-          Alert.alert("Book Listed for Sale succesfully!");
+          Alert.alert("cloth Listed for Sale succesfully!");
         }
-        navigation.replace("SoldBooksScreen");
+        navigation.replace("SoldclothsScreen");
       } catch (err) {
         setError(err.response.data.errMessage);
         setLoading(false);
@@ -175,11 +175,11 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
         handleImageUpload={handleImageUpload}
       />
       <View style={styles.UploadCard}>
-        <Caption style={styles.StepText}>Step 4 of 4</Caption>
+        <Caption style={styles.StepText}>Step 3 of 3</Caption>
         <Title stule={styles.ModalHeader}>Time to take a picture 📷</Title>
         <Caption stule={styles.ModalFooter}>
-          You are allowed to upload a max of 2 images. Make sure to take picture
-          of both the front view and the rear view of the book
+          You are allowed to upload a maximum of 5 images. Please ensure to
+          include clear pictures of the clothing item.
         </Caption>
       </View>
       {pictures.length === 0 && (
