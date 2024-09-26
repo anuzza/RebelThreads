@@ -49,14 +49,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    contactInfo: {
-      phone: { type: String, default: null },
-      twitter: { type: String, default: null },
-      instagram: { type: String, default: null },
-      facebook: { type: String, default: null },
-      snapchat: { type: String, default: null },
+    phone: {
+      type: String,
+      required: true,
     },
-    preferredCommunication: [String],
     deleted: {
       type: Boolean,
       default: false,

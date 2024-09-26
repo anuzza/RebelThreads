@@ -125,6 +125,10 @@ const LoginScreen = () => {
                 placeholder="Email (olemiss.edu)"
                 placeholderTextColor={"gray"}
                 onChange={(e) => handleEmail(e)}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.secondTextInput.focus();
+                }}
               />
               {email.length < 1 ? null : emailVerify ? (
                 <Feather name="check-circle" color="green" size={20} />
@@ -154,10 +158,14 @@ const LoginScreen = () => {
                 size={20}
               />
               <TextInput
+                ref={(input) => {
+                  this.secondTextInput = input;
+                }}
                 placeholder="Password"
                 placeholderTextColor={"gray"}
                 secureTextEntry={showPassword}
                 style={styles.textInput}
+                returnKeyType="done"
                 onChange={(e) => handlePassword(e)}
               />
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

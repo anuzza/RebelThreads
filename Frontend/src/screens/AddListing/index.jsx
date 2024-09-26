@@ -1,14 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { BaseScreen } from "./BaseScreen";
+import { CameraScreen } from "./CameraScreen";
+import { FinalScreen } from "./FinalScreen";
+import { SecondaryScreen } from "./SecondaryScreen";
 
-const AddListing = () => {
-  return (
-    <View>
-      <Text>Add</Text>
-    </View>
-  );
-};
-
-export default AddListing;
-
-const styles = StyleSheet.create({});
+export { FinalScreen, BaseScreen, SecondaryScreen, CameraScreen };

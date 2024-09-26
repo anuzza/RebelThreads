@@ -30,14 +30,16 @@ const SignupScreen = () => {
   const [emailVerify, setEmailVerify] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [phoneVerify, setPhoneVerify] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
 
   const authLoading = useSelector((state) => state.auth.authLoading);
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    if (nameVerify && emailVerify && passwordVerify) {
-      dispatch(signup(name, email, password));
+    if (nameVerify && emailVerify && passwordVerify && phoneVerify) {
+      dispatch(signup(name, email, password, phone));
     } else {
       Alert.alert("Fill mandatory details");
     }
@@ -76,8 +78,20 @@ const SignupScreen = () => {
     }
   };
 
+  const handlePhoneNumber = (e) => {
+    const phoneNumberVar = e.nativeEvent.text;
+    setPhone(phoneNumberVar);
+    setPhoneVerify(false);
+
+    // Regex to check if the phone number is in the format (123) 456-7890 or 123-456-7890 or 1234567890
+    if (/^\d{10}$/.test(phoneNumberVar)) {
+      setPhoneVerify(true);
+    }
+  };
+
   // Check if all fields are verified
-  const isFormValid = nameVerify && emailVerify && passwordVerify;
+  const isFormValid =
+    nameVerify && emailVerify && passwordVerify && phoneVerify;
 
   return (
     <ScrollView
@@ -87,7 +101,7 @@ const SignupScreen = () => {
       <SafeAreaView className="bg-white h-full w-full">
         <StatusBar style="light" />
         <Image
-          className="h-[600] w-full absolute"
+          className="h-[530] w-full absolute"
           source={require("../../assets/images/background.png")}
         />
 
@@ -106,9 +120,9 @@ const SignupScreen = () => {
         </View>
 
         {/* title and form */}
-        <View className="h-full w-full flex justify-around pt-40 pb-2">
+        <View className="h-full w-full flex justify-around pt-10 pb-2">
           {/* Title */}
-          <View className="flex items-center">
+          <View className="flex items-center" style={{ marginTop: 100 }}>
             <Animated.Text
               entering={FadeInUp.delay(800).duration(1000).springify()}
               className="text-white font-bold tracking-wider text-5xl"
@@ -120,7 +134,7 @@ const SignupScreen = () => {
           {/* form */}
           <View className="flex items-center mx-4 space-y-3">
             <Animated.View
-              entering={FadeInDown.duration(1000).springify()}
+              entering={FadeInDown.delay(200).duration(1000).springify()}
               className="bg-black/5 p-4 rounded-2xl w-full flex-row"
             >
               <FontAwesome
@@ -134,6 +148,10 @@ const SignupScreen = () => {
                 placeholderTextColor={"gray"}
                 onChange={(e) => handleName(e)}
                 style={styles.textInput}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.secondTextInput.focus();
+                }}
               />
               {name.length < 1 ? null : nameVerify ? (
                 <Feather
@@ -163,7 +181,7 @@ const SignupScreen = () => {
               </Text>
             )}
             <Animated.View
-              entering={FadeInDown.duration(1000).springify()}
+              entering={FadeInDown.delay(400).duration(1000).springify()}
               className="bg-black/5 p-4 rounded-2xl w-full flex-row"
             >
               <Fontisto
@@ -173,10 +191,17 @@ const SignupScreen = () => {
                 size={20}
               />
               <TextInput
+                ref={(input) => {
+                  this.secondTextInput = input;
+                }}
                 style={styles.textInput}
                 placeholder="Email (olemiss.edu)"
                 placeholderTextColor={"gray"}
                 onChange={(e) => handleEmail(e)}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.thirdTextInput.focus();
+                }}
               />
               {email.length < 1 ? null : emailVerify ? (
                 <Feather name="check-circle" color="green" size={20} />
@@ -197,7 +222,7 @@ const SignupScreen = () => {
             )}
 
             <Animated.View
-              entering={FadeInDown.delay(200).duration(1000).springify()}
+              entering={FadeInDown.delay(600).duration(1000).springify()}
               className="bg-black/5 p-4 rounded-2xl w-full flex-row"
             >
               <FontAwesome
@@ -207,11 +232,18 @@ const SignupScreen = () => {
                 size={20}
               />
               <TextInput
+                ref={(input) => {
+                  this.thirdTextInput = input;
+                }}
                 style={styles.textInput}
                 placeholder="Password"
                 placeholderTextColor={"gray"}
                 onChange={(e) => handlePassword(e)}
                 secureTextEntry={showPassword}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.fourthTextInput.focus();
+                }}
               />
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 {password.length < 1 ? null : !showPassword ? (
@@ -243,7 +275,44 @@ const SignupScreen = () => {
               </Text>
             )}
             <Animated.View
-              entering={FadeInDown.duration(1000).delay(400).springify()}
+              entering={FadeInDown.delay(800).duration(1000).springify()}
+              className="bg-black/5 p-4 rounded-2xl w-full flex-row"
+            >
+              <Fontisto
+                name="mobile-alt"
+                color="#420475"
+                style={styles.smallIcon}
+                size={20}
+              />
+              <TextInput
+                ref={(input) => {
+                  this.fourthTextInput = input;
+                }}
+                style={styles.textInput}
+                placeholder="Phone number"
+                placeholderTextColor={"gray"}
+                onChange={(e) => handlePhoneNumber(e)}
+                returnKeyType="done"
+              />
+              {phone.length < 1 ? null : phoneVerify ? (
+                <Feather name="check-circle" color="green" size={20} />
+              ) : (
+                <Error name="error" color="red" size={20} />
+              )}
+            </Animated.View>
+            {phone.length < 1 ? null : phoneVerify ? null : (
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: "red",
+                  fontSize: 12,
+                }}
+              >
+                Please enter a valid 10-digit phone number
+              </Text>
+            )}
+            <Animated.View
+              entering={FadeInDown.delay(1000).duration(1000).springify()}
               className="w-full"
             >
               <TouchableOpacity
@@ -263,7 +332,7 @@ const SignupScreen = () => {
               </TouchableOpacity>
             </Animated.View>
             <Animated.View
-              entering={FadeInDown.duration(1000).delay(400).springify()}
+              entering={FadeInDown.delay(1200).duration(1000).springify()}
               className="flex-row justify-center"
             >
               <Text>Already have an account? </Text>

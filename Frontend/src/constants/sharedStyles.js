@@ -49,7 +49,7 @@ export const uploadFormStyles = StyleSheet.create({
 
   ActionButton: {
     marginTop: 20,
-    borderColor: "#000",
+    borderColor: "#4338ca",
     width: "80%",
     padding: 10,
     borderWidth: 1,
@@ -74,7 +74,7 @@ export const uploadFormStyles = StyleSheet.create({
     fontSize: 12,
   },
   StepText: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#D91848",
   },
   error: {
@@ -99,12 +99,20 @@ export const uploadFormStyles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
   },
+  longInput: {
+    borderColor: "#ddd",
+    borderWidth: 1,
+    padding: 10,
+    marginLeft: 10,
+    fontSize: 16,
+    height: 60,
+  },
   SaveButton: {
     width: "100%",
     alignSelf: "center",
     marginTop: 25,
     marginBottom: 40,
-    backgroundColor: "#000",
+    backgroundColor: "#4338ca",
     padding: 10,
     alignItems: "center",
     justifyContent: "center",

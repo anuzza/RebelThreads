@@ -26,7 +26,7 @@ export const login = (email, password) => {
   };
 };
 
-export const signup = (name, email, password) => {
+export const signup = (name, email, password, phone) => {
   return async (dispatch) => {
     try {
       dispatch(authStart());
@@ -34,6 +34,7 @@ export const signup = (name, email, password) => {
         name,
         email,
         password,
+        phone,
       };
 
       const {

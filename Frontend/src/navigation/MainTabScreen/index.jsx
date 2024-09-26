@@ -1,7 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons as Icon } from "@expo/vector-icons";
-import { HomeStackScreen } from "../RootStackScreen/StackScreens";
+import {
+  AddListingStackScreen,
+  HomeStackScreen,
+} from "../RootStackScreen/StackScreens";
 import AddListing from "../../screens/AddListing/index";
 import Requests from "../../screens/Requests/index";
 import { useNavigation } from "@react-navigation/native";
@@ -47,8 +50,9 @@ const MainTabScreen = ({ user }) => {
       />
       <Tab.Screen
         name="Sell Tab"
-        component={AddListing}
+        component={AddListingStackScreen}
         options={{
+          headerShown: false,
           tabBarLabel: "Sell",
           tabBarIcon: ({ color }) => (
             <Icon name="camera" color={color} size={26} />

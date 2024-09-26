@@ -8,6 +8,12 @@ import ProfileScreen from "../../screens/Profile";
 import MyListings from "../../screens/MyListings/index";
 import MyRequests from "../../screens/My Requests/index";
 import { Ionicons as Icon } from "@expo/vector-icons";
+import {
+  BaseScreen as UploadClothBaseScreen,
+  FinalScreen as UploadClothFinalScreen,
+  CameraScreen as UploadClothCameraScreen,
+  SecondaryScreen as UploadClothSecondaryScreen,
+} from "../../screens/AddListing";
 
 import {
   horizontalAnimation,
@@ -78,4 +84,56 @@ export const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen name="Profile" component={ProfileScreen} />
     <HomeStack.Screen name="Saved" component={Saved} />
   </HomeStack.Navigator>
+);
+
+const AddListingStack = createNativeStackNavigator();
+export const AddListingStackScreen = ({ navigation }) => (
+  <AddListingStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      ...horizontalAnimation,
+    }}
+  >
+    <AddListingStack.Screen
+      name="UploadClothBaseScreen"
+      options={{
+        title: "Add a Listing",
+        headerShown: true,
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#000"
+            backgroundColor="#fff"
+            onPress={() => navigation.goBack()}
+          ></Icon.Button>
+        ),
+      }}
+      component={UploadClothBaseScreen}
+    />
+    <AddListingStack.Screen
+      name="UploadClothSecondaryScreen"
+      options={{
+        title: "More Info",
+        headerShown: true,
+      }}
+      component={UploadClothSecondaryScreen}
+    />
+    {/* <AddListingStack.Screen
+      name="UploadClothFinalScreen"
+      options={{
+        title: "More Info",
+        headerShown: true,
+      }}
+      component={UploadClothFinalScreen}
+    /> */}
+    {/* <AddListingStack.Screen
+      name="UploadClothCameraScreen"
+      options={{
+        title: "Finish",
+        headerShown: true,
+      }}
+      component={UploadClothCameraScreen}
+    /> */}
+  </AddListingStack.Navigator>
 );
