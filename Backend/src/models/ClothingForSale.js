@@ -48,11 +48,6 @@ const clothingForSaleSchema = new mongoose.Schema(
       default: 0,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["available", "pending", "sold"],
-      default: "available",
-    },
     active: {
       type: Boolean,
       default: true,

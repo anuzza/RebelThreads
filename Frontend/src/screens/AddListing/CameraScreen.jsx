@@ -68,7 +68,7 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     const result = await showImagePicker();
 
     if (!result.canceled) {
-      handleImageUpload(result);
+      handleImageUpload(result.assets[0]);
     }
   };
 
@@ -183,7 +183,7 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
               onPress={() => onDeleteImage(index)}
               style={styles.DeleteButton}
             >
-              <Icon name="trash" size={15} color="#fff" />
+              <Icon name="trash" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
         ))}

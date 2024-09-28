@@ -16,14 +16,15 @@ export const uploadFormStyles = StyleSheet.create({
     alignItems: "center",
   },
   SingleImageWrapper: {
-    marginLeft: 20,
+    marginTop: 20,
     height: 120,
     padding: 20,
     borderWidth: 1,
+    borderRadius: 20,
+    borderColor: "#C0C0C0",
   },
   PhotoContainer: {
-    marginTop: 40,
-    marginHorizontal: 35,
+    margin: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
@@ -31,7 +32,7 @@ export const uploadFormStyles = StyleSheet.create({
   },
 
   ImageWrapper: {
-    width: "50%",
+    width: "45%",
     position: "relative",
   },
 
@@ -40,13 +41,15 @@ export const uploadFormStyles = StyleSheet.create({
     padding: 5,
     borderRadius: 120,
     backgroundColor: "#D91848",
-    bottom: 105,
-    right: -7,
+    bottom: 130,
+    right: -10,
   },
 
   Image: {
     width: "100%",
-    height: 120,
+    height: 150,
+    marginTop: 20,
+    borderRadius: 20,
   },
 
   ActionButton: {

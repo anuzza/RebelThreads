@@ -100,7 +100,6 @@ const CameraComponent = ({
             style={styles.camera}
             facing={facing}
             flash={flashMode}
-            mirror={false}
           >
             <View
               style={{

@@ -37,11 +37,6 @@ const clothesRequestedSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["open", "fulfilled", "closed"],
-      default: "open",
-    },
     active: {
       type: Boolean,
       default: true,

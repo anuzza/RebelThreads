@@ -97,7 +97,7 @@ export const AddListingStackScreen = ({ navigation, route }) => (
       headerTintColor: "#FFF",
     }}
   >
-    {/* <AddListingStack.Screen
+    <AddListingStack.Screen
       name="UploadClothBaseScreen"
       options={{
         title: "Add a Listing",
@@ -123,7 +123,7 @@ export const AddListingStackScreen = ({ navigation, route }) => (
         headerShown: true,
       }}
       component={UploadClothSecondaryScreen}
-    /> */}
+    />
     <AddListingStack.Screen
       name="UploadClothCameraScreen"
       options={{
