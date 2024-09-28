@@ -48,7 +48,7 @@ export const SecondaryScreen = ({ route, navigation }) => {
     } else {
       const valid = /^-?\d*(\.\d+)?$/;
       if (!price.match(valid)) {
-        validationErrors.amountError = "Price must be a decimal value!";
+        validationErrors.priceError = "Price must be a decimal value!";
       }
     }
     if (condition === "Select Condition") {
@@ -88,19 +88,11 @@ export const SecondaryScreen = ({ route, navigation }) => {
     if (route?.params?.clothState) {
       setState({
         ...state,
-        price: route?.params?.clothState?.price
-          ? route.params.clothState.price
-          : "",
-        condition: route?.params?.clothState?.condition
-          ? route.params.clothState.condition
-          : "",
-        category: route?.params?.clothState?.category
-          ? route.params.clothState.category
-          : "",
-        gender: route?.params?.clothState?.gender
-          ? route.params.clothState.gender
-          : "",
+        price: route.params.clothState.price || "0",
       });
+      setCondition(route.params.clothState.condition || conditionOptions[0]);
+      setCategory(route.params.clothState.category || categoryOptions[0]);
+      setGender(route.params.clothState.gender || genderOptions[0]);
     }
   }, [route]);
 
@@ -190,6 +182,7 @@ export const SecondaryScreen = ({ route, navigation }) => {
             style={[styles.Input, error?.genderError && styles.borderError]}
             returnKeyType="done"
             value={gender}
+            editable={false}
             selectTextOnFocus={false}
             onPressIn={() => {
               if (error?.genderError) {

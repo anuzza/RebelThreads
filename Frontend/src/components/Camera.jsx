@@ -6,43 +6,50 @@ import {
   TouchableOpacity,
   Alert,
   ImageBackground,
-  StatusBar,
   Modal,
+  SafeAreaView,
 } from "react-native";
-import { CameraView, CameraType } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { Ionicons as Icon } from "@expo/vector-icons";
+import { CameraType, FlashMode } from "expo-camera/build/legacy/Camera.types";
 
-let camera;
 const CameraComponent = ({
   modalVisible,
   setModalVisible,
   handleImageUpload,
 }) => {
-  const [cameraStarted, setStartCamera] = useState(false);
-  //   const [hasPermission, setHasPermission] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [camera, setCamera] = useState(null);
+  const [facing, setFacing] = useState(CameraType.back);
+  const [flashMode, setFlashMode] = useState(FlashMode.off);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [facing, setFacing] = useState("back");
-  const [flashMode, setFlashMode] = useState("off");
-
-  const startCamera = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    if (status === "granted") {
-      setStartCamera(true);
-    } else {
-      Alert.alert("Access denied");
-    }
-  };
 
   useEffect(() => {
-    startCamera();
-  }, []);
-  //   if (hasPermission === null) {
-  //     return <Text>Requesting for camera permission</Text>;
-  //   }
-  //   if (hasPermission === false) {
-  //     return Alert.alert("Access denied");
-  //   }
+    if (permission?.granted === false) {
+      Alert.alert("Camera access is required.");
+    }
+  }, [permission]);
+
+  const toggleCameraFacing = () => {
+    setFacing((prevFacing) =>
+      prevFacing === CameraType.back ? CameraType.front : CameraType.back
+    );
+  };
+
+  const handleFlashMode = () => {
+    setFlashMode((prevFlash) =>
+      prevFlash === FlashMode.off ? FlashMode.on : FlashMode.off
+    );
+  };
+
+  const takePicture = async () => {
+    if (camera) {
+      const photo = await camera.takePictureAsync();
+      setCapturedImage(photo);
+      setPreviewVisible(true);
+    }
+  };
 
   const savePhoto = () => {
     handleImageUpload(capturedImage);
@@ -51,34 +58,28 @@ const CameraComponent = ({
     setCapturedImage(null);
   };
 
-  const takePicture = async () => {
-    const photo = await camera.takePictureAsync();
-    setPreviewVisible(true);
-    setCapturedImage(photo);
-  };
-
   const retakePicture = () => {
     setCapturedImage(null);
     setPreviewVisible(false);
-    startCamera();
   };
 
-  const handleFlashMode = () => {
-    if (flashMode === "on") {
-      setFlashMode("off");
-    } else if (flashMode === "off") {
-      setFlashMode("on");
-    } else {
-      setFlashMode("auto");
-    }
-  };
-  const switchCamera = () => {
-    if (facing === "back") {
-      setFacing("front");
-    } else {
-      setFacing("back");
-    }
-  };
+  // Request camera permission
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <TouchableOpacity onPress={requestPermission} style={styles.button}>
+          <Text style={styles.text}>Grant Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <Modal
@@ -86,13 +87,7 @@ const CameraComponent = ({
       animationType="slide"
       style={styles.container}
     >
-      <StatusBar style="auto" />
-      <View
-        style={{
-          flex: 1,
-          width: "100%",
-        }}
-      >
+      <View style={{ flex: 1 }}>
         {previewVisible && capturedImage ? (
           <CameraPreview
             photo={capturedImage}
@@ -101,82 +96,56 @@ const CameraComponent = ({
           />
         ) : (
           <CameraView
+            ref={setCamera}
+            style={styles.camera}
             facing={facing}
-            flashMode={flashMode}
-            style={{ flex: 1 }}
-            ref={(r) => {
-              camera = r;
-            }}
+            flash={flashMode}
+            mirror={false}
           >
             <View
               style={{
-                flex: 1,
-                width: "100%",
-                backgroundColor: "transparent",
-                flexDirection: "row",
+                position: "absolute",
+                left: "5%",
+                top: "5%",
               }}
             >
-              <View
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
                 style={{
-                  position: "absolute",
-                  left: "5%",
-                  top: "5%",
+                  marginTop: 20,
+                  borderRadius: "50%",
+                  height: 25,
+                  width: 25,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => setModalVisible(false)}
-                  style={{
-                    marginTop: 20,
-                    borderRadius: "50%",
-                    height: 25,
-                    width: 25,
-                  }}
-                >
-                  <Icon name="close-sharp" size={30} color="#fff"></Icon>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  flexDirection: "row",
-                  flex: 1,
-                  width: "100%",
-                  alignItems: "center",
-                  padding: 40,
-                  justifyContent: "space-between",
-                }}
+                <Icon name="close-sharp" size={30} color="#fff"></Icon>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.cameraControls}>
+              <TouchableOpacity
+                onPress={toggleCameraFacing}
+                style={styles.controlButton}
               >
-                <TouchableOpacity onPress={handleFlashMode}>
-                  <Icon
-                    name={
-                      flashMode === "off"
-                        ? "ios-flash-off-outline"
-                        : "ios-flash-outline"
-                    }
-                    size={30}
-                    color="#fff"
-                  />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={takePicture}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    bottom: 0,
-                    borderRadius: 50,
-                    backgroundColor: "#fff",
-                  }}
+                <Icon name="camera-reverse-outline" size={35} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={takePicture}
+                style={styles.captureButton}
+              />
+              <TouchableOpacity
+                onPress={handleFlashMode}
+                style={styles.controlButton}
+              >
+                <Icon
+                  name={
+                    flashMode === FlashMode.off
+                      ? "flash-off-outline"
+                      : "flash-outline"
+                  }
+                  size={30}
+                  color="#fff"
                 />
-                <TouchableOpacity onPress={switchCamera}>
-                  <Icon
-                    name="ios-camera-reverse-outline"
-                    size={35}
-                    color="#fff"
-                  />
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
           </CameraView>
         )}
@@ -185,80 +154,20 @@ const CameraComponent = ({
   );
 };
 
-const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
-  return (
-    <View
-      style={{
-        backgroundColor: "transparent",
-        flex: 1,
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <ImageBackground
-        source={{ uri: photo && photo.uri }}
-        style={{
-          flex: 1,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            padding: 15,
-            justifyContent: "flex-end",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <TouchableOpacity
-              onPress={retakePicture}
-              style={{
-                width: 130,
-                height: 40,
-
-                alignItems: "center",
-                borderRadius: 4,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 20,
-                }}
-              >
-                Re-take
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={savePhoto}
-              style={{
-                width: 130,
-                height: 40,
-
-                alignItems: "center",
-                borderRadius: 4,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 20,
-                }}
-              >
-                save photo
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
-  );
-};
+const CameraPreview = ({ photo, retakePicture, savePhoto }) => (
+  <View style={styles.previewContainer}>
+    <ImageBackground source={{ uri: photo.uri }} style={styles.imageBackground}>
+      <View style={styles.previewActions}>
+        <TouchableOpacity onPress={retakePicture} style={styles.actionButton}>
+          <Text style={styles.actionText}>Re-take</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={savePhoto} style={styles.actionButton}>
+          <Text style={styles.actionText}>Save Photo</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -266,6 +175,78 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  camera: {
+    flex: 1,
+  },
+  closeButton: {
+    position: "absolute",
+    bottom: 90,
+    left: 20,
+    zIndex: 1,
+  },
+  cameraControls: {
+    position: "absolute",
+    bottom: 0,
+    flexDirection: "row",
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    padding: 40,
+    justifyContent: "space-between",
+  },
+  controlButton: {
+    margin: 10,
+  },
+  captureButton: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    marginBottom: 20, // Space it above the bottom
+  },
+  previewContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  imageBackground: {
+    flex: 1,
+  },
+  previewActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    flex: 1,
+    maxHeight: "fit-content",
+    position: "absolute",
+    bottom: 0, // Position the buttons at the bottom
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  actionButton: {
+    marginBottom: 30,
+    width: 130,
+    height: 20,
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  actionText: {
+    color: "#fff",
+    fontSize: 20,
+  },
+  message: {
+    textAlign: "center",
+    paddingBottom: 10,
+  },
+  button: {
+    padding: 10,
+    backgroundColor: "#4338ca",
+    borderRadius: 5,
+  },
+  text: {
+    color: "white",
+    fontSize: 18,
   },
 });
 

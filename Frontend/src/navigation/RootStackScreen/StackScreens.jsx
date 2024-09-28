@@ -86,14 +86,18 @@ export const HomeStackScreen = ({ navigation }) => (
 );
 
 const AddListingStack = createNativeStackNavigator();
-export const AddListingStackScreen = ({ navigation }) => (
+export const AddListingStackScreen = ({ navigation, route }) => (
   <AddListingStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
       ...horizontalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
-    <AddListingStack.Screen
+    {/* <AddListingStack.Screen
       name="UploadClothBaseScreen"
       options={{
         title: "Add a Listing",
@@ -102,10 +106,9 @@ export const AddListingStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => {
-              navigation.setParams({});
               navigation.goBack();
             }}
           ></Icon.Button>
@@ -120,7 +123,7 @@ export const AddListingStackScreen = ({ navigation }) => (
         headerShown: true,
       }}
       component={UploadClothSecondaryScreen}
-    />
+    /> */}
     <AddListingStack.Screen
       name="UploadClothCameraScreen"
       options={{

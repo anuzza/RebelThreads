@@ -16,7 +16,7 @@ export const uploadFormStyles = StyleSheet.create({
     alignItems: "center",
   },
   SingleImageWrapper: {
-    marginLeft: 10,
+    marginLeft: 20,
     height: 120,
     padding: 20,
     borderWidth: 1,
@@ -26,10 +26,12 @@ export const uploadFormStyles = StyleSheet.create({
     marginHorizontal: 35,
     flexDirection: "row",
     justifyContent: "space-between",
+    flexWrap: "wrap",
+    alignContent: "center",
   },
 
   ImageWrapper: {
-    width: "48%",
+    width: "50%",
     position: "relative",
   },
 

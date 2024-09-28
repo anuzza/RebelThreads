@@ -11,6 +11,13 @@ import { Caption, Title } from "react-native-paper";
 import { uploadFormStyles as styles } from "../../constants/sharedStyles";
 
 export const BaseScreen = ({ route, navigation }) => {
+  const initialState = {
+    title: "",
+    description: "",
+    brand: "",
+    size: "",
+    error: {},
+  };
   const [state, setState] = useState({
     title: "",
     description: "",
@@ -50,6 +57,7 @@ export const BaseScreen = ({ route, navigation }) => {
       setState({ ...state, error: {} });
       navigation.push("UploadClothSecondaryScreen", {
         clothState: {
+          ...route?.params?.clothState,
           title,
           description,
           brand,
@@ -63,18 +71,10 @@ export const BaseScreen = ({ route, navigation }) => {
     if (route?.params?.clothState) {
       setState({
         ...state,
-        title: route?.params?.clothState?.title
-          ? route.params.clothState.title
-          : "",
-        description: route?.params?.clothState?.description
-          ? route.params.clothState.description
-          : "",
-        brand: route?.params?.clothState?.brand
-          ? route.params.clothState.brand
-          : "",
-        size: route?.params?.clothState?.size
-          ? route.params.clothState.size
-          : "",
+        title: route.params.clothState.title || "",
+        description: route.params.clothState.description || "",
+        brand: route.params.clothState.brand || "",
+        size: route.params.clothState.size || "",
       });
     }
   }, [route]);
@@ -97,6 +97,7 @@ export const BaseScreen = ({ route, navigation }) => {
           <TextInput
             style={[styles.Input, error?.titleError && styles.borderError]}
             returnKeyType="done"
+            value={title}
             onChangeText={(text) => {
               setState({ ...state, title: text });
             }}
@@ -119,6 +120,7 @@ export const BaseScreen = ({ route, navigation }) => {
                 styles.longInput,
                 error?.descriptionError && styles.borderError,
               ]}
+              value={description}
               multiline={true}
               onChangeText={(text) => {
                 setState({ ...state, description: text });
@@ -140,6 +142,7 @@ export const BaseScreen = ({ route, navigation }) => {
           <TextInput
             style={[styles.Input, error?.brandError && styles.borderError]}
             returnKeyType="done"
+            value={brand}
             onChangeText={(text) => {
               setState({ ...state, brand: text });
             }}

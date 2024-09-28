@@ -24,7 +24,7 @@ const options = ["Select photos", "Take a photo", "Cancel"];
 const findUploadedPictures = (pictures) => {
   const images = [];
   pictures.forEach((picture) => {
-    if (picture.selectedOrUploaded === false) {
+    if (!picture.selectedOrUploaded) {
       images.push(picture.image);
     }
   });
@@ -32,7 +32,7 @@ const findUploadedPictures = (pictures) => {
 };
 
 export const CameraScreen = connectActionSheet(({ route, navigation }) => {
-  const [modalVisible, setModalVisable] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   const [pictures, setPictures] = useState([]);
   const [error, setError] = useState("");
@@ -43,35 +43,32 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     if (route?.params?.clothState) {
       setPictures(
         route?.params?.clothState?.pictures
-          ? route.params.clothState.pictures.map((picture) => {
-              return { image: picture, selectedOrUploaded: false };
-            })
+          ? route.params.clothState.pictures.map((picture) => ({
+              image: picture,
+              selectedOrUploaded: false,
+            }))
           : []
       );
     }
   }, [route]);
 
   const handleImageUpload = (image) => {
-    setPictures(
-      pictures.concat({
-        image: image,
-        selectedOrUploaded: true,
-      })
-    );
-    setError("");
+    if (pictures.length < 4) {
+      setPictures((prevPictures) => [
+        ...prevPictures,
+        { image: image, selectedOrUploaded: true },
+      ]);
+      setError("");
+    } else {
+      Alert.alert("Maximum of 4 images can be uploaded.");
+    }
   };
 
   const handleImageSelection = async () => {
     const result = await showImagePicker();
 
-    if (!result.cancelled) {
-      setPictures(
-        pictures.concat({
-          image: result,
-          selectedOrUploaded: true,
-        })
-      );
-      setError("");
+    if (!result.canceled) {
+      handleImageUpload(result);
     }
   };
 
@@ -83,11 +80,11 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
         destructiveButtonIndex: 2,
       },
       (buttonIndex) => {
-        if (buttonIndex == 0) {
+        if (buttonIndex === 0) {
           handleImageSelection();
         }
-        if (buttonIndex == 1) {
-          setModalVisable(true);
+        if (buttonIndex === 1) {
+          setModalVisible(true);
         }
       }
     );
@@ -95,74 +92,63 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
 
   const onDeleteImage = (index) => {
     if (!pictures[index].selectedOrUploaded) {
-      setDeletedImages(deletedImages.concat(pictures[index].image));
+      setDeletedImages((prevDeleted) => [
+        ...prevDeleted,
+        pictures[index].image,
+      ]);
     }
-
-    setPictures(pictures.filter((image, idx) => idx !== index));
+    setPictures((prevPictures) =>
+      prevPictures.filter((_, idx) => idx !== index)
+    );
   };
 
   const onFormSubmit = async () => {
     if (pictures.length === 0) {
-      setError("Please select atleast one picture!");
+      setError("Please upload at least one picture!");
       validateInputRef.current.shake(800);
-    } else {
-      setError("");
-      const formData = new FormData();
-      const clothState = {
-        title: route?.params?.clothState?.title,
-        description: route?.params?.clothState?.description,
-        brand: route?.params?.clothState?.brand,
-        size: route?.params.clothState?.size,
-        price: route?.params?.clothState?.price,
-        condition: route?.params?.clothState?.condition,
-        category: route?.params?.clothState?.category,
-        gender: route?.params?.clothState?.gender,
-      };
-      Object.keys(clothState).forEach((key) => {
-        formData.append(key, clothState[key]);
-      });
-      if (!route?.params?.clothState?.id) {
-        pictures.forEach((photo) => {
-          formData.append("files", {
-            name: photo.image.uri,
-            type: photo.image.type + "/jpeg",
-            uri: photo.image.uri,
-          });
-        });
-      } else {
-        pictures.forEach((photo) => {
-          if (photo.selectedOrUploaded) {
-            formData.append("files", {
-              name: photo.image.uri,
-              type: photo.image.type + "/jpeg",
-              uri: photo.image.uri,
-            });
-          }
-        });
-        formData.append(
-          "pictures",
-          JSON.stringify(findUploadedPictures(pictures))
-        );
-        formData.append("deletedPictures", JSON.stringify(deletedImages));
-      }
-
-      try {
-        setLoading(true);
-        if (route?.params?.clothState?.id) {
-          await axios.patch(`/sales/${route.params.clothState.id}`, formData);
-          setLoading(false);
-          Alert.alert("cloth Updated succesfully!");
-        } else {
-          await axios.post("/sales/", formData);
-          setLoading(false);
-          Alert.alert("cloth Listed for Sale succesfully!");
-        }
-        navigation.replace("SoldclothsScreen");
-      } catch (err) {
-        setError(err.response.data.errMessage);
-        setLoading(false);
-      }
+      return; // Ensure early return on error
     }
+
+    setError("");
+    const formData = new FormData();
+    const clothState = {
+      title: route?.params?.clothState?.title,
+      description: route?.params?.clothState?.description,
+      brand: route?.params?.clothState?.brand,
+      size: route?.params?.clothState?.size,
+      price: route?.params?.clothState?.price,
+      condition: route?.params?.clothState?.condition,
+      category: route?.params?.clothState?.category,
+      gender: route?.params?.clothState?.gender,
+    };
+    Object.keys(clothState).forEach((key) => {
+      formData.append(key, clothState[key]);
+    });
+
+    pictures.forEach((photo) => {
+      formData.append("files", {
+        name: photo.image.uri || photo.image,
+        type: photo.image.type ? photo.image.type + "/jpeg" : "image/jpeg",
+        uri: photo.image.uri || photo.image,
+      });
+    });
+
+    if (route?.params?.clothState?.id) {
+      formData.append(
+        "pictures",
+        JSON.stringify(findUploadedPictures(pictures))
+      );
+      formData.append("deletedPictures", JSON.stringify(deletedImages));
+      // Update existing cloth
+      await axios.patch(`/sales/${route.params.clothState.id}`, formData);
+      Alert.alert("Cloth updated successfully!");
+    } else {
+      // Create new cloth listing
+      await axios.post("/sales/", formData);
+      Alert.alert("Cloth listed for sale successfully!");
+    }
+
+    navigation.replace("SoldclothsScreen");
   };
 
   const validateInputRef = useRef();
@@ -171,39 +157,17 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     <ScrollView style={{ flex: 1, padding: 10 }}>
       <CameraComponent
         modalVisible={modalVisible}
-        setModalVisible={setModalVisable}
+        setModalVisible={setModalVisible}
         handleImageUpload={handleImageUpload}
       />
       <View style={styles.UploadCard}>
         <Caption style={styles.StepText}>Step 3 of 3</Caption>
-        <Title stule={styles.ModalHeader}>Time to take a picture 📷</Title>
-        <Caption stule={styles.ModalFooter}>
-          You are allowed to upload a maximum of 5 images. Please ensure to
+        <Title style={styles.ModalHeader}>Add pictures 📷</Title>
+        <Caption style={styles.ModalFooter}>
+          You are allowed to upload a maximum of 4 images. Please ensure to
           include clear pictures of the clothing item.
         </Caption>
       </View>
-      {pictures.length === 0 && (
-        <Animatable.View ref={validateInputRef}>
-          <TouchableOpacity
-            style={styles.ActionButton}
-            onPress={() => setModalVisable(true)}
-          >
-            <View style={styles.RowFlex}>
-              <Icon name="camera" size={25} />
-              <Caption style={styles.ActionText}>Take photo</Caption>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.ActionButton}
-            onPress={handleImageSelection}
-          >
-            <View style={styles.RowFlex}>
-              <Icon name="image" size={25} />
-              <Caption style={styles.ActionText}>Select photo</Caption>
-            </View>
-          </TouchableOpacity>
-        </Animatable.View>
-      )}
 
       <View style={styles.PhotoContainer}>
         {pictures.map((image, index) => (
@@ -224,7 +188,7 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
           </View>
         ))}
 
-        {pictures.length === 1 && (
+        {pictures.length < 4 && (
           <TouchableOpacity
             onPress={onOpenActionSheet}
             style={styles.SingleImageWrapper}
@@ -232,7 +196,7 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
             <View style={styles.ColumnFlex}>
               <Icon name="add" size={50} color="#000" />
               <Caption style={{ marginTop: 10, color: "#000" }}>
-                Using 1/2 images
+                Add Images
               </Caption>
             </View>
           </TouchableOpacity>
