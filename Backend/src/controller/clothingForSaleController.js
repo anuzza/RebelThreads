@@ -16,7 +16,7 @@ const uploadClothingItem = async (req, res) => {
         return res.status(403).send(err);
       }
 
-      if (req.files) {
+      if (req.files.length !== 0) {
         const {
           title,
           description,
@@ -56,6 +56,7 @@ const uploadClothingItem = async (req, res) => {
       }
     });
   } catch (error) {
+    console.log(error);
     res.status(400).send({
       errMessage: error.message,
     });

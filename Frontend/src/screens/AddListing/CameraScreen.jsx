@@ -54,10 +54,12 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
 
   const handleImageUpload = (image) => {
     if (pictures.length < 4) {
-      setPictures((prevPictures) => [
-        ...prevPictures,
-        { image: image, selectedOrUploaded: true },
-      ]);
+      setPictures(
+        pictures.concat({
+          image: image,
+          selectedOrUploaded: true,
+        })
+      );
       setError("");
     } else {
       Alert.alert("Maximum of 4 images can be uploaded.");
@@ -92,14 +94,10 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
 
   const onDeleteImage = (index) => {
     if (!pictures[index].selectedOrUploaded) {
-      setDeletedImages((prevDeleted) => [
-        ...prevDeleted,
-        pictures[index].image,
-      ]);
+      setDeletedImages(deletedImages.concat(pictures[index].image));
     }
-    setPictures((prevPictures) =>
-      prevPictures.filter((_, idx) => idx !== index)
-    );
+
+    setPictures(pictures.filter((image, idx) => idx !== index));
   };
 
   const onFormSubmit = async () => {
@@ -125,30 +123,48 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
       formData.append(key, clothState[key]);
     });
 
-    pictures.forEach((photo) => {
-      formData.append("files", {
-        name: photo.image.uri || photo.image,
-        type: photo.image.type ? photo.image.type + "/jpeg" : "image/jpeg",
-        uri: photo.image.uri || photo.image,
+    if (!route?.params?.bookState?.id) {
+      pictures.forEach((photo) => {
+        formData.append("files", {
+          name: photo.image.uri,
+          type: photo.image.type + "/jpeg",
+          uri: photo.image.uri,
+        });
       });
-    });
-
-    if (route?.params?.clothState?.id) {
+    } else {
+      pictures.forEach((photo) => {
+        if (photo.selectedOrUploaded) {
+          formData.append("files", {
+            name: photo.image.uri,
+            type: photo.image.type + "/jpeg",
+            uri: photo.image.uri,
+          });
+        }
+      });
       formData.append(
         "pictures",
         JSON.stringify(findUploadedPictures(pictures))
       );
       formData.append("deletedPictures", JSON.stringify(deletedImages));
-      // Update existing cloth
-      await axios.patch(`/sales/${route.params.clothState.id}`, formData);
-      Alert.alert("Cloth updated successfully!");
-    } else {
-      // Create new cloth listing
-      await axios.post("/sales/", formData);
-      Alert.alert("Cloth listed for sale successfully!");
     }
 
-    navigation.replace("SoldclothsScreen");
+    try {
+      setLoading(true);
+      if (route?.params?.bookState?.id) {
+        await axios.patch(`/sales/${route.params.bookState.id}`, formData);
+        setLoading(false);
+        Alert.alert("Cloth Updated succesfully!");
+      } else {
+        await axios.post("/sales/", formData);
+        setLoading(false);
+        Alert.alert("Cloth Listed for Sale succesfully!");
+      }
+      navigation.replace("MyListingScreen");
+    } catch (err) {
+      setError(err.response.data.errMessage);
+      setLoading(false);
+      console.log(err);
+    }
   };
 
   const validateInputRef = useRef();

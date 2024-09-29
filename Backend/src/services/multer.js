@@ -11,7 +11,7 @@ const fileUpload = () => {
     acl: "public-read",
 
     key: function (req, file, cb) {
-      cb(null, new Date().toISOString() + +"_" + file.originalname);
+      cb(null, new Date().toISOString() + file.originalname);
     },
   });
 
@@ -29,6 +29,8 @@ const fileUpload = () => {
       cb(undefined, true);
     },
   });
+
+  console.log("upload", upload);
 
   return upload;
 };

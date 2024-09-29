@@ -2,7 +2,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { verticalAnimation } from "../../constants/animation";
 import Drawer from "../DrawerScreen";
-import { AuthStackScreen } from "./StackScreens";
+import {
+  AuthStackScreen,
+  MyListingStackScreen,
+  AddListingStackScreen,
+  HomeStackScreen,
+} from "./StackScreens";
 import LoginScreen from "../../screens/Auth/LoginScreen";
 import { useSelector } from "react-redux";
 
@@ -29,6 +34,14 @@ const RootStackScreen = ({ userToken, user }) => {
           >
             {(props) => <Drawer user={user} {...props} />}
           </RootStack.Screen>
+          <RootStack.Screen
+            name="MyListingScreen"
+            component={MyListingStackScreen}
+          />
+          <RootStack.Screen
+            name="AddListingScreen"
+            component={AddListingStackScreen}
+          />
         </>
       ) : (
         <RootStack.Screen

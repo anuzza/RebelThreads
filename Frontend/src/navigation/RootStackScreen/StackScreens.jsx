@@ -85,8 +85,50 @@ export const HomeStackScreen = ({ navigation }) => (
   </HomeStack.Navigator>
 );
 
+const MyListingStack = createNativeStackNavigator();
+export const MyListingStackScreen = ({ navigation }) => (
+  <MyListingStack.Navigator
+    screenOptions={{
+      ...verticalAnimation,
+      headerBackTitleVisible: false,
+    }}
+  >
+    <MyListingStack.Screen
+      name="MyListing"
+      options={{
+        title: "My Listings",
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#000"
+            backgroundColor="#fff"
+            onPress={() => navigation.replace("App")}
+          ></Icon.Button>
+        ),
+        headerShown: true,
+      }}
+      component={MyListings}
+    />
+    {/* <MyListingStack.Screen
+      name="Details"
+      options={{
+        headerShown: false,
+      }}
+      component={DetailsScreen}
+    /> */}
+    <MyListingStack.Screen
+      name="Profile"
+      options={{
+        headerShown: false,
+      }}
+      component={ProfileScreen}
+    />
+  </MyListingStack.Navigator>
+);
+
 const AddListingStack = createNativeStackNavigator();
-export const AddListingStackScreen = ({ navigation, route }) => (
+export const AddListingStackScreen = ({ navigation }) => (
   <AddListingStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,

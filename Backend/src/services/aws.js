@@ -1,9 +1,9 @@
-const { S3 } = require("@aws-sdk/client-s3");
-const s3 = new S3({
+const AWS = require("aws-sdk");
+
+module.exports = new AWS.S3({
+  region: "us-east-1",
   credentials: {
     accessKeyId: process.env.AWS_ID,
     secretAccessKey: process.env.AWS_SECRET,
   },
 });
-
-module.exports = s3;
