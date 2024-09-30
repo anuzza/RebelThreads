@@ -86,6 +86,7 @@ export const uploadFormStyles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 10,
     color: "#D91848",
+    fontSize: 16,
     justifyContent: "flex-start",
   },
   borderError: {

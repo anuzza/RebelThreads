@@ -6,7 +6,7 @@ const fileUpload = () => {
   let storage;
 
   storage = multerS3({
-    s3,
+    s3: s3,
     bucket: process.env.AWS_BUCKET_NAME,
     acl: "public-read",
 
@@ -29,8 +29,6 @@ const fileUpload = () => {
       cb(undefined, true);
     },
   });
-
-  console.log("upload", upload);
 
   return upload;
 };

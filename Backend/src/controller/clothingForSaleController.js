@@ -16,7 +16,7 @@ const uploadClothingItem = async (req, res) => {
         return res.status(403).send(err);
       }
 
-      if (req.files.length !== 0) {
+      if (req.files) {
         const {
           title,
           description,

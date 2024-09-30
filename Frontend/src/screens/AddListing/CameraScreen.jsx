@@ -100,6 +100,18 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     setPictures(pictures.filter((image, idx) => idx !== index));
   };
 
+  const appendFilesToFormData = (pictures, formData) => {
+    pictures.forEach((photo) => {
+      const { image } = photo;
+      const fileObject = {
+        name: image.uri,
+        type: image.type ? image.type + "/jpeg" : "image/jpeg",
+        uri: image.uri,
+      };
+      formData.append("files", fileObject);
+    });
+  };
+
   const onFormSubmit = async () => {
     if (pictures.length === 0) {
       setError("Please upload at least one picture!");
@@ -123,24 +135,14 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
       formData.append(key, clothState[key]);
     });
 
-    if (!route?.params?.bookState?.id) {
-      pictures.forEach((photo) => {
-        formData.append("files", {
-          name: photo.image.uri,
-          type: photo.image.type + "/jpeg",
-          uri: photo.image.uri,
-        });
-      });
+    if (!route?.params?.clothState?.id) {
+      appendFilesToFormData(pictures, formData);
     } else {
-      pictures.forEach((photo) => {
-        if (photo.selectedOrUploaded) {
-          formData.append("files", {
-            name: photo.image.uri,
-            type: photo.image.type + "/jpeg",
-            uri: photo.image.uri,
-          });
-        }
-      });
+      const filteredPictures = pictures.filter(
+        (photo) => photo.selectedOrUploaded
+      );
+      appendFilesToFormData(filteredPictures, formData);
+
       formData.append(
         "pictures",
         JSON.stringify(findUploadedPictures(pictures))
@@ -163,7 +165,6 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     } catch (err) {
       setError(err.response.data.errMessage);
       setLoading(false);
-      console.log(err);
     }
   };
 
@@ -205,17 +206,19 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
         ))}
 
         {pictures.length < 4 && (
-          <TouchableOpacity
-            onPress={onOpenActionSheet}
-            style={styles.SingleImageWrapper}
-          >
-            <View style={styles.ColumnFlex}>
-              <Icon name="add" size={50} color="#000" />
-              <Caption style={{ marginTop: 10, color: "#000" }}>
-                Add Images
-              </Caption>
-            </View>
-          </TouchableOpacity>
+          <Animatable.View ref={validateInputRef}>
+            <TouchableOpacity
+              onPress={onOpenActionSheet}
+              style={styles.SingleImageWrapper}
+            >
+              <View style={styles.ColumnFlex}>
+                <Icon name="add" size={50} color="#000" />
+                <Caption style={{ marginTop: 10, color: "#000" }}>
+                  Add Images
+                </Caption>
+              </View>
+            </TouchableOpacity>
+          </Animatable.View>
         )}
       </View>
 
