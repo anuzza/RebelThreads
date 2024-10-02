@@ -101,11 +101,11 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
   };
 
   const appendFilesToFormData = (pictures, formData) => {
-    pictures.forEach((photo) => {
+    pictures.forEach((photo, index) => {
       const { image } = photo;
       const fileObject = {
-        name: image.uri,
-        type: image.type ? image.type + "/jpeg" : "image/jpeg",
+        name: image.fileName ? image.fileName : `img${index}.jpg`,
+        type: image.mimeType,
         uri: image.uri,
       };
       formData.append("files", fileObject);
