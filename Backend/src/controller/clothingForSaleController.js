@@ -9,7 +9,6 @@ const multiUpload = upload.array("files", 4); // Allow up to 4 images
 const uploadClothingItem = async (req, res) => {
   try {
     multiUpload(req, res, async function (err) {
-      console.log(req.files);
       if (err) {
         if (err.message && err.message === "File too large") {
           err.errMessage = "File size cannot be larger than 2 MB";

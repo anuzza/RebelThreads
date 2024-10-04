@@ -19,6 +19,7 @@ import {
   verticalAnimation,
 } from "../../constants/animation";
 import Saved from "../../screens/Saved";
+import RequestedScreen from "../../screens/RequestedFeed";
 
 const AuthStack = createNativeStackNavigator();
 export const AuthStackScreen = () => (
@@ -175,4 +176,48 @@ export const AddListingStackScreen = ({ navigation }) => (
       component={UploadClothCameraScreen}
     />
   </AddListingStack.Navigator>
+);
+
+const FeedStack = createNativeStackNavigator();
+export const FeedStackScreen = ({ navigation }) => (
+  <FeedStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
+    }}
+  >
+    <FeedStack.Screen
+      name="Feed"
+      component={RequestedScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="menu-outline"
+            size={25}
+            color="#fff"
+            backgroundColor="#4338ca"
+            onPress={() => navigation.openDrawer()}
+          ></Icon.Button>
+        ),
+        headerShown: true,
+      }}
+    />
+    <FeedStack.Screen
+      name="Profile"
+      options={{
+        headerShown: false,
+      }}
+      component={ProfileScreen}
+    />
+    {/* <FeedStack.Screen
+      name="Details"
+      options={{
+        headerShown: false,
+      }}
+      component={DetailsScreen}
+    /> */}
+  </FeedStack.Navigator>
 );

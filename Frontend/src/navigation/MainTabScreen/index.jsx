@@ -3,10 +3,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import {
   AddListingStackScreen,
+  FeedStackScreen,
   HomeStackScreen,
 } from "../RootStackScreen/StackScreens";
-import AddListing from "../../screens/AddListing/index";
-import Requests from "../../screens/Requests/index";
 import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
@@ -44,7 +43,7 @@ const MainTabScreen = ({ user }) => {
           headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
-            <Icon name="home" color={color} size={26} />
+            <Icon name="home" color={color} size={30} />
           ),
         }}
       />
@@ -55,18 +54,19 @@ const MainTabScreen = ({ user }) => {
           headerShown: false,
           tabBarLabel: "Sell",
           tabBarIcon: ({ color }) => (
-            <Icon name="camera" color={color} size={26} />
+            <Icon name="add-circle" color={color} size={30} />
           ),
         }}
       />
 
       <Tab.Screen
-        name="Requests Tab"
-        component={Requests}
+        name="Requests Feed"
+        component={FeedStackScreen}
         options={{
-          tabBarLabel: "Request",
+          headerShown: false,
+          tabBarLabel: "Feed",
           tabBarIcon: ({ color }) => (
-            <Icon name="pricetag" color={color} size={26} />
+            <Icon name="pricetags" color={color} size={30} />
           ),
         }}
       />
