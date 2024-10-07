@@ -13,6 +13,7 @@ import {
   CameraScreen as UploadClothCameraScreen,
   SecondaryScreen as UploadClothSecondaryScreen,
 } from "../../screens/AddListing";
+import { BaseScreen as AddRequestScreen } from "../../screens/AddRequest";
 
 import {
   horizontalAnimation,
@@ -92,6 +93,10 @@ export const MyListingStackScreen = ({ navigation }) => (
     screenOptions={{
       ...verticalAnimation,
       headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <MyListingStack.Screen
@@ -102,8 +107,8 @@ export const MyListingStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.replace("App")}
           ></Icon.Button>
         ),
@@ -190,19 +195,21 @@ export const FeedStackScreen = ({ navigation }) => (
     }}
   >
     <FeedStack.Screen
-      name="Feed"
+      name="Request Feed"
       component={RequestedScreen}
       options={{
+        headerShown: true,
         headerLeft: () => (
           <Icon.Button
-            name="menu-outline"
+            name=""
             size={25}
             color="#fff"
             backgroundColor="#4338ca"
-            onPress={() => navigation.openDrawer()}
+            onPress={() => {
+              navigation.goBack();
+            }}
           ></Icon.Button>
         ),
-        headerShown: true,
       }}
     />
     <FeedStack.Screen
@@ -220,4 +227,67 @@ export const FeedStackScreen = ({ navigation }) => (
       component={DetailsScreen}
     /> */}
   </FeedStack.Navigator>
+);
+
+const AddRequestStack = createNativeStackNavigator();
+export const AddRequestStackScreen = ({ navigation }) => (
+  <AddRequestStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      ...horizontalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
+    }}
+  >
+    <AddRequestStack.Screen
+      name="RequestBookBaseScreen"
+      options={{
+        title: "Request A Cloth",
+        headerShown: true,
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#fff"
+            backgroundColor="#4338ca"
+            onPress={() => navigation.goBack()}
+          ></Icon.Button>
+        ),
+      }}
+      component={AddRequestScreen}
+    />
+  </AddRequestStack.Navigator>
+);
+
+const MyRequestStack = createNativeStackNavigator();
+export const MyRequestStackScreen = ({ navigation }) => (
+  <MyRequestStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
+    }}
+  >
+    <MyRequestStack.Screen
+      name="MyRequest"
+      options={{
+        title: "My Requests",
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#fff"
+            backgroundColor="#4338ca"
+            onPress={() => navigation.goBack()}
+          ></Icon.Button>
+        ),
+        headerShown: true,
+      }}
+      component={MyRequests}
+    />
+  </MyRequestStack.Navigator>
 );

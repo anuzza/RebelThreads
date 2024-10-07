@@ -3,7 +3,7 @@ const ClothesRequested = require("../models/ClothesRequested");
 // Request a clothing item
 const requestClothing = async (req, res) => {
   try {
-    const { title, brand, size, category, gender, description } = req.body;
+    const { title, brand, size, gender, description } = req.body;
     let clothesRequested;
 
     if (req.body.id) {
@@ -23,7 +23,6 @@ const requestClothing = async (req, res) => {
         title,
         brand,
         size,
-        category,
         gender,
         description,
       };
@@ -47,7 +46,6 @@ const requestClothing = async (req, res) => {
           title,
           brand,
           size,
-          category,
           gender,
           description,
         },
@@ -74,7 +72,7 @@ const getAllRequestedClothes = async (req, res) => {
     })
       .populate({
         path: "user",
-        select: "name avatar email contact_number", // Modify according to your User model
+        select: "name avatar email phone", // Modify according to your User model
       })
       .sort({ createdAt: -1 });
 

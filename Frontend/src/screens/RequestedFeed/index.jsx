@@ -27,7 +27,7 @@ const RequestedScreen = ({ navigation }) => {
 
   const fetchClothes = async () => {
     try {
-      const { data } = await axios.get("/requests");
+      const { data } = await axios.get("/requests/");
       setClothes(data);
       setLoading(false);
     } catch (error) {
@@ -79,7 +79,7 @@ const RequestedScreen = ({ navigation }) => {
           }}
         >
           <FloatingButton
-            onPress={() => navigation.push("Requestclothescreen")}
+            onPress={() => navigation.push("AddRequestScreen")}
             color="#fff"
             backgroundColor="#4338ca"
             iconName="add"

@@ -17,14 +17,9 @@ const clothesRequestedSchema = new mongoose.Schema(
         trim: true,
         required: true,
       },
-      category: {
-        type: String,
-        trim: true,
-        required: true,
-      },
       gender: {
         type: String,
-        enum: ["male", "female", "unisex"],
+        enum: ["Men", "Women", "Unisex"],
         required: true,
       },
       description: {

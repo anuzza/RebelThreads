@@ -192,15 +192,8 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
   if (feed) {
     const {
       _id,
-      user: {
-        name,
-        avatar,
-        email,
-        contact_number: { value, visibility },
-      },
-      book: { title, edition, isbn },
-      course_code,
-      course_name,
+      user: { name, avatar, email, phone },
+      clothing: { title, brand, size, gender, description },
       createdAt,
     } = item;
 
@@ -254,9 +247,10 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
           </View>
 
           <View style={{ ...styles.subInformation, marginTop: 10 }}>
-            <Text style={styles.info}>
-              For {course_name} {course_code}
-            </Text>
+            <Text style={styles.info}>{description}</Text>
+          </View>
+          <View style={{ ...styles.subInformation, marginTop: 10 }}>
+            <Text style={{ ...styles.info }}>Brand: {brand}</Text>
             <View
               style={{
                 borderRightWidth: 1,
@@ -266,33 +260,23 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
                 marginRight: 5,
               }}
             />
-            <Text style={{ ...styles.info }}>ISBN {isbn}</Text>
+            <Text style={styles.info}>Size: {size} </Text>
           </View>
           <View style={{ ...styles.subInformation, marginTop: 10 }}>
-            <Text style={styles.info}>Edition: {edition} </Text>
+            <Text style={styles.info}>Gender: {gender} </Text>
           </View>
           <View
             style={{ ...styles.subInformation, marginTop: 15, width: "80%" }}
           >
             <FloatingButton
-              onPress={() => sendEmail(email, title, true)}
+              onPress={() => sendSMS(phone, title, true)}
+              marginLeft={20}
               size={25}
               padding={10}
               color="#fff"
               backgroundColor="#74758C"
-              iconName="mail"
+              iconName="chatbubbles"
             />
-            {visibility && value && (
-              <FloatingButton
-                onPress={() => sendSMS(value, title, true)}
-                marginLeft={20}
-                size={25}
-                padding={10}
-                color="#fff"
-                backgroundColor="#74758C"
-                iconName="chatbubbles"
-              />
-            )}
             <TouchableOpacity
               onPress={() =>
                 openTwoButtonAlert(

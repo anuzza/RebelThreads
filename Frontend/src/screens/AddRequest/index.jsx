@@ -1,15 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   ScrollView,
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
+  KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Caption, Title } from "react-native-paper";
+import { Caption } from "react-native-paper";
 import { uploadFormStyles as styles } from "../../constants/sharedStyles";
+import CustomPicker from "../../components/CustomPicker";
+import axios from "../../utils/axios";
 
+const genderOptions = ["Select Gender", "Men", "Women", "Unisex"];
 export const BaseScreen = ({ route, navigation }) => {
   const [state, setState] = useState({
     title: "",
@@ -18,6 +23,10 @@ export const BaseScreen = ({ route, navigation }) => {
     size: "",
     error: {},
   });
+
+  const [gender, setGender] = useState(genderOptions[0]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { title, description, brand, size, error } = state;
 
@@ -36,27 +45,49 @@ export const BaseScreen = ({ route, navigation }) => {
     if (size === "") {
       validationErrors.sizeError = "Size is required!";
     }
+    if (gender === "Select Gender") {
+      validationErrors.genderError = "Gender is required!";
+    }
     setState({ ...state, error: validationErrors });
     return Object.keys(validationErrors).length < 1;
   };
 
   const validateInputRef = useRef();
 
-  const onFormSubmit = () => {
+  const onFormSubmit = async () => {
     const isValid = validateInput();
     if (!isValid) {
       validateInputRef.current.shake(800);
     } else {
-      setState({ ...state, error: {} });
-      navigation.push("UploadClothSecondaryScreen", {
-        clothState: {
-          ...route?.params?.clothState,
-          title,
-          description,
-          brand,
-          size,
-        },
-      });
+      setState({ ...state, error: {}, errorMessage: "" });
+      setLoading(true);
+      const formState = {
+        title: title,
+        description: description,
+        brand: brand,
+        size: size,
+        gender: gender,
+      };
+      if (route.params?.clothState?.id) {
+        formState.id = route.params.clothState.id;
+      }
+      try {
+        await axios.post("/requests/", formState);
+        setLoading(false);
+        Alert.alert(
+          `Cloth ${
+            route.params?.clothState?.id ? "updated" : "requested"
+          } succesfully!`
+        );
+        navigation.replace("MyRequestScreen");
+      } catch (err) {
+        setState({
+          ...state,
+          errorMessage: err.response?.data?.errMessage,
+        });
+        setLoading(false);
+        Alert.alert(state.errMessage || err);
+      }
     }
   };
 
@@ -69,6 +100,7 @@ export const BaseScreen = ({ route, navigation }) => {
         brand: route.params.clothState.brand || "",
         size: route.params.clothState.size || "",
       });
+      setGender(route.params.clothState.gender || genderOptions[0]);
     }
   }, [route]);
 
@@ -77,13 +109,6 @@ export const BaseScreen = ({ route, navigation }) => {
       style={{ flex: 1, padding: 10 }}
       automaticallyAdjustKeyboardInsets="true"
     >
-      <View style={styles.UploadCard}>
-        <Caption style={styles.StepText}>Step 1 of 3</Caption>
-        <Title>Add your listing information</Title>
-        <Caption style={styles.ModalFooter}>
-          Let's start with the basics!
-        </Caption>
-      </View>
       <Animatable.View ref={validateInputRef}>
         <View>
           <Caption style={styles.Label}>Title</Caption>
@@ -170,9 +195,42 @@ export const BaseScreen = ({ route, navigation }) => {
             <Caption style={styles.error}>{error?.sizeError}</Caption>
           )}
         </View>
+        <View>
+          <Caption style={styles.Label}>Gender</Caption>
+          <TextInput
+            style={[styles.Input, error?.genderError && styles.borderError]}
+            returnKeyType="done"
+            value={gender}
+            editable={false}
+            selectTextOnFocus={false}
+            onPressIn={() => {
+              if (error?.genderError) {
+                delete error["genderError"];
+                setState({ ...state, error });
+              }
+              setModalVisible(true);
+            }}
+          />
+          {error?.genderError && (
+            <Caption style={styles.error}>{error?.genderError}</Caption>
+          )}
+        </View>
       </Animatable.View>
+      {modalVisible && (
+        <CustomPicker
+          options={genderOptions}
+          value={gender}
+          setValue={setGender}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      )}
       <TouchableOpacity onPress={onFormSubmit} style={styles.SaveButton}>
-        <Caption style={styles.alignedText}>Continue</Caption>
+        {!loading ? (
+          <Caption style={styles.alignedText}>Add Request</Caption>
+        ) : (
+          <ActivityIndicator color="#fff" />
+        )}
       </TouchableOpacity>
     </ScrollView>
   );

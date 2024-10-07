@@ -165,6 +165,7 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
     } catch (err) {
       setError(err.response.data.errMessage);
       setLoading(false);
+      Alert.alert(error || err);
     }
   };
 
