@@ -66,15 +66,7 @@ export const HomeStackScreen = ({ navigation }) => (
       name="Home"
       component={HomeScreen}
       options={{
-        headerLeft: () => (
-          <Icon
-            name="menu-outline"
-            size={25}
-            color="#fff"
-            onPress={() => navigation.openDrawer()}
-          ></Icon>
-        ),
-        headerShown: true,
+        headerShown: false,
       }}
     />
 

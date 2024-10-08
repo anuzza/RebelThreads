@@ -16,6 +16,8 @@ const MainTabScreen = ({ user }) => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#B0B0C3",
+
         tabBarStyle: {
           backgroundColor: "#4338ca",
         },

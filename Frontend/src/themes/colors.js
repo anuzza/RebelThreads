@@ -40,5 +40,6 @@ export const CustomDefaultTheme = {
     // Lights & Brights
     notWhite: "#Fafafa",
     lightWhite: "#FBFBFB",
+    elevation: {},
   },
 };

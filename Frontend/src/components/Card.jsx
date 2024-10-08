@@ -10,10 +10,10 @@ import { openTwoButtonAlert } from "../utils/alert";
 import axios from "../utils/axios";
 import { cardStyles as styles } from "../constants/sharedCardStyles";
 
-const LeftSwipeActions = ({ item, requests, handleBookAlteration }) => {
+const LeftSwipeActions = ({ item, requests, handleClothAlteration }) => {
   return (
     <View style={styles.leftSwipeActionContainer}>
-      <TouchableOpacity onPress={() => handleBookAlteration(item._id)}>
+      <TouchableOpacity onPress={() => handleClothAlteration(item._id)}>
         <Text
           style={{
             color: "#fff",
@@ -28,10 +28,10 @@ const LeftSwipeActions = ({ item, requests, handleBookAlteration }) => {
 };
 const RightSwipeActions = ({
   item,
-  handleBookDeletion,
+  handleClothDeletion,
   active,
   bookmarks,
-  handleBookUpdation,
+  handleClothUpdation,
 }) => {
   return (
     <View
@@ -42,7 +42,7 @@ const RightSwipeActions = ({
     >
       {active && !bookmarks && (
         <TouchableOpacity
-          onPress={() => handleBookUpdation(item)}
+          onPress={() => handleClothUpdation(item)}
           style={{
             backgroundColor: "#eec643",
             ...styles.rightSwipeButtonContainer,
@@ -61,7 +61,7 @@ const RightSwipeActions = ({
         />
       )}
       <TouchableOpacity
-        onPress={() => handleBookDeletion(item._id)}
+        onPress={() => handleClothDeletion(item._id)}
         style={{
           backgroundColor: "#D91848",
           width: bookmarks && 100,
@@ -78,9 +78,9 @@ const RightSwipeActions = ({
 
 export const ListCard = ({
   item,
-  handleBookDeletion,
-  handleBookAlteration,
-  handleBookUpdation,
+  handleClothDeletion,
+  handleClothAlteration,
+  handleClothUpdation,
   requests,
   profile,
 }) => {
@@ -153,7 +153,7 @@ export const ListCard = ({
       renderLeftActions={() => (
         <LeftSwipeActions
           item={item}
-          handleBookAlteration={handleBookAlteration}
+          handleClothAlteration={handleClothAlteration}
           requests={requests}
           active={active}
         />
@@ -161,8 +161,8 @@ export const ListCard = ({
       renderRightActions={() => (
         <RightSwipeActions
           item={item}
-          handleBookDeletion={handleBookDeletion}
-          handleBookUpdation={handleBookUpdation}
+          handleClothDeletion={handleClothDeletion}
+          handleClothUpdation={handleClothUpdation}
           active={active}
         />
       )}
@@ -176,7 +176,7 @@ export const ListCard = ({
       renderRightActions={() => (
         <RightSwipeActions
           item={item}
-          handleBookDeletion={handleBookDeletion}
+          handleClothDeletion={handleClothDeletion}
           active={active}
         />
       )}
@@ -188,7 +188,7 @@ export const ListCard = ({
   );
 };
 
-const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
+const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
   if (feed) {
     const {
       _id,
@@ -300,22 +300,88 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
       </View>
     );
   } else {
+    // const {
+    //   clothing: { title, brand, size, gender, description, condition },
+    //   pictures,
+    //   active,
+    //   price,
+    // } = item;
+    // const cardValue = (
+    //   <View style={[styles.card, { opacity: !active && bookmarks ? 0.6 : 1 }]}>
+    //     <View
+    //       style={{
+    //         position: "relative",
+    //         borderColor: "#fff",
+    //         borderRadius: 10,
+    //       }}
+    //     >
+    //       <Image
+    //         style={styles.image}
+    //         source={{
+    //           uri: pictures[0],
+    //         }}
+    //         resizeMode="cover"
+    //       />
+
+    //       {bookmarks && !active && (
+    //         <View style={styles.overlay}>
+    //           <Text style={styles.soldText}>SOLD</Text>
+    //         </View>
+    //       )}
+    //     </View>
+    //     <View style={{ padding: 10 }}>
+    //       <Text style={styles.title}>{title}</Text>
+    //       <View style={styles.subInformation}>
+    //         <Text style={styles.info}>Brand: {brand} </Text>
+    //       </View>
+    //       <View style={styles.subInformation}>
+    //         <Text style={{ ...styles.info, flexWrap: "wrap" }}>
+    //           {" "}
+    //           Size: {size}
+    //         </Text>
+    //         <View
+    //           style={{
+    //             borderRightWidth: 1,
+    //             height: "100%",
+    //             borderColor: "#A89E9E",
+    //             marginLeft: 5,
+    //             marginRight: 5,
+    //           }}
+    //         />
+    //         <Text style={{ ...styles.info, flexWrap: "wrap" }}>
+    //           {" "}
+    //           Gender: {gender}
+    //         </Text>
+    //       </View>
+    //       <View style={styles.subInformation}>
+    //         <View style={styles.priceContainer}>
+    //           <Text style={styles.alignedText}>${price.toFixed(2)}</Text>
+    //         </View>
+    //         <View
+    //           style={[
+    //             styles.priceContainer,
+    //             {
+    //               backgroundColor: condition === "New" ? "#a2d729" : "#eec643",
+    //             },
+    //           ]}
+    //         >
+    //           <Text style={styles.alignedText}>{condition}</Text>
+    //         </View>
+    //       </View>
+    //     </View>
+    //   </View>
+    // );
     const {
-      book: { title, isbn, edition },
+      clothing: { title, brand, size, gender, description, condition },
       pictures,
-      condition,
       active,
-      amount,
+      price,
     } = item;
+
     const cardValue = (
       <View style={[styles.card, { opacity: !active && bookmarks ? 0.6 : 1 }]}>
-        <View
-          style={{
-            position: "relative",
-            borderTopWidth: 1,
-            borderColor: "#bebfc4",
-          }}
-        >
+        {/* Image Section */}
+        <View style={styles.imageContainer}>
           <Image
             style={styles.image}
             source={{
@@ -323,45 +389,49 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
             }}
             resizeMode="cover"
           />
-
+          {/* Sold Overlay */}
           {bookmarks && !active && (
             <View style={styles.overlay}>
               <Text style={styles.soldText}>SOLD</Text>
             </View>
           )}
         </View>
-        <View style={{ padding: 10 }}>
+
+        {/* Info Section */}
+        <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
-          <View style={styles.subInformation}>
-            <Text style={styles.info}>{edition}th edition </Text>
-            <View
-              style={{
-                borderRightWidth: 1,
-                height: "100%",
-                borderColor: "#A89E9E",
-                marginLeft: 5,
-                marginRight: 5,
-              }}
-            />
-            <Text style={{ ...styles.info, flexWrap: "wrap" }}>
-              {" "}
-              ISBN {isbn}
-            </Text>
+
+          {/* Brand and Size Row */}
+          <View style={styles.row}>
+            <Text style={styles.infoText}>Brand: {brand}</Text>
+            <Text style={styles.infoText}>Size: {size}</Text>
           </View>
-          <View style={styles.subInformation}>
-            <View style={styles.priceContainer}>
-              <Text style={styles.alignedText}>${amount.toFixed(2)}</Text>
-            </View>
-            <View
+
+          {/* Price Row */}
+          <View style={styles.row}>
+            <Text style={[styles.price, price === 0 && styles.free]}>
+              {price === 0 ? "$ Free" : `$${price.toFixed(2)}`}
+            </Text>
+            <Text
               style={[
-                styles.priceContainer,
+                styles.conditionText,
                 {
-                  backgroundColor: condition === "NEW" ? "#a2d729" : "#eec643",
+                  backgroundColor:
+                    condition === "New"
+                      ? "#4e9049" // Bright Green for "New"
+                      : condition === "Like New"
+                      ? "#5DADE2" // Light Blue for "Like New"
+                      : condition === "Good"
+                      ? "#F39C12" // Orange for "Good"
+                      : condition === "Fair"
+                      ? "#F4D03F" // Amber/Yellow for "Fair"
+                      : "#BDC3C7",
+                  borderRadius: 20,
                 },
               ]}
             >
-              <Text style={styles.alignedText}>{condition}</Text>
-            </View>
+              {condition}
+            </Text>
           </View>
         </View>
       </View>
@@ -371,7 +441,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleBookDeletion }) => {
       <Swipeable
         renderRightActions={() => (
           <RightSwipeActions
-            handleBookDeletion={handleBookDeletion}
+            handleClothDeletion={handleClothDeletion}
             bookmarks={bookmarks}
             active={active}
             item={item}
