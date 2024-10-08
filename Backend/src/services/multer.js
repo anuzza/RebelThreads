@@ -18,9 +18,10 @@ const fileUpload = () => {
   upload = multer({
     storage,
     limits: {
-      fileSize: 1000000,
+      fileSize: 3000000,
     },
     fileFilter(req, file, cb) {
+      console.log(file);
       if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|gif|png)$/)) {
         return cb(
           new Error("Invalid file type, only JPEG and PNG is allowed!")

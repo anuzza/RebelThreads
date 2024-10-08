@@ -101,9 +101,17 @@ export const cardStyles = StyleSheet.create({
   requestUserContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     flexWrap: "wrap",
-    width: "85%",
+    width: "90%",
+    justifyContent: "space-between",
+  },
+
+  profile: {
+    flexDirection: "row",
+    width: "30%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: 10,
   },
 
   userName: {
@@ -116,7 +124,7 @@ export const cardStyles = StyleSheet.create({
     fontSize: 12,
     color: "#74758C",
     flexWrap: "wrap",
-    alignSelf: "center",
+    marginRight: 20,
   },
 
   leftSwipeActionContainer: {
@@ -187,5 +195,13 @@ export const cardStyles = StyleSheet.create({
   },
   free: {
     color: "#4CAF50", // Green color for "Free"
+  },
+  feedCard: {
+    borderRadius: 10,
+    padding: 10,
+    flexDirection: "row",
+    marginBottom: 20,
+    width: "100%",
+    height: "auto",
   },
 });

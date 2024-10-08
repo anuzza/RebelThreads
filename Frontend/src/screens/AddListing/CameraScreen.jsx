@@ -103,11 +103,18 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
   const appendFilesToFormData = (pictures, formData) => {
     pictures.forEach((photo, index) => {
       const { image } = photo;
+      let fileName = image.fileName;
+      if (fileName) {
+        const temp = fileName.split(".");
+        temp[temp.length - 1] = "jpeg";
+        fileName = temp.join(".");
+      }
       const fileObject = {
-        name: image.fileName ? image.fileName : `img${index}.jpg`,
-        type: image.mimeType,
+        name: image.fileName ? fileName : `img${index}.jpeg`,
+        type: "image/jpeg",
         uri: image.uri,
       };
+      console.log(fileObject);
       formData.append("files", fileObject);
     });
   };
@@ -163,9 +170,13 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
       }
       navigation.replace("MyListingScreen");
     } catch (err) {
-      setError(err.response.data.errMessage);
       setLoading(false);
-      Alert.alert(error || err);
+      console.log(err.response);
+      console.log(err.response.data);
+      console.log(err.message);
+
+      // Alert.alert(err.response.data.errMessage || err);
+      setError(err.response.data.errMessage);
     }
   };
 

@@ -234,7 +234,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
             <Text style={styles.userName}>{name}</Text>
             <Text style={styles.date}>{moment(createdAt).fromNow()}</Text>
           </View>
-          <View style={{ width: "90%", flexGrow: 1, flex: 1 }}>
+          <View style={{ width: "90%" }}>
             <Text
               style={{
                 ...styles.title,
@@ -246,7 +246,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
             </Text>
           </View>
 
-          <View style={{ ...styles.subInformation, marginTop: 10 }}>
+          <View style={{ ...styles.subInformation }}>
             <Text style={styles.info}>{description}</Text>
           </View>
           <View style={{ ...styles.subInformation, marginTop: 10 }}>
@@ -266,21 +266,29 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
             <Text style={styles.info}>Gender: {gender} </Text>
           </View>
           <View
-            style={{ ...styles.subInformation, marginTop: 15, width: "80%" }}
+            style={{ ...styles.subInformation, marginTop: 20, width: "80%" }}
           >
             <FloatingButton
-              onPress={() => sendSMS(phone, title, true)}
+              onPress={() => sendEmail(email, name, title, true)}
+              size={25}
+              padding={10}
+              color="#fff"
+              backgroundColor="#FFB347"
+              iconName="mail"
+            />
+            <FloatingButton
+              onPress={() => sendSMS(phone, name, title, true)}
               marginLeft={20}
               size={25}
               padding={10}
               color="#fff"
-              backgroundColor="#74758C"
-              iconName="chatbubbles"
+              backgroundColor="#4CAF50"
+              iconName="chatbubble-ellipses"
             />
             <TouchableOpacity
               onPress={() =>
                 openTwoButtonAlert(
-                  "Are you sure you want to report this book?",
+                  "Are you sure you want to report this post?",
                   handleReport
                 )
               }
@@ -300,77 +308,6 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
       </View>
     );
   } else {
-    // const {
-    //   clothing: { title, brand, size, gender, description, condition },
-    //   pictures,
-    //   active,
-    //   price,
-    // } = item;
-    // const cardValue = (
-    //   <View style={[styles.card, { opacity: !active && bookmarks ? 0.6 : 1 }]}>
-    //     <View
-    //       style={{
-    //         position: "relative",
-    //         borderColor: "#fff",
-    //         borderRadius: 10,
-    //       }}
-    //     >
-    //       <Image
-    //         style={styles.image}
-    //         source={{
-    //           uri: pictures[0],
-    //         }}
-    //         resizeMode="cover"
-    //       />
-
-    //       {bookmarks && !active && (
-    //         <View style={styles.overlay}>
-    //           <Text style={styles.soldText}>SOLD</Text>
-    //         </View>
-    //       )}
-    //     </View>
-    //     <View style={{ padding: 10 }}>
-    //       <Text style={styles.title}>{title}</Text>
-    //       <View style={styles.subInformation}>
-    //         <Text style={styles.info}>Brand: {brand} </Text>
-    //       </View>
-    //       <View style={styles.subInformation}>
-    //         <Text style={{ ...styles.info, flexWrap: "wrap" }}>
-    //           {" "}
-    //           Size: {size}
-    //         </Text>
-    //         <View
-    //           style={{
-    //             borderRightWidth: 1,
-    //             height: "100%",
-    //             borderColor: "#A89E9E",
-    //             marginLeft: 5,
-    //             marginRight: 5,
-    //           }}
-    //         />
-    //         <Text style={{ ...styles.info, flexWrap: "wrap" }}>
-    //           {" "}
-    //           Gender: {gender}
-    //         </Text>
-    //       </View>
-    //       <View style={styles.subInformation}>
-    //         <View style={styles.priceContainer}>
-    //           <Text style={styles.alignedText}>${price.toFixed(2)}</Text>
-    //         </View>
-    //         <View
-    //           style={[
-    //             styles.priceContainer,
-    //             {
-    //               backgroundColor: condition === "New" ? "#a2d729" : "#eec643",
-    //             },
-    //           ]}
-    //         >
-    //           <Text style={styles.alignedText}>{condition}</Text>
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </View>
-    // );
     const {
       clothing: { title, brand, size, gender, description, condition },
       pictures,
@@ -426,7 +363,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
                       : condition === "Fair"
                       ? "#F4D03F" // Amber/Yellow for "Fair"
                       : "#BDC3C7",
-                  borderRadius: 20,
+                  borderRadius: 0,
                 },
               ]}
             >

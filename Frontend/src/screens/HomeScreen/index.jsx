@@ -71,99 +71,105 @@ const HomeScreen = ({ navigation }) => {
     .slice(0, 5);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#4338ca" }}>
-      <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
-      {/* <Loader loading={loading} /> */}
-      {!loading && clothes.length === 0 ? (
-        <EmptyListPlaceholder>
-          Currently, there aren't any clothes for sale in the platform
-        </EmptyListPlaceholder>
-      ) : (
-        <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
-          <FlatList
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            showsVerticalScrollIndicator={false}
-            keyExtractor={({ _id }) => _id}
-            data={filteredClothes}
-            ListHeaderComponent={
-              <View>
-                {text === "" && topDeals.length > 0 && (
-                  <View style={styles.topDealsContainer}>
-                    <Text style={styles.sectionTitle}>Top Deals</Text>
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={true}
-                    >
-                      {topDeals.map((item) => (
-                        <TouchableOpacity
-                          key={item._id}
-                          onPress={() =>
-                            navigation.push("Details", { id: item._id })
-                          }
-                          style={styles.dealCard}
-                        >
-                          <Card item={item} />
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ backgroundColor: "#4338CA" }}>
+        <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
+      </SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }}>
+        {/* <Loader loading={loading} /> */}
+        {!loading && clothes.length === 0 ? (
+          <EmptyListPlaceholder>
+            <Text style={{ textAlign: "center" }}>
+              Currently, there aren't any clothes for sale in the platform
+            </Text>
+          </EmptyListPlaceholder>
+        ) : (
+          <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+            <FlatList
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              showsVerticalScrollIndicator={false}
+              keyExtractor={({ _id }) => _id}
+              data={filteredClothes}
+              ListHeaderComponent={
+                <View>
+                  {text === "" && topDeals.length > 0 && (
+                    <View style={styles.topDealsContainer}>
+                      <Text style={styles.sectionTitle}>Top Deals</Text>
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                      >
+                        {topDeals.map((item) => (
+                          <TouchableOpacity
+                            key={item._id}
+                            onPress={() =>
+                              navigation.push("Details", { id: item._id })
+                            }
+                            style={styles.dealCard}
+                          >
+                            <Card item={item} />
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
 
-                {/* Title for the list of other items */}
-                <Text style={styles.listingTitle}>
-                  {text !== "" ? "Search Results" : "Explore Items"}
-                </Text>
-              </View>
-            }
-            renderItem={({ item, index }) => {
-              if (index % 2 === 0) {
-                return (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      margin: 10,
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.push("Details", { id: item._id })
-                      }
-                      activeOpacity={1}
-                      underlayColor="#eee"
-                      style={{ width: "48%" }} // Adjust the width of the card
+                  {/* Title for the list of other items */}
+                  <Text style={styles.listingTitle}>
+                    {text !== "" ? "Search Results" : "Explore Items"}
+                  </Text>
+                </View>
+              }
+              renderItem={({ item, index }) => {
+                if (index % 2 === 0) {
+                  return (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        margin: 10,
+                      }}
                     >
-                      <Card navigation={navigation} item={item} />
-                    </TouchableOpacity>
-                    {filteredClothes[index + 1] && (
                       <TouchableOpacity
                         onPress={() =>
-                          navigation.push("Details", {
-                            id: filteredClothes[index + 1]._id,
-                          })
+                          navigation.push("Details", { id: item._id })
                         }
                         activeOpacity={1}
                         underlayColor="#eee"
                         style={{ width: "48%" }} // Adjust the width of the card
                       >
-                        <Card
-                          navigation={navigation}
-                          item={filteredClothes[index + 1]}
-                        />
+                        <Card navigation={navigation} item={item} />
                       </TouchableOpacity>
-                    )}
-                  </View>
-                );
-              } else {
-                return null; // Don't return anything for odd indices as we handle them in pairs
-              }
-            }}
-          />
-        </View>
-      )}
-    </SafeAreaView>
+                      {filteredClothes[index + 1] && (
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.push("Details", {
+                              id: filteredClothes[index + 1]._id,
+                            })
+                          }
+                          activeOpacity={1}
+                          underlayColor="#eee"
+                          style={{ width: "48%" }} // Adjust the width of the card
+                        >
+                          <Card
+                            navigation={navigation}
+                            item={filteredClothes[index + 1]}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  );
+                } else {
+                  return null; // Don't return anything for odd indices as we handle them in pairs
+                }
+              }}
+            />
+          </View>
+        )}
+      </SafeAreaView>
+    </View>
   );
 };
 

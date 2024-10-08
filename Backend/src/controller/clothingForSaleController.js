@@ -11,8 +11,9 @@ const uploadClothingItem = async (req, res) => {
     multiUpload(req, res, async function (err) {
       if (err) {
         if (err.message && err.message === "File too large") {
-          err.errMessage = "File size cannot be larger than 2 MB";
+          err.errMessage = "File size cannot be larger than 3 MB";
         }
+        console.log(err.message);
         return res.status(403).send(err);
       }
 
