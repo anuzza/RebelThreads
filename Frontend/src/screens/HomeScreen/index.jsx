@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const topDeals = clothes
-    .filter((clothing) => clothing.price < 60)
+    .filter((clothing) => clothing.price < 100)
     .slice(0, 5);
 
   return (

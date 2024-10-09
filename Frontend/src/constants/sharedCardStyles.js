@@ -19,7 +19,7 @@ export const cardStyles = StyleSheet.create({
     position: "relative",
     width: "100%",
     height: 160, // Adjust image height for a better ratio
-    borderRadius: 10,
+    borderRadius: 12,
     overflow: "hidden",
   },
 

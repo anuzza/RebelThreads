@@ -6,6 +6,7 @@ import SignupScreen from "../../screens/Auth/SignupScreen";
 import HomeScreen from "../../screens/HomeScreen";
 import ProfileScreen from "../../screens/Profile";
 import MyListings from "../../screens/MyListings/index";
+import DetailsScreen from "../../screens/DetailsScreen";
 import MyRequests from "../../screens/My Requests/index";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import {
@@ -69,6 +70,7 @@ export const HomeStackScreen = ({ navigation }) => (
         headerShown: false,
       }}
     />
+    <HomeStack.Screen name="Details" component={DetailsScreen} />
 
     <HomeStack.Screen name="MyListings" component={MyListings} />
 
@@ -108,13 +110,13 @@ export const MyListingStackScreen = ({ navigation }) => (
       }}
       component={MyListings}
     />
-    {/* <MyListingStack.Screen
+    <MyListingStack.Screen
       name="Details"
       options={{
         headerShown: false,
       }}
       component={DetailsScreen}
-    /> */}
+    />
     <MyListingStack.Screen
       name="Profile"
       options={{
@@ -211,13 +213,13 @@ export const FeedStackScreen = ({ navigation }) => (
       }}
       component={ProfileScreen}
     />
-    {/* <FeedStack.Screen
+    <FeedStack.Screen
       name="Details"
       options={{
         headerShown: false,
       }}
       component={DetailsScreen}
-    /> */}
+    />
   </FeedStack.Navigator>
 );
 

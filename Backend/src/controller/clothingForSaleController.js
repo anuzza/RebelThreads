@@ -191,7 +191,7 @@ const getOneItemForSale = async (req, res) => {
       deleted: false,
     }).populate({
       path: "seller",
-      select: "name email contact_number isAdmin", // Modify according to your User model
+      select: "name email phone isAdmin",
     });
 
     if (!clothingItem) {
