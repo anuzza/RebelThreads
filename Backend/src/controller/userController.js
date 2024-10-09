@@ -101,11 +101,11 @@ const getUserInfo = async (req, res) => {
         select: "-reports",
       })
       .populate({
-        path: "clothesForSale", // If you have this relationship
+        path: "clothForSale",
         select: "-reports",
       });
 
-    const requestedClothes = user.clothesRequested.filter(
+    const sellingClothes = user.clothForSale.filter(
       ({ active }) => active === true
     );
     const profile = {
@@ -114,9 +114,10 @@ const getUserInfo = async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      selling: sellingClothes.length,
+      sold: user.clothForSale.length - sellingClothes.length,
       requested: user.clothesRequested.length,
-      activeRequests: requestedClothes.length,
-      recentRequests: requestedClothes.slice(0, 3), // Get the latest 3 active requests
+      clothForSale: sellingClothes.slice(0, 3),
     };
     res.send(profile);
   } catch (error) {

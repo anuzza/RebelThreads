@@ -86,7 +86,7 @@ export const ListCard = ({
 }) => {
   const [swiped, setSwiped] = useState(false);
   const {
-    book: { title },
+    clothing: { title },
     createdAt,
     active,
   } = item;
@@ -297,11 +297,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
                 flexWrap: "wrap",
               }}
             >
-              <Caption
-                style={{ color: "#A89E9E", fontSize: 15, fontWeight: "bold" }}
-              >
-                Report
-              </Caption>
+              <Icon name="warning-outline" color="black" size={35}></Icon>
             </TouchableOpacity>
           </View>
         </View>

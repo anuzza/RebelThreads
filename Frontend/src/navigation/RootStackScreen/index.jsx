@@ -53,7 +53,6 @@ const RootStackScreen = ({ userToken, user }) => {
             name="MyRequestScreen"
             component={MyRequestStackScreen}
           />
-          <RootStack.Screen name="FeedScreen" component={FeedStackScreen} />
         </>
       ) : (
         <RootStack.Screen

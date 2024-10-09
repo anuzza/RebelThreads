@@ -5,6 +5,7 @@ import LandingScreen from "../../screens/LandingScreen";
 import SignupScreen from "../../screens/Auth/SignupScreen";
 import HomeScreen from "../../screens/HomeScreen";
 import ProfileScreen from "../../screens/Profile";
+import EditProfileScreen from "../../screens/EditProfileScreen";
 import MyListings from "../../screens/MyListings/index";
 import DetailsScreen from "../../screens/DetailsScreen";
 import MyRequests from "../../screens/My Requests/index";
@@ -72,12 +73,7 @@ export const HomeStackScreen = ({ navigation }) => (
     />
     <HomeStack.Screen name="Details" component={DetailsScreen} />
 
-    <HomeStack.Screen name="MyListings" component={MyListings} />
-
-    <HomeStack.Screen name="MyRequests" component={MyRequests} />
-
     <HomeStack.Screen name="Profile" component={ProfileScreen} />
-    <HomeStack.Screen name="Saved" component={Saved} />
   </HomeStack.Navigator>
 );
 
@@ -206,13 +202,7 @@ export const FeedStackScreen = ({ navigation }) => (
         ),
       }}
     />
-    <FeedStack.Screen
-      name="Profile"
-      options={{
-        headerShown: false,
-      }}
-      component={ProfileScreen}
-    />
+    <FeedStack.Screen name="Profile" component={ProfileScreen} />
     <FeedStack.Screen
       name="Details"
       options={{
@@ -284,4 +274,24 @@ export const MyRequestStackScreen = ({ navigation }) => (
       component={MyRequests}
     />
   </MyRequestStack.Navigator>
+);
+
+const ProfileStack = createNativeStackNavigator();
+export const ProfileStackScreen = ({ navigation }) => (
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      ...horizontalAnimation,
+    }}
+  >
+    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    <ProfileStack.Screen name="Details" component={DetailsScreen} />
+    <ProfileStack.Screen
+      name="Edit Profile"
+      options={{
+        headerShown: true,
+      }}
+      component={EditProfileScreen}
+    />
+  </ProfileStack.Navigator>
 );

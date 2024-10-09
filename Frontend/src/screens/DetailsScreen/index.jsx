@@ -135,7 +135,7 @@ const DetailsScreen = ({ navigation, route }) => {
             }}
             style={styles.reportButton}
           >
-            <Icon name="warning-outline" color="#FF6347" size={35}></Icon>
+            <Icon name="warning-outline" color="black" size={35}></Icon>
           </TouchableOpacity>
         )}
       </View>
