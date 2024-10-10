@@ -102,6 +102,7 @@ const getUserInfo = async (req, res) => {
       })
       .populate({
         path: "clothForSale",
+        match: { deleted: false },
         select: "-reports",
       });
 

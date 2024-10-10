@@ -109,7 +109,7 @@ export const MyListingStackScreen = ({ navigation }) => (
     <MyListingStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />
@@ -206,7 +206,7 @@ export const FeedStackScreen = ({ navigation }) => (
     <FeedStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />
@@ -323,6 +323,10 @@ export const BookmarksStackScreen = ({ navigation }) => (
     screenOptions={{
       headerBackTitleVisible: false,
       ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <BookmarksStack.Screen
@@ -332,8 +336,8 @@ export const BookmarksStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.goBack()}
           ></Icon.Button>
         ),
@@ -344,7 +348,7 @@ export const BookmarksStackScreen = ({ navigation }) => (
     <BookmarksStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />

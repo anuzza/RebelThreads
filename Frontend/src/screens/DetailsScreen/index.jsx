@@ -21,8 +21,6 @@ import Loader from "../../components/Loader";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { loadUser } from "../../redux/actions/auth";
-import { Caption } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 

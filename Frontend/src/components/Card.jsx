@@ -305,7 +305,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
     );
   } else {
     const {
-      clothing: { title, brand, size, gender, description, condition },
+      clothing: { title, brand, size, condition },
       pictures,
       active,
       price,
@@ -320,7 +320,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
             source={{
               uri: pictures[0],
             }}
-            resizeMode="cover"
+            resizeMode={bookmarks ? "contain" : "cover"}
           />
           {/* Sold Overlay */}
           {bookmarks && !active && (
