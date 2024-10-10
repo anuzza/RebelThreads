@@ -56,7 +56,7 @@ const MainTabScreen = ({ user }) => {
           headerShown: false,
           tabBarLabel: "Sell",
           tabBarIcon: ({ color }) => (
-            <Icon name="add-circle" color={color} size={30} />
+            <Icon name="shirt" color={color} size={30} />
           ),
         }}
       />
@@ -68,7 +68,7 @@ const MainTabScreen = ({ user }) => {
           headerShown: false,
           tabBarLabel: "Feed",
           tabBarIcon: ({ color }) => (
-            <Icon name="pricetags" color={color} size={30} />
+            <Icon name="list" color={color} size={30} />
           ),
         }}
       />

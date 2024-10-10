@@ -13,7 +13,6 @@ const uploadClothingItem = async (req, res) => {
         if (err.message && err.message === "File too large") {
           err.errMessage = "File size cannot be larger than 3 MB";
         }
-        console.log(err.message);
         return res.status(403).send(err);
       }
 

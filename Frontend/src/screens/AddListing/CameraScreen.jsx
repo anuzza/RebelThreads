@@ -114,7 +114,6 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
         type: "image/jpeg",
         uri: image.uri,
       };
-      console.log(fileObject);
       formData.append("files", fileObject);
     });
   };
@@ -171,12 +170,8 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
       navigation.replace("MyListingScreen");
     } catch (err) {
       setLoading(false);
-      console.log(err.response);
-      console.log(err.response.data);
-      console.log(err.message);
-
-      // Alert.alert(err.response.data.errMessage || err);
       setError(err.response.data.errMessage);
+      Alert.alert(err.response.data.errMessage || err);
     }
   };
 

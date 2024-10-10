@@ -28,30 +28,43 @@ import {
 } from "../../redux/actions/auth";
 import Loader from "../../components/Loader";
 
-const pickerOptions = ["Freshmen", "Sophmore", "Junior", "Senior"];
-
 const EditProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
   const authLoading = useSelector((state) => state.auth.authLoading);
-  const error = useSelector((state) => state.auth.error);
   const [avatarLoading, setAvatarLoading] = useState(false);
+  const authError = useSelector((state) => state.auth.error);
 
   const [state, setState] = useState({
     name: user?.name,
     email: user?.email,
-    contact_number: user?.contact_number?.value,
-    major: user?.major,
+    phone: user?.phone,
+    error: {},
   });
-  const [classification, setClassification] = useState(user?.classification);
   const [modalVisible, setModalVisable] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
 
-  const [isEnabled, setIsEnabled] = useState(user?.contact_number?.visibility);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-
-  const { name, email, contact_number, major } = state;
+  const { name, email, phone, error } = state;
 
   const dispatch = useDispatch();
+
+  const validateInput = () => {
+    const validationErrors = {};
+
+    if (name === "") {
+      validationErrors.nameError = "Name is required!";
+    }
+    if (!/^[\w.%+-]+@(go\.)?olemiss\.edu$/.test(email)) {
+      validationErrors.emailError = "Please enter a valid olemiss.edu email!";
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      validationErrors.phoneError =
+        "Please enter a valid 10-digit phone number!";
+    }
+
+    setState({ ...state, error: validationErrors });
+    return Object.keys(validationErrors).length < 1;
+  };
 
   const handleImageUpload = async (image) => {
     setAvatarLoading(true);
@@ -67,9 +80,9 @@ const EditProfileScreen = ({ navigation }) => {
 
   const handleImageSelection = async () => {
     const result = await showImagePicker();
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setAvatarLoading(true);
-      await dispatch(uploadImage(result));
+      await dispatch(uploadImage(result.assets[0]));
       setAvatarLoading(false);
     }
   };
@@ -100,17 +113,19 @@ const EditProfileScreen = ({ navigation }) => {
     );
   };
 
-  const validateInput = useRef();
+  const ValidateInputRef = useRef();
 
   const onUpdate = () => {
-    dispatch(
-      signup(name, email, contact_number, classification, major, {
-        isEnabled,
-        update: true,
-      })
-    );
-    if (error) {
-      validateInput.current.shake(800);
+    const isValid = validateInput();
+    if (!isValid) {
+      ValidateInputRef.current.shake(800);
+    } else {
+      setState({ ...state, error: {} });
+      dispatch(
+        signup(name, email, phone, {
+          update: true,
+        })
+      );
     }
   };
 
@@ -123,12 +138,11 @@ const EditProfileScreen = ({ navigation }) => {
   return (
     <ScrollView
       style={{
-        backgroundColor: pickerVisible ? "rgba(255,255,255,0.1)" : "#fff",
+        backgroundColor: "#fff",
         flex: 1,
       }}
     >
       <Loader loading={avatarLoading} />
-      <StatusBar hidden={false} />
       <CameraComponent
         modalVisible={modalVisible}
         setModalVisible={setModalVisable}
@@ -148,7 +162,7 @@ const EditProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <Animatable.View ref={validateInput}>
+      <Animatable.View ref={ValidateInputRef}>
         <View
           style={{
             ...styles.InputWrapper,
@@ -165,8 +179,9 @@ const EditProfileScreen = ({ navigation }) => {
               setState({ ...state, name: text });
             }}
             onFocus={() => {
-              if (error?.error || error?.nameError) {
-                dispatch(clearErrors());
+              if (error?.nameError) {
+                delete error["nameError"];
+                setState({ ...state, error });
               }
             }}
           />
@@ -186,8 +201,9 @@ const EditProfileScreen = ({ navigation }) => {
               setState({ ...state, email: text });
             }}
             onFocus={() => {
-              if (error?.error || error?.emailError) {
-                dispatch(clearErrors());
+              if (error?.emailError) {
+                delete error["emailError"];
+                setState({ ...state, error });
               }
             }}
           />
@@ -198,100 +214,25 @@ const EditProfileScreen = ({ navigation }) => {
         <View style={styles.InputWrapper}>
           <Caption style={styles.Label}>Phone</Caption>
           <TextInput
-            value={contact_number}
+            value={phone}
             keyboardType="phone-pad"
-            style={styles.Input}
+            style={[styles.Input, error?.phoneError && styles.borderError]}
             returnKeyType="done"
             onChangeText={(text) => {
-              setState({ ...state, contact_number: text });
-            }}
-          />
-        </View>
-        <View style={styles.InputWrapper}>
-          <Caption style={styles.Label}>Classification</Caption>
-          <TextInput
-            value={classification}
-            style={styles.Input}
-            editable={false}
-            selectTextOnFocus={false}
-            returnKeyType="next"
-            onPressIn={() => {
-              setPickerVisible(true);
-            }}
-            onChangeText={(text) => {
-              setState({ ...state, classification: text });
-            }}
-          />
-        </View>
-        {pickerVisible && (
-          <CustomPicker
-            options={pickerOptions}
-            value={classification}
-            setValue={setClassification}
-            modalVisible={pickerVisible}
-            setModalVisible={setPickerVisible}
-          />
-        )}
-        <View
-          style={{
-            ...styles.InputWrapper,
-            borderBottomColor: error?.majorError ? "#D91848" : "#ddd",
-            borderBottomWidth: 1,
-          }}
-        >
-          <Caption style={styles.Label}>Major</Caption>
-          <TextInput
-            style={{ ...styles.Input, borderBottomWidth: 0 }}
-            value={major}
-            returnKeyType="done"
-            onChangeText={(text) => {
-              setState({ ...state, major: text });
+              setState({ ...state, phone: text });
             }}
             onFocus={() => {
-              if (error?.error || error?.majorError) {
-                dispatch(clearErrors());
+              if (error?.phoneError) {
+                delete error["phoneError"];
+                setState({ ...state, error });
               }
             }}
           />
+          {error?.phoneError && (
+            <Caption style={styles.error}>{error?.phoneError}</Caption>
+          )}
         </View>
-        {error?.majorError && (
-          <Caption style={styles.error}>{error?.majorError}</Caption>
-        )}
-
-        <View style={styles.PrivacyContainer}>
-          <Title style={styles.Label}>PRIVACY</Title>
-          <View
-            style={{
-              ...styles.InputWrapper,
-              borderTopColor: "#ddd",
-              borderTopWidth: 1,
-              borderBottomColor: "#ddd",
-              borderBottomWidth: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingRight: 10,
-            }}
-          >
-            <Text
-              style={{
-                ...styles.Label,
-                fontSize: 16,
-                marginBottom: 15,
-                marginTop: 15,
-              }}
-            >
-              Share Phone Number
-            </Text>
-            <Switch
-              trackColor={{ false: "#767577", true: "#3c91e6" }}
-              thumbColor="#fff"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-        </View>
-        {error?.error && (
+        {authError?.error && (
           <Caption
             style={{
               ...styles.error,
@@ -299,7 +240,7 @@ const EditProfileScreen = ({ navigation }) => {
               justifyContent: "center",
             }}
           >
-            {error?.error}
+            {authError?.error}
           </Caption>
         )}
       </Animatable.View>
@@ -324,7 +265,7 @@ const styles = StyleSheet.create({
   Title: {
     fontSize: 13,
     marginTop: 15,
-    color: "#3c91e6",
+    color: "#4338ca",
   },
   InputWrapper: {
     backgroundColor: "#fff",
@@ -350,7 +291,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     marginTop: 25,
     marginBottom: 40,
-    backgroundColor: "#000",
+    backgroundColor: "#4338ca",
     padding: 15,
     alignItems: "center",
     justifyContent: "center",

@@ -10,6 +10,8 @@ import {
   AddRequestStackScreen,
   MyRequestStackScreen,
   FeedStackScreen,
+  ProfileStackScreen,
+  BookmarksStackScreen,
 } from "./StackScreens";
 import LoginScreen from "../../screens/Auth/LoginScreen";
 import { useSelector } from "react-redux";
@@ -37,6 +39,14 @@ const RootStackScreen = ({ userToken, user }) => {
           >
             {(props) => <Drawer user={user} {...props} />}
           </RootStack.Screen>
+          <RootStack.Screen
+            name="ProfileScreen"
+            component={ProfileStackScreen}
+          />
+          <RootStack.Screen
+            name="BookmarksScreen"
+            component={BookmarksStackScreen}
+          />
           <RootStack.Screen
             name="MyListingScreen"
             component={MyListingStackScreen}

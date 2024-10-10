@@ -26,23 +26,33 @@ export const login = (email, password) => {
   };
 };
 
-export const signup = (name, email, password, phone) => {
+export const signup = (
+  name,
+  email,
+  phone,
+  { password = undefined, update = false }
+) => {
   return async (dispatch) => {
     try {
       dispatch(authStart());
       const submitForm = {
         name,
         email,
-        password,
         phone,
       };
 
-      const {
-        data: { user, token },
-      } = await axios.post("/users", submitForm);
-      setAuthToken(token);
-      await AsyncStorage.setItem("userToken", token);
-      dispatch(authSuccess(token));
+      if (!update) {
+        submitForm.password = password;
+        const {
+          data: { user, token },
+        } = await axios.post("/users", submitForm);
+        setAuthToken(token);
+        await AsyncStorage.setItem("userToken", token);
+        dispatch(authSuccess(token));
+      } else {
+        await axios.patch("/users/me", submitForm);
+        Alert.alert("Profie updated succesfully!");
+      }
       dispatch(loadUser());
     } catch (err) {
       dispatch(authFail(err.response ? err.response.data : err.message));
@@ -108,11 +118,18 @@ export const signout = () => {
 
 export const uploadImage = (photo) => {
   return async (dispatch) => {
+    let fileName = photo.fileName;
+    if (fileName) {
+      const temp = fileName.split(".");
+      temp[temp.length - 1] = "jpeg";
+      fileName = temp.join(".");
+    }
+    console.log(photo);
     try {
       const fd = new FormData();
       fd.append("avatar", {
-        name: photo.uri,
-        type: photo.type + "/jpeg",
+        name: photo.fileName ? fileName : "profile.jpeg",
+        type: "image/jpeg",
         uri: photo.uri,
       });
       await axios.post("/users/me/avatar", fd);

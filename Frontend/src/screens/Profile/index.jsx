@@ -26,7 +26,6 @@ const ProfileScreen = ({ route, navigation }) => {
     try {
       const { data } = await axios.get("/users/" + id);
       setProfile(data);
-      console.log(profile);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -84,7 +83,7 @@ const ProfileScreen = ({ route, navigation }) => {
           {profile && user && profile.id === user._id && (
             <TouchableOpacity
               style={styles.Icon}
-              onPress={() => navigation.push("Edit Profile")}
+              onPress={() => navigation.push("EditProfile")}
             >
               <Icon style={styles.Icon} name="create-outline" />
             </TouchableOpacity>
@@ -136,13 +135,6 @@ const ProfileScreen = ({ route, navigation }) => {
         {clothesWrapper}
       </View>
       <View style={{ borderBottomColor: "#e5e5e5", borderBottomWidth: 1 }} />
-      <View style={styles.BottomContainer}>
-        <Title style={styles.MainTopic}>More Info</Title>
-        <View style={styles.types}>
-          <Text style={styles.type}>{profile?.major}</Text>
-          <Text style={styles.type}>{profile?.classification}</Text>
-        </View>
-      </View>
     </ScrollView>
   );
 };

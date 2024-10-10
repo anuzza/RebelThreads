@@ -9,6 +9,7 @@ import EditProfileScreen from "../../screens/EditProfileScreen";
 import MyListings from "../../screens/MyListings/index";
 import DetailsScreen from "../../screens/DetailsScreen";
 import MyRequests from "../../screens/My Requests/index";
+import BookmarksScreen from "../../screens/BookmarksScreen";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import {
   BaseScreen as UploadClothBaseScreen,
@@ -21,7 +22,6 @@ import {
   horizontalAnimation,
   verticalAnimation,
 } from "../../constants/animation";
-import Saved from "../../screens/Saved";
 import RequestedScreen from "../../screens/RequestedFeed";
 
 const AuthStack = createNativeStackNavigator();
@@ -282,16 +282,78 @@ export const ProfileStackScreen = ({ navigation }) => (
     screenOptions={{
       headerBackTitleVisible: false,
       ...horizontalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
-    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-    <ProfileStack.Screen name="Details" component={DetailsScreen} />
     <ProfileStack.Screen
-      name="Edit Profile"
+      name="Profile"
+      component={ProfileScreen}
       options={{
+        title: "My Profile",
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#fff"
+            backgroundColor="#4338ca"
+            onPress={() => navigation.goBack()}
+          ></Icon.Button>
+        ),
         headerShown: true,
       }}
+    />
+    <ProfileStack.Screen name="Details" component={DetailsScreen} />
+    <ProfileStack.Screen
+      name="EditProfile"
       component={EditProfileScreen}
+      options={{
+        title: "Edit Profile",
+        headerShown: true,
+      }}
     />
   </ProfileStack.Navigator>
+);
+
+const BookmarksStack = createNativeStackNavigator();
+export const BookmarksStackScreen = ({ navigation }) => (
+  <BookmarksStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      ...verticalAnimation,
+    }}
+  >
+    <BookmarksStack.Screen
+      name="Bookmarks"
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="close"
+            size={25}
+            color="#000"
+            backgroundColor="#fff"
+            onPress={() => navigation.goBack()}
+          ></Icon.Button>
+        ),
+        headerShown: true,
+      }}
+      component={BookmarksScreen}
+    />
+    <BookmarksStack.Screen
+      name="Details"
+      options={{
+        headerShown: false,
+      }}
+      component={DetailsScreen}
+    />
+    <BookmarksStack.Screen
+      name="Profile"
+      options={{
+        headerShown: false,
+      }}
+      component={ProfileScreen}
+    />
+  </BookmarksStack.Navigator>
 );

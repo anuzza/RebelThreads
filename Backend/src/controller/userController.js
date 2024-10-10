@@ -128,13 +128,7 @@ const getUserInfo = async (req, res) => {
 const updateUser = async (req, res) => {
   const updates = Object.keys(req.body);
   let validationErrors = {};
-  const allowedUpdates = [
-    "name",
-    "email",
-    "contact_number",
-    "classification",
-    "major",
-  ];
+  const allowedUpdates = ["name", "email", "phone"];
   const isValidOperators = updates.every((item) => {
     return allowedUpdates.includes(item);
   });
@@ -159,11 +153,8 @@ const updateUser = async (req, res) => {
         if (error.errors.email) {
           validationErrors.emailError = "Email is required";
         }
-        if (error.errors.major) {
-          validationErrors.majorError = "Major is required";
-        }
-        if (error.errors.classification) {
-          validationErrors.classificationError = "Classification is required";
+        if (error.errors.phone) {
+          validationErrors.phoneError = "Phone is required";
         }
       } else {
         validationErrors.error = "User already exists";
@@ -242,7 +233,7 @@ const changeAvatar = async (req, res) => {
     singleUpload(req, res, async function (err) {
       if (err) {
         if (err.message && err.message === "File too large") {
-          err.errMessage = "File size cannot be larger than 2 MB";
+          err.errMessage = "File size cannot be larger than 3 MB";
         }
         return res.status(403).send(err);
       }

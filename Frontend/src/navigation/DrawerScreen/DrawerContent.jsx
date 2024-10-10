@@ -25,7 +25,7 @@ export const DrawerContent = (props) => {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <TouchableOpacity
                 onPress={() => {
-                  props.navigation.push("Profile");
+                  props.navigation.push("ProfileScreen");
                   props.navigation.toggleDrawer();
                 }}
               >
@@ -51,7 +51,7 @@ export const DrawerContent = (props) => {
 
           <Drawer.Section style={styles.drawerSection}>
             <CustomDrawerItem
-              iconName="home-sharp"
+              iconName="home"
               label="Home"
               onPress={() => {
                 props.navigation.navigate("Home Tab", {
@@ -62,34 +62,34 @@ export const DrawerContent = (props) => {
             {!isAdmin ? (
               <>
                 <CustomDrawerItem
-                  iconName="bookmarks-sharp"
+                  iconName="heart"
                   label="Saved"
                   onPress={() => {
-                    props.navigation.push("Saved");
+                    props.navigation.push("BookmarksScreen");
                     props.navigation.toggleDrawer();
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="pricetag"
+                  iconName="hanger"
                   label="My Listings"
                   onPress={() => {
-                    props.navigation.push("MyListings");
+                    props.navigation.push("MyListingScreen");
                     props.navigation.toggleDrawer();
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="pricetag"
+                  iconName="dresser"
                   label="My Requests"
                   onPress={() => {
-                    props.navigation.push("MyRequests");
+                    props.navigation.push("MyRequestScreen");
                     props.navigation.toggleDrawer();
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="person-sharp"
-                  label="Profile"
+                  iconName="account"
+                  label="My Profile"
                   onPress={() => {
-                    props.navigation.push("Profile");
+                    props.navigation.push("ProfileScreen");
                     props.navigation.toggleDrawer();
                   }}
                 />
@@ -97,7 +97,7 @@ export const DrawerContent = (props) => {
             ) : (
               <>
                 <CustomDrawerItem
-                  iconName="book-sharp"
+                  iconName="tag"
                   label="Reported Sales"
                   onPress={() => {
                     props.navigation.push("ReportedSalesScreen");
@@ -105,7 +105,7 @@ export const DrawerContent = (props) => {
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="pricetag"
+                  iconName="archive-eye"
                   label="Reported Requests"
                   onPress={() => {
                     props.navigation.push("ReportedRequestsScreen");
@@ -113,7 +113,7 @@ export const DrawerContent = (props) => {
                   }}
                 />
                 <CustomDrawerItem
-                  iconName="bookmarks-sharp"
+                  iconName="account-group"
                   label="Reported Users"
                   onPress={() => {
                     props.navigation.push("ReportedUsersScreen");
@@ -127,7 +127,7 @@ export const DrawerContent = (props) => {
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
         <CustomDrawerItem
-          iconName="log-out-sharp"
+          iconName="logout"
           label="Sign Out"
           onPress={signOut}
         />
