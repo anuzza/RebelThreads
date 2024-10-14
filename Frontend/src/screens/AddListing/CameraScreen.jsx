@@ -158,8 +158,8 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
 
     try {
       setLoading(true);
-      if (route?.params?.bookState?.id) {
-        await axios.patch(`/sales/${route.params.bookState.id}`, formData);
+      if (route?.params?.clothState?.id) {
+        await axios.patch(`/sales/${route.params.clothState.id}`, formData);
         setLoading(false);
         Alert.alert("Cloth Updated succesfully!");
       } else {
@@ -232,7 +232,11 @@ export const CameraScreen = connectActionSheet(({ route, navigation }) => {
       <View style={{ marginTop: 30 }}>
         <TouchableOpacity onPress={onFormSubmit} style={styles.SaveButton}>
           {!loading ? (
-            <Caption style={styles.alignedText}>Post for Sale</Caption>
+            <Caption style={styles.alignedText}>
+              {route?.params?.clothState?.id
+                ? "Update Listing"
+                : "Post for Sale"}
+            </Caption>
           ) : (
             <ActivityIndicator color="#fff" />
           )}

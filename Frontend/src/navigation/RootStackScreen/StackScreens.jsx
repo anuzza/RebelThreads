@@ -108,16 +108,10 @@ export const MyListingStackScreen = ({ navigation }) => (
     />
     <MyListingStack.Screen
       name="Details"
-      options={{
-        headerShown: true,
-      }}
       component={DetailsScreen}
     />
     <MyListingStack.Screen
       name="Profile"
-      options={{
-        headerShown: false,
-      }}
       component={ProfileScreen}
     />
   </MyListingStack.Navigator>

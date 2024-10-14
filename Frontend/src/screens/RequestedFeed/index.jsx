@@ -51,7 +51,7 @@ const RequestedScreen = ({ navigation }) => {
         <Loader loading={loading} />
         {!loading && clothes.length === 0 ? (
           <EmptyListPlaceholder>
-            <Text style={{ textAlign: "center" }}>
+            <Text style={{ textAlign: "center", fontSize: 18 }}>
               Currently, there aren't any requested clothes in the platform
             </Text>
           </EmptyListPlaceholder>

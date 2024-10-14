@@ -87,6 +87,7 @@ export const ListCard = ({
   const [swiped, setSwiped] = useState(false);
   const {
     clothing: { title },
+    pictures,
     createdAt,
     active,
   } = item;
@@ -97,7 +98,7 @@ export const ListCard = ({
         ...styles.feedCard,
         flexDirection: "column",
         backgroundColor: profile ? "#eee" : "#fff",
-        opacity: !profile && !active ? 0.3 : 1,
+        opacity: !profile && !active ? 0.65 : 1,
         borderRadius: !swiped ? 10 : 0,
       }}
     >
