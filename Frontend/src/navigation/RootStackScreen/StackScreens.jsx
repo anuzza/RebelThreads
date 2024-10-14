@@ -106,14 +106,8 @@ export const MyListingStackScreen = ({ navigation }) => (
       }}
       component={MyListings}
     />
-    <MyListingStack.Screen
-      name="Details"
-      component={DetailsScreen}
-    />
-    <MyListingStack.Screen
-      name="Profile"
-      component={ProfileScreen}
-    />
+    <MyListingStack.Screen name="Details" component={DetailsScreen} />
+    <MyListingStack.Screen name="Profile" component={ProfileScreen} />
   </MyListingStack.Navigator>
 );
 
@@ -220,7 +214,7 @@ export const AddRequestStackScreen = ({ navigation }) => (
     }}
   >
     <AddRequestStack.Screen
-      name="RequestBookBaseScreen"
+      name="RequestClothBaseScreen"
       options={{
         title: "Request A Cloth",
         headerShown: true,

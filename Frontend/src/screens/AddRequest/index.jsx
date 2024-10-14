@@ -227,7 +227,9 @@ export const BaseScreen = ({ route, navigation }) => {
       )}
       <TouchableOpacity onPress={onFormSubmit} style={styles.SaveButton}>
         {!loading ? (
-          <Caption style={styles.alignedText}>Add Request</Caption>
+          <Caption style={styles.alignedText}>
+            {route?.params?.clothState?.id ? "Update Request" : "Add Request"}
+          </Caption>
         ) : (
           <ActivityIndicator color="#fff" />
         )}
