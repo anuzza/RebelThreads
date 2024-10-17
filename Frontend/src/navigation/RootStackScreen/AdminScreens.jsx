@@ -41,6 +41,7 @@ export const AdminHomeStackScreen = ({ navigation }) => (
         headerShown: true,
       }}
     />
+    <AdminHomeStack.Screen name="Details" component={DetailsScreen} />
   </AdminHomeStack.Navigator>
 );
 
@@ -75,14 +76,14 @@ export const AdminFeedStackScreen = ({ navigation }) => (
     <AdminFeedStack.Screen
       name="Profile"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={ProfileScreen}
     />
     <AdminFeedStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />

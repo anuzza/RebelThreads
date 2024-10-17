@@ -83,7 +83,7 @@ const MainTabScreen = ({ user }) => {
       ) : (
         <>
           <Tab.Screen
-            name="HomeTab"
+            name="Home Tab"
             component={AdminHomeStackScreen}
             options={{
               headerShown: false,

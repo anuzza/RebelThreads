@@ -1,19 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Alert,
-  TouchableOpacity,
-  Touchable,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import { cardStyles as styles } from "../constants/sharedCardStyles";
 import moment from "moment";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Caption } from "react-native-paper";
 
-const RightSwipeActions = ({ item, handleBookDeletion, listCard }) => {
+const RightSwipeActions = ({ item, handleClothDeletion, listCard }) => {
   return (
     <View
       style={{
@@ -22,7 +15,7 @@ const RightSwipeActions = ({ item, handleBookDeletion, listCard }) => {
       }}
     >
       <TouchableOpacity
-        onPress={() => handleBookDeletion(item._id)}
+        onPress={() => handleClothDeletion(item._id)}
         style={{
           backgroundColor: "#D91848",
           width: 100,
@@ -41,7 +34,7 @@ export const AdminListCard = ({
   item,
   users,
   navigation,
-  handleBookDeletion,
+  handleClothDeletion,
 }) => {
   const [swiped, setSwiped] = useState(false);
   let cardValue;
@@ -105,7 +98,7 @@ export const AdminListCard = ({
     );
   } else {
     const {
-      book: { title },
+      clothing: { title },
       _id,
       date,
       seller,
@@ -205,7 +198,7 @@ export const AdminListCard = ({
       renderRightActions={() => (
         <RightSwipeActions
           listCard
-          handleBookDeletion={handleBookDeletion}
+          handleClothDeletion={handleClothDeletion}
           item={item}
         />
       )}
@@ -217,21 +210,14 @@ export const AdminListCard = ({
   );
 };
 
-const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
+const AdminCard = ({ item, feed, navigation, handleClothDeletion, users }) => {
   const [swiped, setSwiped] = useState(false);
   let cardValue;
   if (feed) {
     const {
       _id,
-      user: {
-        name,
-        avatar,
-        email,
-        contact_number: { value, visibility },
-      },
-      book: { title, edition, isbn },
-      course_code,
-      course_name,
+      user: { name, avatar, email, phone },
+      clothing: { title, size, condition },
       createdAt,
     } = item;
 
@@ -274,9 +260,7 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
           </View>
 
           <View style={{ ...styles.subInformation, marginTop: 10 }}>
-            <Text style={styles.info}>
-              For {course_name} {course_code}
-            </Text>
+            <Text style={styles.info}>Size: {size}</Text>
             <View
               style={{
                 borderRightWidth: 1,
@@ -286,25 +270,16 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
                 marginRight: 5,
               }}
             />
-            <Text style={{ ...styles.info }}>ISBN {isbn}</Text>
-          </View>
-          <View style={{ ...styles.subInformation, marginTop: 10 }}>
-            <Text style={styles.info}>Edition: {edition} </Text>
+            <Text style={{ ...styles.info }}>Condition: {condition}</Text>
           </View>
         </View>
       </View>
     );
   } else if (users) {
-    const { name, avatar, major, classification, email, createdAt } = item;
+    const { name, avatar, email, createdAt } = item;
     cardValue = (
-      <View style={[styles.card]}>
-        <View
-          style={{
-            position: "relative",
-            borderTopWidth: 1,
-            borderColor: "#bebfc4",
-          }}
-        >
+      <View style={[styles.card, { width: "95%", alignSelf: "center" }]}>
+        <View style={styles.imageContainer}>
           <Image
             style={styles.image}
             source={{
@@ -315,7 +290,7 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
             resizeMode="cover"
           />
         </View>
-        <View style={{ padding: 10 }}>
+        <View style={styles.content}>
           <Text style={styles.title}>{name}</Text>
           <View style={styles.subInformation}>
             <Text style={styles.info}>
@@ -324,8 +299,7 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
           </View>
           <View style={styles.subInformation}>
             <View style={styles.types}>
-              <Text style={styles.type}>{major}</Text>
-              <Text style={styles.type}>{classification}</Text>
+              <Text style={styles.type}>Email: {email}</Text>
             </View>
           </View>
         </View>
@@ -333,21 +307,14 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
     );
   } else {
     const {
-      book: { title, isbn, edition },
+      clothing: { title, size, condition, brand },
       pictures,
-      condition,
       active,
-      amount,
+      price,
     } = item;
     cardValue = (
-      <View style={[styles.card]}>
-        <View
-          style={{
-            position: "relative",
-            borderTopWidth: 1,
-            borderColor: "#bebfc4",
-          }}
-        >
+      <View style={[styles.card, { width: "95%", alignSelf: "center" }]}>
+        <View style={styles.imageContainer}>
           <Image
             style={styles.image}
             source={{
@@ -356,38 +323,40 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
             resizeMode="cover"
           />
         </View>
-        <View style={{ padding: 10 }}>
+        <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
-          <View style={styles.subInformation}>
-            <Text style={styles.info}>{edition}th edition </Text>
-            <View
-              style={{
-                borderRightWidth: 1,
-                height: "100%",
-                borderColor: "#A89E9E",
-                marginLeft: 5,
-                marginRight: 5,
-              }}
-            />
-            <Text style={{ ...styles.info, flexWrap: "wrap" }}>
-              {" "}
-              ISBN {isbn}
-            </Text>
+
+          {/* Brand and Size Row */}
+          <View style={styles.row}>
+            <Text style={styles.infoText}>Brand: {brand}</Text>
+            <Text style={styles.infoText}>Size: {size}</Text>
           </View>
-          <View style={styles.subInformation}>
-            <View style={styles.priceContainer}>
-              <Text style={styles.alignedText}>${amount.toFixed(2)}</Text>
-            </View>
-            <View
+
+          {/* Price Row */}
+          <View style={styles.row}>
+            <Text style={[styles.price, price === 0 && styles.free]}>
+              {price === 0 ? "$ Free" : `$${price.toFixed(2)}`}
+            </Text>
+            <Text
               style={[
-                styles.priceContainer,
+                styles.conditionText,
                 {
-                  backgroundColor: condition === "NEW" ? "#a2d729" : "#eec643",
+                  backgroundColor:
+                    condition === "New"
+                      ? "#4e9049" // Bright Green for "New"
+                      : condition === "Like New"
+                      ? "#5DADE2" // Light Blue for "Like New"
+                      : condition === "Good"
+                      ? "#F39C12" // Orange for "Good"
+                      : condition === "Fair"
+                      ? "#F4D03F" // Amber/Yellow for "Fair"
+                      : "#BDC3C7",
+                  borderRadius: 0,
                 },
               ]}
             >
-              <Text style={styles.alignedText}>{condition}</Text>
-            </View>
+              {condition}
+            </Text>
           </View>
         </View>
       </View>
@@ -398,7 +367,7 @@ const AdminCard = ({ item, feed, navigation, handleBookDeletion, users }) => {
       renderRightActions={() => (
         <RightSwipeActions
           listCard={feed}
-          handleBookDeletion={handleBookDeletion}
+          handleClothDeletion={handleClothDeletion}
           item={item}
         />
       )}

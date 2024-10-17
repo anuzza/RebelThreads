@@ -204,4 +204,8 @@ export const cardStyles = StyleSheet.create({
     width: "100%",
     height: "auto",
   },
+  content: {
+    width: "100%",
+    padding: 10,
+  },
 });

@@ -56,7 +56,6 @@ const HomeScreen = ({ navigation }) => {
   );
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Loader loading={loading} />
       {!loading && clothes.length === 0 ? (
         <EmptyListPlaceholder>
           Currently, there aren't any clothes for sale in the platform
