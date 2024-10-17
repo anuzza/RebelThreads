@@ -97,6 +97,14 @@ export const DrawerContent = (props) => {
             ) : (
               <>
                 <CustomDrawerItem
+                  iconName="account"
+                  label="My Profile"
+                  onPress={() => {
+                    props.navigation.push("ProfileScreen");
+                    props.navigation.toggleDrawer();
+                  }}
+                />
+                <CustomDrawerItem
                   iconName="tag"
                   label="Reported Sales"
                   onPress={() => {

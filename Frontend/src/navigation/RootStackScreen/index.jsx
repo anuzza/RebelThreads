@@ -6,21 +6,20 @@ import {
   AuthStackScreen,
   MyListingStackScreen,
   AddListingStackScreen,
-  HomeStackScreen,
   AddRequestStackScreen,
   MyRequestStackScreen,
-  FeedStackScreen,
   ProfileStackScreen,
   BookmarksStackScreen,
 } from "./StackScreens";
-import LoginScreen from "../../screens/Auth/LoginScreen";
-import { useSelector } from "react-redux";
+import {
+  AdminReportedRequestsStackScreen,
+  AdminReportedSalesStackScreen,
+  AdminReportedUsersStackScreen,
+} from "./AdminScreens";
 
 const RootStack = createNativeStackNavigator();
 
 const RootStackScreen = ({ userToken, user }) => {
-  const isAdmin = useSelector((state) => state.auth.isAdmin);
-
   return (
     <RootStack.Navigator
       screenOptions={{
@@ -39,30 +38,53 @@ const RootStackScreen = ({ userToken, user }) => {
           >
             {(props) => <Drawer user={user} {...props} />}
           </RootStack.Screen>
-          <RootStack.Screen
-            name="ProfileScreen"
-            component={ProfileStackScreen}
-          />
-          <RootStack.Screen
-            name="BookmarksScreen"
-            component={BookmarksStackScreen}
-          />
-          <RootStack.Screen
-            name="MyListingScreen"
-            component={MyListingStackScreen}
-          />
-          <RootStack.Screen
-            name="AddListingScreen"
-            component={AddListingStackScreen}
-          />
-          <RootStack.Screen
-            name="AddRequestScreen"
-            component={AddRequestStackScreen}
-          />
-          <RootStack.Screen
-            name="MyRequestScreen"
-            component={MyRequestStackScreen}
-          />
+          {user && !user.isAdmin ? (
+            <>
+              <RootStack.Screen
+                name="ProfileScreen"
+                component={ProfileStackScreen}
+              />
+              <RootStack.Screen
+                name="BookmarksScreen"
+                component={BookmarksStackScreen}
+              />
+              <RootStack.Screen
+                name="MyListingScreen"
+                component={MyListingStackScreen}
+              />
+              <RootStack.Screen
+                name="AddListingScreen"
+                component={AddListingStackScreen}
+              />
+              <RootStack.Screen
+                name="AddRequestScreen"
+                component={AddRequestStackScreen}
+              />
+              <RootStack.Screen
+                name="MyRequestScreen"
+                component={MyRequestStackScreen}
+              />
+            </>
+          ) : (
+            <>
+              <RootStack.Screen
+                name="ProfileScreen"
+                component={ProfileStackScreen}
+              />
+              <RootStack.Screen
+                name="ReportedUsersScreen"
+                component={AdminReportedUsersStackScreen}
+              />
+              <RootStack.Screen
+                name="ReportedSalesScreen"
+                component={AdminReportedSalesStackScreen}
+              />
+              <RootStack.Screen
+                name="ReportedRequestsScreen"
+                component={AdminReportedRequestsStackScreen}
+              />
+            </>
+          )}
         </>
       ) : (
         <RootStack.Screen

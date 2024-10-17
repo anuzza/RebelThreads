@@ -39,7 +39,7 @@ const SignupScreen = () => {
 
   const handleSubmit = () => {
     if (nameVerify && emailVerify && passwordVerify && phoneVerify) {
-      dispatch(signup(name, email, password, phone));
+      dispatch(signup(name, email, phone, { password }));
     } else {
       Alert.alert("Fill mandatory details");
     }

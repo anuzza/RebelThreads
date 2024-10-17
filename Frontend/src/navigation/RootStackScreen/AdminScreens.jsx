@@ -19,6 +19,10 @@ export const AdminHomeStackScreen = ({ navigation }) => (
     screenOptions={{
       headerBackTitleVisible: false,
       ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminHomeStack.Screen
@@ -29,8 +33,8 @@ export const AdminHomeStackScreen = ({ navigation }) => (
           <Icon.Button
             name="menu-outline"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.openDrawer()}
           ></Icon.Button>
         ),
@@ -40,11 +44,16 @@ export const AdminHomeStackScreen = ({ navigation }) => (
   </AdminHomeStack.Navigator>
 );
 
-const AdminFeedStack = createStackNavigator();
+const AdminFeedStack = createNativeStackNavigator();
 export const AdminFeedStackScreen = ({ navigation }) => (
   <AdminFeedStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
+      ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminFeedStack.Screen
@@ -55,8 +64,8 @@ export const AdminFeedStackScreen = ({ navigation }) => (
           <Icon.Button
             name="menu-outline"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.openDrawer()}
           ></Icon.Button>
         ),
@@ -80,11 +89,16 @@ export const AdminFeedStackScreen = ({ navigation }) => (
   </AdminFeedStack.Navigator>
 );
 
-const AdminUserStack = createStackNavigator();
+const AdminUserStack = createNativeStackNavigator();
 export const AdminUserStackScreen = ({ navigation }) => (
   <AdminUserStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
+      ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminUserStack.Screen
@@ -95,8 +109,8 @@ export const AdminUserStackScreen = ({ navigation }) => (
           <Icon.Button
             name="menu-outline"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.openDrawer()}
           ></Icon.Button>
         ),
@@ -106,25 +120,30 @@ export const AdminUserStackScreen = ({ navigation }) => (
     <AdminUserStack.Screen
       name="Profile"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={ProfileScreen}
     />
     <AdminUserStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />
   </AdminUserStack.Navigator>
 );
 
-const AdminReportedSalesStack = createStackNavigator();
+const AdminReportedSalesStack = createNativeStackNavigator();
 export const AdminReportedSalesStackScreen = ({ navigation }) => (
   <AdminReportedSalesStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
+      ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminReportedSalesStack.Screen
@@ -136,8 +155,8 @@ export const AdminReportedSalesStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.goBack()}
           ></Icon.Button>
         ),
@@ -147,25 +166,30 @@ export const AdminReportedSalesStackScreen = ({ navigation }) => (
     <AdminReportedSalesStack.Screen
       name="Profile"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={ProfileScreen}
     />
     <AdminReportedSalesStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />
   </AdminReportedSalesStack.Navigator>
 );
 
-const AdminReportedUsersStack = createStackNavigator();
+const AdminReportedUsersStack = createNativeStackNavigator();
 export const AdminReportedUsersStackScreen = ({ navigation }) => (
   <AdminReportedUsersStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
+      ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminReportedUsersStack.Screen
@@ -177,9 +201,8 @@ export const AdminReportedUsersStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
-            onPress={() => navigation.goBack()}
+            color="#fff"
+            backgroundColor="#4338ca"
           ></Icon.Button>
         ),
         headerShown: true,
@@ -188,25 +211,30 @@ export const AdminReportedUsersStackScreen = ({ navigation }) => (
     <AdminReportedUsersStack.Screen
       name="Profile"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={ProfileScreen}
     />
     <AdminReportedUsersStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />
   </AdminReportedUsersStack.Navigator>
 );
 
-const AdminReportedRequestsStack = createStackNavigator();
+const AdminReportedRequestsStack = createNativeStackNavigator();
 export const AdminReportedRequestsStackScreen = ({ navigation }) => (
   <AdminReportedRequestsStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,
+      ...verticalAnimation,
+      headerStyle: {
+        backgroundColor: "#4338ca",
+      },
+      headerTintColor: "#FFF",
     }}
   >
     <AdminReportedRequestsStack.Screen
@@ -218,8 +246,8 @@ export const AdminReportedRequestsStackScreen = ({ navigation }) => (
           <Icon.Button
             name="close"
             size={25}
-            color="#000"
-            backgroundColor="#fff"
+            color="#fff"
+            backgroundColor="#4338ca"
             onPress={() => navigation.goBack()}
           ></Icon.Button>
         ),
@@ -229,14 +257,14 @@ export const AdminReportedRequestsStackScreen = ({ navigation }) => (
     <AdminReportedRequestsStack.Screen
       name="Profile"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={ProfileScreen}
     />
     <AdminReportedRequestsStack.Screen
       name="Details"
       options={{
-        headerShown: false,
+        headerShown: true,
       }}
       component={DetailsScreen}
     />

@@ -6,6 +6,11 @@ import {
   FeedStackScreen,
   HomeStackScreen,
 } from "../RootStackScreen/StackScreens";
+import {
+  AdminFeedStackScreen,
+  AdminHomeStackScreen,
+  AdminUserStackScreen,
+} from "../RootStackScreen/AdminScreens";
 import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
@@ -38,40 +43,81 @@ const MainTabScreen = ({ user }) => {
       initialRouteName="Home"
       shifting={false}
     >
-      <Tab.Screen
-        name="Home Tab"
-        component={HomeStackScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color }) => (
-            <Icon name="home" color={color} size={30} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Sell Tab"
-        component={AddListingStackScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: "Sell",
-          tabBarIcon: ({ color }) => (
-            <Icon name="shirt" color={color} size={30} />
-          ),
-        }}
-      />
+      {user && !user.isAdmin ? (
+        <>
+          <Tab.Screen
+            name="Home Tab"
+            component={HomeStackScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color }) => (
+                <Icon name="home" color={color} size={30} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Sell Tab"
+            component={AddListingStackScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Sell",
+              tabBarIcon: ({ color }) => (
+                <Icon name="shirt" color={color} size={30} />
+              ),
+            }}
+          />
 
-      <Tab.Screen
-        name="Requests Feed"
-        component={FeedStackScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: "Feed",
-          tabBarIcon: ({ color }) => (
-            <Icon name="list" color={color} size={30} />
-          ),
-        }}
-      />
+          <Tab.Screen
+            name="Requests Feed"
+            component={FeedStackScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Feed",
+              tabBarIcon: ({ color }) => (
+                <Icon name="list" color={color} size={30} />
+              ),
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Tab.Screen
+            name="HomeTab"
+            component={AdminHomeStackScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color }) => (
+                <Icon name="home" color={color} size={26} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="AdminUsersTab"
+            component={AdminUserStackScreen}
+            options={{
+              headerShown: false,
+
+              tabBarLabel: "Users",
+              tabBarIcon: ({ color }) => (
+                <Icon name="people" color={color} size={26} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="AdminFeedTab"
+            component={AdminFeedStackScreen}
+            options={{
+              headerShown: false,
+              tabBarLabel: "Requests",
+              tabBarIcon: ({ color }) => (
+                <Icon name="list" color={color} size={26} />
+              ),
+            }}
+          />
+        </>
+      )}
     </Tab.Navigator>
   );
 };
