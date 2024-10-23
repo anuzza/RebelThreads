@@ -58,11 +58,15 @@ const LoginScreen = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error && Object.keys(error).length !== 0) {
       const errorMessage =
         typeof error === "object" && error.error ? error.error : error;
-      Alert.alert(errorMessage);
-      dispatch(clearErrors());
+
+      // Show alert if we have a valid error message
+      if (errorMessage) {
+        Alert.alert("Error", errorMessage);
+        dispatch(clearErrors());
+      }
     }
   }, [error]);
 
