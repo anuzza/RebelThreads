@@ -9,12 +9,11 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import Animated, { FadeInUp, FadeInDown } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RadioGroup from "react-native-radio-buttons-group";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import Error from "react-native-vector-icons/MaterialIcons";
@@ -60,7 +59,9 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert(error.error || error);
+      const errorMessage =
+        typeof error === "object" && error.error ? error.error : error;
+      Alert.alert(errorMessage);
       dispatch(clearErrors());
     }
   }, [error]);

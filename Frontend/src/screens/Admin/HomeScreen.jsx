@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation }) => {
       setClothes(data);
       setLoading(false);
     } catch (error) {
-      console.log(error.response.data);
+      // console.log(error.response.data);
       setLoading(false);
     }
   };
@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
       await axios.delete("/admin/sales/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
 

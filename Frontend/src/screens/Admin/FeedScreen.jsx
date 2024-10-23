@@ -33,7 +33,7 @@ const FeedScreen = ({ navigation }) => {
       await axios.delete("/admin/requests/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
     } catch (error) {
-      console.log(error.message);
+      //alert
     }
   };
 

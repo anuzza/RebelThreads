@@ -58,7 +58,6 @@ const loginUser = async (req, res) => {
     res.send({ user, token });
   } catch (error) {
     if (error.message?.includes("timed out")) {
-      console.log("hello");
       return res.status(400).send({ error: "Network error" });
     }
     if (error.toString().includes("Error: ")) {

@@ -1,6 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, RefreshControl } from "react-native";
+import { FlatList, SafeAreaView, RefreshControl, Text } from "react-native";
 import { ListCard } from "../../components/Card";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import Loader from "../../components/Loader";
@@ -75,7 +75,9 @@ const MyRequests = ({ navigation }) => {
   if (!loading && clothes.length === 0) {
     return (
       <EmptyListPlaceholder>
-        You have not requested any clothes in the past yet
+        <Text style={{ textAlign: "center", fontSize: 18 }}>
+          You have not requested any clothes in the past yet
+        </Text>
       </EmptyListPlaceholder>
     );
   }

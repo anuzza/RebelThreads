@@ -179,12 +179,12 @@ export const FeedStackScreen = ({ navigation }) => (
         headerShown: true,
         headerLeft: () => (
           <Icon.Button
-            name=""
+            name="menu"
             size={25}
             color="#fff"
             backgroundColor="#4338ca"
             onPress={() => {
-              navigation.goBack();
+              navigation.openDrawer();
             }}
           ></Icon.Button>
         ),

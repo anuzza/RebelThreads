@@ -66,7 +66,8 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const topDeals = clothes
-    .filter((clothing) => clothing.price < 100)
+    .filter((clothing) => clothing.price < 50)
+    .sort((a, b) => a.price - b.price)
     .slice(0, 5);
 
   return (
@@ -93,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
               data={filteredClothes}
               ListHeaderComponent={
                 <View>
-                  {text === "" && topDeals.length > 0 && (
+                  {text === "" && topDeals?.length > 0 && (
                     <View style={styles.topDealsContainer}>
                       <Text style={styles.sectionTitle}>Top Deals</Text>
                       <ScrollView

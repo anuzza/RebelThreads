@@ -6,7 +6,7 @@ export const cardStyles = StyleSheet.create({
     marginBottom: 15, // Add more space between cards
     backgroundColor: "#fff",
     borderRadius: 12, // Slightly larger border radius for smooth corners
-    padding: 10,
+    padding: 8,
     elevation: 4, // Increased shadow for depth
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
@@ -177,7 +177,7 @@ export const cardStyles = StyleSheet.create({
     marginBottom: 10,
   },
   infoText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
   },
   conditionText: {
@@ -206,6 +206,6 @@ export const cardStyles = StyleSheet.create({
   },
   content: {
     width: "100%",
-    padding: 10,
+    padding: 5,
   },
 });

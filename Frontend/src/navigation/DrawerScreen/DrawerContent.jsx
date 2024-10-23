@@ -50,17 +50,17 @@ export const DrawerContent = (props) => {
           </View>
 
           <Drawer.Section style={styles.drawerSection}>
-            <CustomDrawerItem
-              iconName="home"
-              label="Home"
-              onPress={() => {
-                props.navigation.navigate("Home Tab", {
-                  screen: "Home",
-                });
-              }}
-            />
             {!isAdmin ? (
               <>
+                <CustomDrawerItem
+                  iconName="home"
+                  label="Home"
+                  onPress={() => {
+                    props.navigation.navigate("Home Tab", {
+                      screen: "Home",
+                    });
+                  }}
+                />
                 <CustomDrawerItem
                   iconName="heart"
                   label="Saved"
@@ -96,6 +96,15 @@ export const DrawerContent = (props) => {
               </>
             ) : (
               <>
+                <CustomDrawerItem
+                  iconName="home"
+                  label="Home"
+                  onPress={() => {
+                    props.navigation.navigate("HomeTab", {
+                      screen: "Home",
+                    });
+                  }}
+                />
                 <CustomDrawerItem
                   iconName="account"
                   label="My Profile"

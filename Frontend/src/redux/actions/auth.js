@@ -124,7 +124,6 @@ export const uploadImage = (photo) => {
       temp[temp.length - 1] = "jpeg";
       fileName = temp.join(".");
     }
-    console.log(photo);
     try {
       const fd = new FormData();
       fd.append("avatar", {
