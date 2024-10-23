@@ -36,7 +36,7 @@ const ReportedSalesScreen = ({ navigation }) => {
   const onOpenActionSheet = (id) => {
     showActionSheetWithOptions(
       {
-        options: ["Delete Report", "Delete Book", "Cancel"],
+        options: ["Delete Report", "Delete Post", "Cancel"],
         cancelButtonIndex: 2,
         destructiveButtonIndex: 1,
       },
@@ -53,7 +53,7 @@ const ReportedSalesScreen = ({ navigation }) => {
 
   const deleteReport = async (id) => {
     try {
-      await axios.delete("/requests/" + id);
+      await axios.delete("/sales/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
     } catch (error) {
       console.log(error.message);
@@ -79,7 +79,7 @@ const ReportedSalesScreen = ({ navigation }) => {
     }, [])
   );
 
-  if (!loading && books.length === 0) {
+  if (!loading && clothes.length === 0) {
     return (
       <EmptyListPlaceholder>
         There aren't any reported sales in this platform yet!

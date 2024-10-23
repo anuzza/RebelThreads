@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Card from "../../components/Card";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
-import FloatingButton from "../../components/FloatingButton";
 import SearchBarHeader from "../../components/SearchBarHeader";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "../../utils/axios";

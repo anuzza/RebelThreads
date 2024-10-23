@@ -36,7 +36,7 @@ const ReportedRequestsScreen = ({ navigation }) => {
   const onOpenActionSheet = (id) => {
     showActionSheetWithOptions(
       {
-        options: ["Delete Report", "Delete Book", "Cancel"],
+        options: ["Delete Report", "Delete Post", "Cancel"],
         cancelButtonIndex: 2,
         destructiveButtonIndex: 1,
       },
@@ -79,7 +79,7 @@ const ReportedRequestsScreen = ({ navigation }) => {
     }, [])
   );
 
-  if (!loading && books.length === 0) {
+  if (!loading && clothes.length === 0) {
     return (
       <EmptyListPlaceholder>
         There aren't any reported requests in this platform yet!

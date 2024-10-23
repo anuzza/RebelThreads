@@ -20,7 +20,7 @@ const ReportedUsersScreen = ({ navigation }) => {
   const onOpenActionSheet = (id) => {
     showActionSheetWithOptions(
       {
-        options: ["Delete Report", "Delete Book", "Cancel"],
+        options: ["Delete Report", "Delete User", "Cancel"],
         cancelButtonIndex: 2,
         destructiveButtonIndex: 1,
       },
