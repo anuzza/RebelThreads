@@ -226,6 +226,52 @@ const deleteClothesSaleReport = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const user = await User.findById(req.params.id).session(session);
+    if (!user) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Delete all clothes for sale posted by the user
+    await ClothingForSale.updateMany(
+      { seller: user._id },
+      { $set: { deleted: true, active: false } },
+      { session }
+    );
+
+    // Delete all clothing requests posted by the user
+    await ClothesRequested.updateMany(
+      { user: user._id },
+      { $set: { deleted: true, active: false } },
+      { session }
+    );
+
+    // Finally, delete the user itself
+    await User.findByIdAndDelete(req.params.id).session(session);
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    res.send({ message: "User and all associated posts deleted successfully" });
+  } catch (error) {
+    // If there is an error, abort the transaction
+    await session.abortTransaction();
+    session.endSession();
+
+    res.status(500).send({
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllClothesOnSale,
   getAllClothesRequested,
@@ -238,4 +284,5 @@ module.exports = {
   deleteClothesSaleReport,
   deleteClothesRequestReport,
   deleteUserReport,
+  deleteUser,
 };

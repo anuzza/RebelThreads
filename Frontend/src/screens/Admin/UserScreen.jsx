@@ -34,7 +34,7 @@ const UserScreen = ({ navigation }) => {
 
   const handleUserDeletion = async (id) => {
     // try {
-    //   await axios.delete("/admin/sales/" + id);
+    //   await axios.delete("/admin/users/" + id);
     setUsers(users.filter((user) => user._id !== id));
     // } catch (error) {
     //   console.log(error.message);

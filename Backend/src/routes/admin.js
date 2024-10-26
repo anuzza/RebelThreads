@@ -37,5 +37,7 @@ router.delete(
   deleteClothesRequestReport
 );
 router.delete("/requests/:id", auth, admin, deleteClothesRequested);
+router.delete("/users/:id", auth, admin, deleteUser);
+
 
 module.exports = router;
