@@ -112,7 +112,7 @@ export const MyListingStackScreen = ({ navigation }) => (
 );
 
 const AddListingStack = createNativeStackNavigator();
-export const AddListingStackScreen = ({ navigation }) => {
+export const AddListingStackScreen = ({ navigation, route }) => {
   const { clothState } = route.params || {}; // Retrieve clothState from route params
   const isUpdateMode = !!clothState;
   return (

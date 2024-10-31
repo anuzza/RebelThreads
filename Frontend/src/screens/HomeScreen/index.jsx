@@ -21,6 +21,7 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -51,19 +52,70 @@ const HomeScreen = ({ navigation }) => {
 
   const handleSearch = (text) => {
     setText(text);
+    setSelectedTag(null);
   };
 
-  const filteredClothes = clothes.filter(
-    (clothing) =>
-      clothing.clothing?.title.toLowerCase().includes(text.toLowerCase()) ||
-      clothing.clothing?.description
-        .toLowerCase()
-        .includes(text.toLowerCase()) ||
-      clothing.clothing?.size.toLowerCase().includes(text.toLowerCase()) ||
-      clothing.clothing?.gender.toLowerCase().includes(text.toLowerCase()) ||
-      clothing.clothing?.brand.toLowerCase().includes(text.toLowerCase()) ||
-      clothing.clothing?.category.toLowerCase().includes(text.toLowerCase())
-  );
+  const handleTagSelect = (tag) => {
+    setText("");
+    if (selectedTag === tag) {
+      setSelectedTag(null);
+    } else {
+      setSelectedTag(tag);
+    }
+  };
+
+  const filterKeywords = {
+    Olemiss: ["olemiss", "ole miss", "rebel"],
+    Gameday: ["game day", "gameday", "tailgate"],
+    Sorority: ["sorority, chapter"],
+    Fraternity: ["frat", "fraternity"],
+    Formal: ["formal", "dress", "suit"],
+    Athletic: ["athletic", "gym", "sportswear"],
+    Casual: ["casual", "everyday"],
+    Tailgate: ["tailgate", "gameday"],
+    Winter: ["winter", "coat", "jacket", "sweater"],
+    Classroom: ["classroom", "school", "study", "class"],
+    Party: ["party", "club", "night", "bar"],
+  };
+
+  const filteredClothes = clothes.filter((clothing) => {
+    const title = clothing.clothing?.title.toLowerCase();
+    const description = clothing.clothing?.description.toLowerCase();
+    const size = clothing.clothing?.size.toLowerCase();
+    const gender = clothing.clothing?.gender.toLowerCase();
+    const brand = clothing.clothing?.brand.toLowerCase();
+    const category = clothing.clothing?.category.toLowerCase();
+
+    const matchesText =
+      title.includes(text.toLowerCase()) ||
+      description.includes(text.toLowerCase()) ||
+      size.includes(text.toLowerCase()) ||
+      gender.includes(text.toLowerCase()) ||
+      brand.includes(text.toLowerCase()) ||
+      category.includes(text.toLowerCase());
+
+    const matchesTag = selectedTag
+      ? filterKeywords[selectedTag].some(
+          (keyword) => title.includes(keyword) || description.includes(keyword)
+        )
+      : true;
+
+    return matchesText && matchesTag;
+  });
+
+  const filterTags = [
+    "Olemiss",
+    "Gameday",
+    "Sorority",
+    "Fraternity",
+    "Formal",
+    "Athletic",
+    "Casual",
+    "Tailgate",
+    "Winter",
+    "Classroom",
+    "Party",
+  ];
 
   const topDeals = clothes
     .filter((clothing) => clothing.price < 50)
@@ -74,6 +126,21 @@ const HomeScreen = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: "#4338CA" }}>
         <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.tagContainer}
+        >
+          {filterTags.map((tag) => (
+            <TouchableOpacity
+              key={tag}
+              onPress={() => handleTagSelect(tag)}
+              style={[styles.tag, selectedTag === tag && styles.selectedTag]}
+            >
+              <Text style={styles.tagText}>{tag}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </SafeAreaView>
       <SafeAreaView style={{ flex: 1 }}>
         <Loader loading={loading} />
@@ -94,7 +161,7 @@ const HomeScreen = ({ navigation }) => {
               data={filteredClothes}
               ListHeaderComponent={
                 <View>
-                  {text === "" && topDeals?.length > 0 && (
+                  {text === "" && !selectedTag && topDeals?.length > 0 && (
                     <View style={styles.topDealsContainer}>
                       <Text style={styles.sectionTitle}>Top Deals</Text>
                       <ScrollView
@@ -118,7 +185,11 @@ const HomeScreen = ({ navigation }) => {
 
                   {/* Title for the list of other items */}
                   <Text style={styles.listingTitle}>
-                    {text !== "" ? "Search Results" : "Explore Items"}
+                    {selectedTag
+                      ? `Showing items for: ${selectedTag}`
+                      : text !== ""
+                      ? "Search Results"
+                      : "Explore Items"}
                   </Text>
                 </View>
               }
@@ -180,6 +251,20 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
+  tagContainer: {
+    flexDirection: "row",
+    padding: 10,
+  },
+  tag: {
+    backgroundColor: "#fafafa",
+    borderRadius: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginHorizontal: 5,
+  },
+  selectedTag: {
+    backgroundColor: "#FFCCBC",
+  },
   topDealsContainer: {
     marginTop: 5,
     padding: 10,
@@ -194,7 +279,8 @@ const styles = StyleSheet.create({
   listingTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingLeft: 10, // Aligns with padding for consistency
+    paddingLeft: 10,
+    marginTop: 10,
   },
   dealCard: {
     marginRight: 10,

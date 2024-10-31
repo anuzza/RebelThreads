@@ -5,7 +5,7 @@ import { Searchbar } from "react-native-paper";
 
 const SearchBarHeader = ({ navigation, handleSearch }) => {
   return (
-    <View style={[styles.container, styles.bottomLine]}>
+    <View style={[styles.container]}>
       <View style={styles.flexContainer}>
         <Icon.Button
           name="menu-outline"
@@ -37,10 +37,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#4338ca",
   },
 
-  bottomLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#ECEFF1",
-  },
   flexContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -53,7 +49,7 @@ const styles = StyleSheet.create({
   searchBar: {
     marginHorizontal: 10,
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     padding: 2,
     borderRadius: 10,
     backgroundColor: "#fafafa",

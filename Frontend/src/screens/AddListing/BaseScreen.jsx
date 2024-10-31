@@ -64,10 +64,10 @@ export const BaseScreen = ({ route, navigation }) => {
     if (route?.params?.clothState) {
       setState({
         ...state,
-        title: route.params.clothState.title || "",
-        description: route.params.clothState.description || "",
-        brand: route.params.clothState.brand || "",
-        size: route.params.clothState.size || "",
+        title: route?.params.clothState.title || "",
+        description: route?.params.clothState.description || "",
+        brand: route?.params.clothState.brand || "",
+        size: route?.params.clothState.size || "",
       });
     }
   }, [route]);

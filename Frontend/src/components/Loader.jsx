@@ -3,20 +3,21 @@ import { StyleSheet, View, Modal, ActivityIndicator } from "react-native";
 
 const Loader = ({ loading }) => {
   return (
-    <Modal
-      transparent={true}
-      animationType={"none"}
-      visible={loading}
-      onRequestClose={() => {
-        console.log("close modal");
-      }}
-    >
-      <View style={styles.modalBackground}>
-        <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator animating={loading} />
+    loading && (
+      <Modal
+        transparent={true}
+        animationType={"none"}
+        onRequestClose={() => {
+          console.log("close modal");
+        }}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <ActivityIndicator animating={loading} />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    )
   );
 };
 
