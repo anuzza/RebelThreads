@@ -13,6 +13,7 @@ const {
   deleteClothesRequestReport,
   deleteClothesSaleReport,
   deleteUserReport,
+  deleteUser,
 } = require("../controller/adminController");
 
 router.get("/users/reports", auth, admin, getAllReportedUsers);
@@ -38,6 +39,5 @@ router.delete(
 );
 router.delete("/requests/:id", auth, admin, deleteClothesRequested);
 router.delete("/users/:id", auth, admin, deleteUser);
-
 
 module.exports = router;

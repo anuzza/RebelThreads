@@ -112,57 +112,61 @@ export const MyListingStackScreen = ({ navigation }) => (
 );
 
 const AddListingStack = createNativeStackNavigator();
-export const AddListingStackScreen = ({ navigation }) => (
-  <AddListingStack.Navigator
-    screenOptions={{
-      headerBackTitleVisible: false,
-      ...horizontalAnimation,
-      headerStyle: {
-        backgroundColor: "#4338ca",
-      },
-      headerTintColor: "#FFF",
-    }}
-  >
-    <AddListingStack.Screen
-      name="UploadClothBaseScreen"
-      options={{
-        title: "Add a Listing",
-        headerShown: true,
-        headerLeft: () => (
-          <Icon.Button
-            name="close"
-            size={25}
-            color="#fff"
-            backgroundColor="#4338ca"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          ></Icon.Button>
-        ),
+export const AddListingStackScreen = ({ navigation }) => {
+  const { clothState } = route.params || {}; // Retrieve clothState from route params
+  const isUpdateMode = !!clothState;
+  return (
+    <AddListingStack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        ...horizontalAnimation,
+        headerStyle: {
+          backgroundColor: "#4338ca",
+        },
+        headerTintColor: "#FFF",
       }}
-      component={UploadClothBaseScreen}
-    />
-    <AddListingStack.Screen
-      name="UploadClothSecondaryScreen"
-      options={{
-        title: "More Info",
-        headerShown: true,
-      }}
-      component={UploadClothSecondaryScreen}
-    />
-    <AddListingStack.Screen
-      name="UploadClothCameraScreen"
-      options={{
-        title: "Finish",
-        headerShown: true,
-      }}
-      component={UploadClothCameraScreen}
-    />
-  </AddListingStack.Navigator>
-);
+    >
+      <AddListingStack.Screen
+        name="UploadClothBaseScreen"
+        options={{
+          title: clothState ? "Update Listing" : "Add a Listing",
+          headerShown: true,
+          headerLeft: () => (
+            <Icon.Button
+              name="close"
+              size={25}
+              color="#fff"
+              backgroundColor="#4338ca"
+              onPress={() => {
+                navigation.goBack();
+              }}
+            ></Icon.Button>
+          ),
+        }}
+        component={UploadClothBaseScreen}
+      />
+      <AddListingStack.Screen
+        name="UploadClothSecondaryScreen"
+        options={{
+          title: "More Info",
+          headerShown: true,
+        }}
+        component={UploadClothSecondaryScreen}
+      />
+      <AddListingStack.Screen
+        name="UploadClothCameraScreen"
+        options={{
+          title: "Finish",
+          headerShown: true,
+        }}
+        component={UploadClothCameraScreen}
+      />
+    </AddListingStack.Navigator>
+  );
+};
 
 const FeedStack = createNativeStackNavigator();
-export const FeedStackScreen = ({ navigation }) => (
+export const FeedStackScreen = ({ navigation, route }) => (
   <FeedStack.Navigator
     screenOptions={{
       headerBackTitleVisible: false,

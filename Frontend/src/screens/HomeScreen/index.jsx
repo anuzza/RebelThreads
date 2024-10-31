@@ -76,8 +76,8 @@ const HomeScreen = ({ navigation }) => {
         <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
       </SafeAreaView>
       <SafeAreaView style={{ flex: 1 }}>
-        {/* <Loader loading={loading} /> */}
-        {!loading && clothes.length === 0 ? (
+        <Loader loading={loading} />
+        {!loading && clothes?.length === 0 ? (
           <EmptyListPlaceholder>
             <Text style={{ textAlign: "center" }}>
               Currently, there aren't any clothes for sale in the platform
@@ -162,7 +162,7 @@ const HomeScreen = ({ navigation }) => {
                     </View>
                   );
                 } else {
-                  return null; // Don't return anything for odd indices as we handle them in pairs
+                  return null;
                 }
               }}
             />
