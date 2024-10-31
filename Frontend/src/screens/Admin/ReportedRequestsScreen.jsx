@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { FlatList, SafeAreaView, RefreshControl } from "react-native";
+import { FlatList, SafeAreaView, RefreshControl, Text } from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import Loader from "../../components/Loader";
 import ScreenContainer from "../../components/ScreenContainer";
@@ -82,7 +82,9 @@ const ReportedRequestsScreen = ({ navigation }) => {
   if (!loading && clothes.length === 0) {
     return (
       <EmptyListPlaceholder>
-        There aren't any reported requests in this platform yet!
+        <Text style={{ textAlign: "center", fontSize: 18 }}>
+          There aren't any reported requests in this platform yet!
+        </Text>
       </EmptyListPlaceholder>
     );
   }

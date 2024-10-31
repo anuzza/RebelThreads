@@ -204,6 +204,7 @@ export const AdminReportedUsersStackScreen = ({ navigation }) => (
             size={25}
             color="#fff"
             backgroundColor="#4338ca"
+            onPress={() => navigation.goBack()}
           ></Icon.Button>
         ),
         headerShown: true,

@@ -5,6 +5,16 @@ const deleteFileFromS3 = require("../services/deleteFile");
 
 const signupUser = async (req, res) => {
   try {
+    const existingDeletedUser = await User.findOne({
+      email: req.body.email,
+      deleted: true,
+    });
+    if (existingDeletedUser) {
+      return res.status(400).send({
+        error:
+          "This email belongs to a deleted account. Please contact administrator if you need assistance.",
+      });
+    }
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
@@ -52,6 +62,12 @@ const loginUser = async (req, res) => {
       req.body.email,
       req.body.password
     );
+
+    if (user.deleted) {
+      return res
+        .status(403)
+        .send({ error: "This account has been deleted by administrator" });
+    }
 
     const token = await user.generateAuthToken();
 

@@ -94,10 +94,13 @@ const getAllReportedClothesRequested = async (req, res) => {
 
 const getAllReportedUsers = async (req, res) => {
   try {
-    const users = await User.find().populate({
+    const users = await User.find({
+      deleted: false,
+    }).populate({
       path: "reports.reportedBy",
       select: "name avatar ",
     });
+
     const reportedUsers = [];
     users.forEach((user) => {
       if (user.reports.length > 0) {
@@ -144,7 +147,10 @@ const getAllClothesRequested = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ isAdmin: false });
+    const users = await User.find({
+      isAdmin: false,
+      deleted: false,
+    });
     res.send(users);
   } catch (error) {
     res.status(500).send({
@@ -239,22 +245,26 @@ const deleteUser = async (req, res) => {
       return res.status(404).send({ message: "User not found" });
     }
 
-    // Delete all clothes for sale posted by the user
+    // Mark listings as deleted
     await ClothingForSale.updateMany(
       { seller: user._id },
       { $set: { deleted: true, active: false } },
       { session }
     );
 
-    // Delete all clothing requests posted by the user
+    // Mark request as deleted
     await ClothesRequested.updateMany(
       { user: user._id },
       { $set: { deleted: true, active: false } },
       { session }
     );
 
-    // Finally, delete the user itself
-    await User.findByIdAndDelete(req.params.id).session(session);
+    // Soft delete the user by setting isDeleted to true
+    await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { deleted: true } },
+      { session }
+    );
 
     // Commit the transaction
     await session.commitTransaction();
