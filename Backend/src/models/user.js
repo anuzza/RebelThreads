@@ -85,9 +85,7 @@ const userSchema = new mongoose.Schema(
 // To use virtual fields(Clothes Sold by this user)
 userSchema.virtual("clothForSale", {
   ref: "ClothingForSale",
-  //   Field on this document
   localField: "_id",
-  //   Field on the other document
   foreignField: "seller",
   options: { sort: { createdAt: -1 } },
 });
@@ -95,9 +93,7 @@ userSchema.virtual("clothForSale", {
 // To use virtual fields(Clothes Requested by this user)
 userSchema.virtual("clothesRequested", {
   ref: "ClothesRequested",
-  //   Field on this document
   localField: "_id",
-  //   Field on the other document
   foreignField: "user",
   options: { sort: { active: 1, createdAt: -1 } },
 });
