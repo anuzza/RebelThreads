@@ -51,7 +51,6 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
     },
     deleted: {
       type: Boolean,
@@ -65,13 +64,13 @@ const userSchema = new mongoose.Schema(
     ],
     reports: [
       {
-        reason: String,
-        reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        createdAt: { type: Date, default: Date.now },
-        status: {
-          type: String,
-          enum: ["pending", "reviewed", "resolved"],
-          default: "pending",
+        reporter: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        date: {
+          type: Date,
+          default: Date.now,
         },
       },
     ],

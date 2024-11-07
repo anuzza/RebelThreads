@@ -15,7 +15,7 @@ const RightSwipeActions = ({ item, handleClothDeletion, listCard }) => {
       }}
     >
       <TouchableOpacity
-        onPress={() => handleClothDeletion(item._id)}
+        onPress={() => handleClothDeletion(item._id, item.reportId)}
         style={{
           backgroundColor: "#D91848",
           width: 100,
@@ -40,6 +40,7 @@ export const AdminListCard = ({
   let cardValue;
   if (users) {
     const { name, avatar, _id, reporter, date } = item;
+
     cardValue = (
       <View
         style={{
@@ -55,8 +56,8 @@ export const AdminListCard = ({
           <Image
             style={styles.avatarImage}
             source={{
-              uri: reporter.avatar
-                ? reporter.avatar
+              uri: reporter?.avatar
+                ? reporter?.avatar
                 : "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
             }}
             resizeMode="cover"
@@ -99,11 +100,12 @@ export const AdminListCard = ({
   } else {
     const {
       clothing: { title },
-      _id,
       date,
       seller,
+      user,
       reporter,
     } = item;
+
     cardValue = (
       <View
         style={{
@@ -119,8 +121,8 @@ export const AdminListCard = ({
           <Image
             style={styles.avatarImage}
             source={{
-              uri: reporter.avatar
-                ? reporter.avatar
+              uri: reporter?.avatar
+                ? reporter?.avatar
                 : "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
             }}
             resizeMode="cover"
@@ -130,7 +132,7 @@ export const AdminListCard = ({
         <View style={styles.requestFeedContainer}>
           <View style={styles.requestUserContainer}>
             <Text style={styles.userName}>
-              {reporter.name}{" "}
+              {reporter?.name}{" "}
               <Caption
                 style={{
                   fontWeight: "bold",
@@ -173,7 +175,11 @@ export const AdminListCard = ({
               Posted By:
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.push("Profile", { id: seller._id })}
+              onPress={() =>
+                navigation.push("Profile", {
+                  id: seller ? seller._id : user._id,
+                })
+              }
               style={{ alignSelf: "center", textAlign: "center" }}
             >
               <Caption
@@ -185,7 +191,7 @@ export const AdminListCard = ({
                   alignSelf: "center",
                 }}
               >
-                {seller.name}
+                {seller ? seller.name : user.name}
               </Caption>
             </TouchableOpacity>
           </View>

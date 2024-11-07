@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Text,
+  Alert,
 } from "react-native";
 import { ListCard } from "../../components/Card";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
@@ -43,7 +44,10 @@ const MyListings = ({ navigation }) => {
       changedClothes[index].active = false;
       setClothes(changedClothes);
     } catch (error) {
-      console.log(error);
+      Alert.alert(
+        "Failed to update the post",
+        error.response?.data?.error || error
+      );
     }
   };
 
@@ -66,7 +70,10 @@ const MyListings = ({ navigation }) => {
       await axios.delete("/sales/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
     } catch (error) {
-      console.log(error.response.data);
+      Alert.alert(
+        "Failed to delete the post",
+        error.response?.data?.error || error
+      );
     }
   };
 

@@ -241,22 +241,22 @@ const deleteClothingItem = async (req, res) => {
 const reportClothingItem = async (req, res) => {
   try {
     const reporter = req.user;
-    const reportedItem = await ClothingForSale.findById(req.params.id);
+    const reportedClothing = await ClothingForSale.findById(req.params.id);
     if (
-      reportedItem.reports.length > 0 &&
-      reportedItem.reports.filter(
-        (report) => report.reportedBy.toString() === reporter._id.toString()
+      reportedClothing.reports.length > 0 &&
+      reportedClothing.reports.filter(
+        (report) => report.reporter.toString() === reporter._id.toString()
       )
     ) {
       return res.status(404).send({
-        error: "You have already reported this item",
+        error: "You have already reported this listing",
       });
     }
-    reportedItem.reports.unshift({
-      reason: req.body.reason,
-      reportedBy: reporter._id,
+
+    reportedClothing.reports.unshift({
+      reporter,
     });
-    await reportedItem.save();
+    await reportedClothing.save();
     res.send({ message: "Report submitted successfully." });
   } catch (error) {
     res.status(500).send({

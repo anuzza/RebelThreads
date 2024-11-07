@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { FlatList, SafeAreaView, RefreshControl, Text } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  RefreshControl,
+  Text,
+  Alert,
+} from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import Loader from "../../components/Loader";
 import ScreenContainer from "../../components/ScreenContainer";
@@ -10,6 +16,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from "@expo/react-native-action-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const ReportedRequestsScreen = ({ navigation }) => {
   const [clothes, setClothes] = useState([]);
@@ -33,7 +40,7 @@ const ReportedRequestsScreen = ({ navigation }) => {
     }
   };
 
-  const onOpenActionSheet = (id) => {
+  const onOpenActionSheet = (id, reportId) => {
     showActionSheetWithOptions(
       {
         options: ["Delete Report", "Delete Post", "Cancel"],
@@ -42,7 +49,7 @@ const ReportedRequestsScreen = ({ navigation }) => {
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
-          deleteReport(id);
+          deleteReport(id, reportId);
         }
         if (buttonIndex === 1) {
           deleteItem(id);
@@ -51,21 +58,29 @@ const ReportedRequestsScreen = ({ navigation }) => {
     );
   };
 
-  const deleteReport = async (id) => {
+  const deleteReport = async (id, reportId) => {
     try {
-      await axios.delete("/requests/" + id);
+      await axios.delete(`/admin/requests/reports/${id}/${reportId}`);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Report Deleted successfully!");
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(
+        "Failed to delete the report",
+        error.response?.data?.error || error
+      );
     }
   };
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete("/admin/requests/" + id);
+      await axios.delete(`/admin/requests/${id}`);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Post Deleted successfully!");
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(
+        "Failed to delete the post",
+        error.response?.data?.error || error
+      );
     }
   };
 
@@ -90,27 +105,31 @@ const ReportedRequestsScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScreenContainer>
-        <Loader loading={loading} />
-        <FlatList
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          showsVerticalScrollIndicator={false}
-          keyExtractor={({ _id }) => _id}
-          data={clothes}
-          renderItem={({ item }) => (
-            <AdminListCard
-              navigation={navigation}
-              handleClothDeletion={onOpenActionSheet}
-              item={item}
-            />
-          )}
-        />
-      </ScreenContainer>
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScreenContainer>
+          <Loader loading={loading} />
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            showsVerticalScrollIndicator={false}
+            keyExtractor={({ _id }) => _id}
+            data={clothes}
+            renderItem={({ item }) => (
+              <AdminListCard
+                navigation={navigation}
+                handleClothDeletion={(id, reportId) =>
+                  onOpenActionSheet(id, reportId)
+                }
+                item={item}
+              />
+            )}
+          />
+        </ScreenContainer>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
-export default ReportedRequestsScreen;
+export default connectActionSheet(ReportedRequestsScreen);

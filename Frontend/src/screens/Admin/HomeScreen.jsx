@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   RefreshControl,
+  Alert,
 } from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import { useFocusEffect } from "@react-navigation/native";
@@ -30,7 +31,6 @@ const HomeScreen = ({ navigation }) => {
       setClothes(data);
       setLoading(false);
     } catch (error) {
-      // console.log(error.response.data);
       setLoading(false);
     }
   };
@@ -39,8 +39,12 @@ const HomeScreen = ({ navigation }) => {
     try {
       await axios.delete("/admin/sales/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Post Deleted successfully!");
     } catch (error) {
-      // console.log(error.message);
+      Alert.alert(
+        "Failed to delete the listing",
+        error.response?.data?.error || error
+      );
     }
   };
 

@@ -4,6 +4,7 @@ import {
   HomeScreen,
   FeedScreen,
   UserScreen,
+  AddAdminScreen,
   ReportedRequestsScreen,
   ReportedSalesScreen,
   ReportedUsersScreen,
@@ -126,11 +127,12 @@ export const AdminUserStackScreen = ({ navigation }) => (
       component={ProfileScreen}
     />
     <AdminUserStack.Screen
-      name="Details"
+      name="AddAdminScreen"
       options={{
         headerShown: true,
+        title: "Add an Administrator",
       }}
-      component={DetailsScreen}
+      component={AddAdminScreen}
     />
   </AdminUserStack.Navigator>
 );

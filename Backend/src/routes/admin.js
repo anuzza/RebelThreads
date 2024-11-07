@@ -14,8 +14,10 @@ const {
   deleteClothesSaleReport,
   deleteUserReport,
   deleteUser,
+  addAdmin,
 } = require("../controller/adminController");
 
+router.post("/add", auth, admin, addAdmin);
 router.get("/users/reports", auth, admin, getAllReportedUsers);
 router.get("/users", auth, admin, getAllUsers);
 router.get("/sales/reports", auth, admin, getAllReportedClothesOnSale);

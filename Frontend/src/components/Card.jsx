@@ -201,7 +201,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
     const handleReport = async () => {
       try {
         await axios.post("/requests/report/" + _id);
-        Alert.alert("Book reported succesfully");
+        Alert.alert("Post reported succesfully");
       } catch (error) {
         Alert.alert(
           error?.response?.data ? error.response.data.error : error.message

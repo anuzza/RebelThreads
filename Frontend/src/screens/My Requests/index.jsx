@@ -1,6 +1,12 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, RefreshControl, Text } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  RefreshControl,
+  Text,
+  Alert,
+} from "react-native";
 import { ListCard } from "../../components/Card";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import Loader from "../../components/Loader";
@@ -37,7 +43,10 @@ const MyRequests = ({ navigation }) => {
       changedClothes[index].active = false;
       setClothes(changedClothes);
     } catch (error) {
-      console.log(error.response.data);
+      Alert.alert(
+        "Failed to update the post",
+        error.response?.data?.error || error
+      );
     }
   };
 
@@ -46,7 +55,10 @@ const MyRequests = ({ navigation }) => {
       await axios.delete("/requests/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(
+        "Failed to delete the post",
+        error.response?.data?.error || error
+      );
     }
   };
 

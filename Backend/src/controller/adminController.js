@@ -1,6 +1,43 @@
+const mongoose = require("mongoose");
+
 const ClothingForSale = require("../models/clothingForSale");
 const ClothesRequested = require("../models/ClothesRequested");
 const User = require("../models/user");
+
+const addAdmin = async (req, res) => {
+  const { name, email, password, phone } = req.body;
+
+  if (!name || !email || !password || !phone) {
+    return res.status(400).send({ error: "All fields are required" });
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).send({ error: "Email is already registered" });
+  }
+
+  const emailRegex = /^[\w.%+-]+@(go\.)?olemiss\.edu$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).send({
+      error: "Email must be an @olemiss.edu or @go.olemiss.edu address",
+    });
+  }
+
+  const admin = new User({
+    name,
+    email,
+    password,
+    phone,
+    isAdmin: true,
+  });
+
+  try {
+    await admin.save();
+    res.status(201).send({ error: "Admin added successfully" });
+  } catch (error) {
+    res.status(500).send({ error: "Failed to add admin" });
+  }
+};
 
 const getAllClothesOnSale = async (req, res) => {
   try {
@@ -29,7 +66,7 @@ const getAllReportedClothesOnSale = async (req, res) => {
         select: "name avatar ",
       })
       .populate({
-        path: "reports.reportedBy",
+        path: "reports.reporter",
         select: "name avatar ",
       });
     const reportedClothes = [];
@@ -41,8 +78,8 @@ const getAllReportedClothesOnSale = async (req, res) => {
             clothing: item.clothing,
             _id: item._id,
             seller: item.seller,
-            reporter: report.reportedBy,
-            date: report.createdAt,
+            reporter: report.reporter,
+            date: report.date,
           });
         });
       }
@@ -66,7 +103,7 @@ const getAllReportedClothesRequested = async (req, res) => {
         select: "name avatar ",
       })
       .populate({
-        path: "reports.reportedBy",
+        path: "reports.reporter",
         select: "name avatar ",
       });
     const reportedClothes = [];
@@ -78,8 +115,8 @@ const getAllReportedClothesRequested = async (req, res) => {
             clothing: item.clothing,
             user: item.user,
             _id: item._id,
-            reporter: report.reportedBy,
-            date: report.createdAt,
+            reporter: report.reporter,
+            date: report.date,
           });
         });
       }
@@ -97,7 +134,7 @@ const getAllReportedUsers = async (req, res) => {
     const users = await User.find({
       deleted: false,
     }).populate({
-      path: "reports.reportedBy",
+      path: "reports.reporter",
       select: "name avatar ",
     });
 
@@ -111,8 +148,8 @@ const getAllReportedUsers = async (req, res) => {
             avatar: user.avatar,
             email: user.email,
             _id: user._id,
-            reporter: report.reportedBy,
-            date: report.createdAt,
+            reporter: report.reporter,
+            date: report.date,
           });
         });
       }
@@ -204,11 +241,13 @@ const deleteUserReport = async (req, res) => {
 
 const deleteClothesRequestReport = async (req, res) => {
   try {
-    const clothing = await ClothesRequested.findById(req.params.id);
-    clothing.reports = clothing.reports.filter(
+    const cloth = await ClothesRequested.findById(req.params.id);
+
+    cloth.reports = cloth.reports.filter(
       (report) => report._id.toString() !== req.params.reportId.toString()
     );
-    await clothing.save();
+    await cloth.save();
+
     res.send();
   } catch (error) {
     res.status(500).send({
@@ -219,11 +258,11 @@ const deleteClothesRequestReport = async (req, res) => {
 
 const deleteClothesSaleReport = async (req, res) => {
   try {
-    const clothing = await ClothingForSale.findById(req.params.id);
-    clothing.reports = clothing.reports.filter(
+    const cloth = await ClothingForSale.findById(req.params.id);
+    cloth.reports = cloth.reports.filter(
       (report) => report._id.toString() !== req.params.reportId.toString()
     );
-    await clothing.save();
+    await cloth.save();
     res.send();
   } catch (error) {
     res.status(500).send({
@@ -295,4 +334,5 @@ module.exports = {
   deleteClothesRequestReport,
   deleteUserReport,
   deleteUser,
+  addAdmin,
 };

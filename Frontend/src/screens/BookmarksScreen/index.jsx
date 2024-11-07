@@ -44,9 +44,7 @@ const BookmarksScreen = ({ navigation }) => {
       await axios.delete("/users/bookmark/" + id);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
       dispatch(loadUser());
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   useFocusEffect(

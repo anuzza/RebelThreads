@@ -4,12 +4,14 @@ import {
   SafeAreaView,
   RefreshControl,
   TouchableOpacity,
+  View,
 } from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "../../utils/axios";
 import Loader from "../../components/Loader";
 import AdminCard from "../../components/AdminCard";
+import FloatingButton from "../../components/FloatingButton";
 
 const UserScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -33,12 +35,16 @@ const UserScreen = ({ navigation }) => {
   };
 
   const handleUserDeletion = async (id) => {
-    // try {
-    //   await axios.delete("/admin/users/" + id);
-    setUsers(users.filter((user) => user._id !== id));
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    try {
+      await axios.delete(`/admin/users/${id}`);
+      setUsers(users.filter((user) => user._id !== id));
+      Alert.alert("User and all associated posts deleted successfully!");
+    } catch (error) {
+      Alert.alert(
+        "Failed to delete the user",
+        error.response?.data?.error || error
+      );
+    }
   };
 
   useFocusEffect(
@@ -69,7 +75,7 @@ const UserScreen = ({ navigation }) => {
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
-                onPress={() => navigation.push("Details", { id: item._id })}
+                onPress={() => navigation.push("Profile", { id: item._id })}
                 activeOpacity={1}
                 underlayColor="#eee"
               >
@@ -84,6 +90,23 @@ const UserScreen = ({ navigation }) => {
           }}
         />
       )}
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          bottom: 15,
+          right: 10,
+        }}
+      >
+        <FloatingButton
+          onPress={() => navigation.push("AddAdminScreen")}
+          color="#fff"
+          backgroundColor="#4338ca"
+          iconName="add"
+        />
+      </View>
     </SafeAreaView>
   );
 };

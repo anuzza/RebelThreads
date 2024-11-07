@@ -126,6 +126,7 @@ const EditProfileScreen = ({ navigation }) => {
           update: true,
         })
       );
+      navigation.goBack();
     }
   };
 

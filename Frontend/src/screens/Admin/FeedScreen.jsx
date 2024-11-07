@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, RefreshControl } from "react-native";
+import { FlatList, SafeAreaView, RefreshControl, Alert } from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import ScreenContainer from "../../components/ScreenContainer";
 import { useFocusEffect } from "@react-navigation/native";
@@ -30,10 +30,14 @@ const FeedScreen = ({ navigation }) => {
 
   const handleClothDeletion = async (id) => {
     try {
-      await axios.delete("/admin/requests/" + id);
+      await axios.delete(`/admin/requests/${id}`);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Post Deleted successfully!");
     } catch (error) {
-      //alert
+      Alert.alert(
+        "Failed to delete the post",
+        error.response?.data?.error || error
+      );
     }
   };
 

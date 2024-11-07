@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { FlatList, SafeAreaView, RefreshControl, Text } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  RefreshControl,
+  Text,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import EmptyListPlaceholder from "../../components/EmptyListPlaceholder";
 import Loader from "../../components/Loader";
 import ScreenContainer from "../../components/ScreenContainer";
@@ -10,6 +17,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from "@expo/react-native-action-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const ReportedSalesScreen = ({ navigation }) => {
   const [clothes, setClothes] = useState([]);
@@ -33,7 +41,7 @@ const ReportedSalesScreen = ({ navigation }) => {
     }
   };
 
-  const onOpenActionSheet = (id) => {
+  const onOpenActionSheet = (id, reportId) => {
     showActionSheetWithOptions(
       {
         options: ["Delete Report", "Delete Post", "Cancel"],
@@ -42,7 +50,7 @@ const ReportedSalesScreen = ({ navigation }) => {
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
-          deleteReport(id);
+          deleteReport(id, reportId);
         }
         if (buttonIndex === 1) {
           deleteItem(id);
@@ -51,21 +59,29 @@ const ReportedSalesScreen = ({ navigation }) => {
     );
   };
 
-  const deleteReport = async (id) => {
+  const deleteReport = async (id, reportId) => {
     try {
-      await axios.delete("/sales/" + id);
+      await axios.delete(`/admin/sales/reports/${id}/${reportId}`);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Report Deleted successfully!");
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(
+        "Failed to delete the report",
+        error.response?.data?.error || error
+      );
     }
   };
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete("/admin/sales/" + id);
+      await axios.delete(`/admin/sales/${id}`);
       setClothes(clothes.filter((cloth) => cloth._id !== id));
+      Alert.alert("Post Deleted successfully!");
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(
+        "Failed to delete the listing",
+        error.response?.data?.error || error
+      );
     }
   };
 
@@ -90,26 +106,35 @@ const ReportedSalesScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScreenContainer>
-        <Loader loading={loading} />
-        <FlatList
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          showsVerticalScrollIndicator={false}
-          keyExtractor={({ _id }) => _id}
-          data={clothes}
-          renderItem={({ item }) => (
-            <AdminListCard
-              navigation={navigation}
-              handleClothDeletion={onOpenActionSheet}
-              item={item}
-            />
-          )}
-        />
-      </ScreenContainer>
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScreenContainer>
+          <Loader loading={loading} />
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            showsVerticalScrollIndicator={false}
+            keyExtractor={({ _id }) => _id}
+            data={clothes}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                key={item._id}
+                onPress={() => navigation.push("Details", { id: item._id })}
+              >
+                <AdminListCard
+                  navigation={navigation}
+                  handleClothDeletion={(id, reportId) =>
+                    onOpenActionSheet(id, reportId)
+                  }
+                  item={item}
+                />
+              </TouchableOpacity>
+            )}
+          />
+        </ScreenContainer>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

@@ -143,8 +143,8 @@ const HomeScreen = ({ navigation }) => {
         </ScrollView>
       </SafeAreaView>
       <SafeAreaView style={{ flex: 1 }}>
-        <Loader loading={loading} />
-        {!loading && clothes?.length === 0 ? (
+        {/* <Loader loading={loading} /> */}
+        {!loading && clothes.length === 0 ? (
           <EmptyListPlaceholder>
             <Text style={{ textAlign: "center" }}>
               Currently, there aren't any clothes for sale in the platform
