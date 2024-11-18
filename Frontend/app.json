@@ -1,4 +1,8 @@
 {
-  "name": "RebelThreads",
-  "slug": "RebelThreads"
+  "expo": {
+    "newArchEnabled": true,
+    "name": "RebelThreads",
+    "slug": "RebelThreads"
+  }
+
 }

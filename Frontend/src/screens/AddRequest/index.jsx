@@ -107,7 +107,7 @@ export const BaseScreen = ({ route, navigation }) => {
   return (
     <ScrollView
       style={{ flex: 1, padding: 10 }}
-      automaticallyAdjustKeyboardInsets="true"
+      automaticallyAdjustKeyboardInsets={true}
     >
       <Animatable.View ref={validateInputRef}>
         <View>

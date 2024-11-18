@@ -99,7 +99,7 @@ export const SecondaryScreen = ({ route, navigation }) => {
   return (
     <ScrollView
       style={{ flex: 1, padding: 10 }}
-      automaticallyAdjustKeyboardInsets="true"
+      automaticallyAdjustKeyboardInsets={true}
     >
       <View style={styles.UploadCard}>
         <Caption style={styles.StepText}>Step 2 of 3</Caption>

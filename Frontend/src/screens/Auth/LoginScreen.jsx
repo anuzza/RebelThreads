@@ -77,7 +77,7 @@ const LoginScreen = () => {
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
-      automaticallyAdjustKeyboardInsets="true"
+      automaticallyAdjustKeyboardInsets={true}
     >
       <SafeAreaView className="bg-white h-full w-full">
         <StatusBar style="light" />

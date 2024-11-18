@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexDirection: "row",
     padding: 10,
+    minHeight: "auto",
   },
   tag: {
     backgroundColor: "#fafafa",

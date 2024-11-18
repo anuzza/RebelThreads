@@ -9,9 +9,13 @@ import {
   Modal,
   SafeAreaView,
 } from "react-native";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import {
+  CameraView,
+  useCameraPermissions,
+  CameraType,
+  FlashMode,
+} from "expo-camera";
 import { Ionicons as Icon } from "@expo/vector-icons";
-import { CameraType, FlashMode } from "expo-camera/build/legacy/Camera.types";
 
 const CameraComponent = ({
   modalVisible,
