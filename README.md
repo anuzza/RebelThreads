@@ -50,7 +50,7 @@ RebelThreads is a cross-platform mobile application designed for University of M
 
 1. **Clone the Repository**
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/anuzza/RebelThreads.git
    cd rebelthreads
    ```
 
@@ -80,11 +80,11 @@ RebelThreads is a cross-platform mobile application designed for University of M
 
    - In the `frontend` update the url to add your port number or your current Ip address in `src/utils/axios`
    - eg:
-     ```
+     ```bash
      const url = "http://localhost:<portnumber>";
-     OR
+     # OR
      const url = "http:<IpAddress>:<portnumber>";
-    ```
+   ```
 
 4. **Start the Backend Server**
    - From the `backend` folder, run:
@@ -103,9 +103,8 @@ RebelThreads is a cross-platform mobile application designed for University of M
    - Scan the QR code displayed in the terminal to view the app on your device.
 
 
-## Deployment
 
-### **Testing Deployment**
+### **Live Testing**
 - The app can run in **Expo Go** during development for real-time testing.
 
 
