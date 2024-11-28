@@ -80,6 +80,14 @@ RebelThreads is a cross-platform mobile application designed for University of M
      AWS_BUCKET_NAME=<your-s3-bucket-name>
      ```
 
+   - In the `frontend` update the url to add your port number or your current Ip address in `src/utils/axios`
+   - eg:
+     ```
+     const url = "http://localhost:<portnumber>";
+     OR
+     const url = "http:<IpAddress>:<portnumber>";
+    ```
+
 4. **Start the Backend Server**
    - From the `backend` folder, run:
      ```bash
@@ -95,7 +103,6 @@ RebelThreads is a cross-platform mobile application designed for University of M
 6. **Test the App**
    - Open the **Expo Go app** on your mobile device.
    - Scan the QR code displayed in the terminal to view the app on your device.
-
 
 
 ## Deployment
@@ -130,6 +137,3 @@ rebelthreads/
 ## Contact
 
 For questions or support, contact [Anuja Sharma](mailto:asharm12@go.olemiss.edu).
-```
-
-Copy-paste this text into your README file, and you’re good to go! Let me know if you need further refinements. 😊
