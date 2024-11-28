@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
 import FloatingButton from "./FloatingButton";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import { sendEmail, sendSMS } from "../utils/contact";
 import moment from "moment";
@@ -32,12 +32,15 @@ const RightSwipeActions = ({
   active,
   bookmarks,
   handleClothUpdation,
+  swiped,
 }) => {
   return (
     <View
       style={{
         ...styles.rightSwipeActionContainer,
         marginBottom: bookmarks ? 40 : 20,
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12,
       }}
     >
       {active && !bookmarks && (
@@ -65,7 +68,7 @@ const RightSwipeActions = ({
         style={{
           backgroundColor: "#D91848",
           width: bookmarks && 100,
-          borderTopRightRadius: !bookmarks ? 10 : 0,
+          borderTopRightRadius: !bookmarks ? 10 : 12,
           borderBottomRightRadius: !bookmarks ? 10 : 0,
           ...styles.rightSwipeButtonContainer,
         }}
@@ -98,8 +101,9 @@ export const ListCard = ({
         ...styles.feedCard,
         flexDirection: "column",
         backgroundColor: profile ? "#eee" : "#fff",
-        opacity: !profile && !active ? 0.65 : 1,
         borderRadius: !swiped ? 10 : 0,
+        overflow: "hidden",
+        zIndex: 1,
       }}
     >
       <Text
@@ -143,22 +147,29 @@ export const ListCard = ({
           </Text>
         )}
       </View>
+      {!active && <View style={styles.listOverlay} />}
     </View>
   );
 
   if (profile) {
     return returnValue;
   }
+
+  const swipeableRef = useRef(null);
+
+  const handleMarkAsFound = async (id) => {
+    await handleClothAlteration(id);
+
+    // Close Swipeable
+    if (swipeableRef.current) {
+      console.log("Closing swipeable for item:", id);
+      swipeableRef.current.close();
+    }
+  };
+
   return active ? (
     <Swipeable
-      renderLeftActions={() => (
-        <LeftSwipeActions
-          item={item}
-          handleClothAlteration={handleClothAlteration}
-          requests={requests}
-          active={active}
-        />
-      )}
+      ref={swipeableRef}
       renderRightActions={() => (
         <RightSwipeActions
           item={item}
@@ -167,6 +178,15 @@ export const ListCard = ({
           active={active}
         />
       )}
+      renderLeftActions={() =>
+        active && (
+          <LeftSwipeActions
+            item={item}
+            handleClothAlteration={handleMarkAsFound}
+            requests={requests}
+          />
+        )
+      }
       onSwipeableOpen={() => setSwiped(true)}
       onSwipeableClose={() => setSwiped(false)}
     >
@@ -313,7 +333,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
     } = item;
 
     const cardValue = (
-      <View style={[styles.card, { opacity: !active && bookmarks ? 0.6 : 1 }]}>
+      <View style={[styles.card]}>
         {/* Image Section */}
         <View style={styles.imageContainer}>
           <Image

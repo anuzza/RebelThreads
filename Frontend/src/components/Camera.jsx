@@ -7,14 +7,8 @@ import {
   Alert,
   ImageBackground,
   Modal,
-  SafeAreaView,
 } from "react-native";
-import {
-  CameraView,
-  useCameraPermissions,
-  CameraType,
-  FlashMode,
-} from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { Ionicons as Icon } from "@expo/vector-icons";
 
 const CameraComponent = ({
@@ -24,8 +18,8 @@ const CameraComponent = ({
 }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const [camera, setCamera] = useState(null);
-  const [facing, setFacing] = useState(CameraType.back);
-  const [flashMode, setFlashMode] = useState(FlashMode.off);
+  const [facing, setFacing] = useState("back");
+  const [flashMode, setFlashMode] = useState("off");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -36,15 +30,11 @@ const CameraComponent = ({
   }, [permission]);
 
   const toggleCameraFacing = () => {
-    setFacing((prevFacing) =>
-      prevFacing === CameraType.back ? CameraType.front : CameraType.back
-    );
+    setFacing((current) => (current === "back" ? "front" : "back"));
   };
 
   const handleFlashMode = () => {
-    setFlashMode((prevFlash) =>
-      prevFlash === FlashMode.off ? FlashMode.on : FlashMode.off
-    );
+    setFlashMode((current) => (current === "off" ? "on" : "off"));
   };
 
   const takePicture = async () => {
@@ -141,9 +131,7 @@ const CameraComponent = ({
               >
                 <Icon
                   name={
-                    flashMode === FlashMode.off
-                      ? "flash-off-outline"
-                      : "flash-outline"
+                    flashMode === "off" ? "flash-off-outline" : "flash-outline"
                   }
                   size={30}
                   color="#fff"

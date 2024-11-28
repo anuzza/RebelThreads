@@ -208,4 +208,19 @@ export const cardStyles = StyleSheet.create({
     width: "100%",
     padding: 5,
   },
+
+  cardContainer: {
+    position: "relative",
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden", // Prevent overlay from going outside the card
+  },
+  inactiveCard: {
+    backgroundColor: "#f5f5f5", // Light gray for inactive cards
+    borderColor: "#ddd",
+  },
+  listOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.1)", // Dimmed transparent overlay
+  },
 });

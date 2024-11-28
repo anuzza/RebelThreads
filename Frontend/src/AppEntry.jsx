@@ -4,6 +4,15 @@ import RootStackScreen from "./navigation/RootStackScreen";
 import { loadUser } from "./redux/actions/auth";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./components/Loader";
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from "react-native-reanimated";
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 const AppEntry = () => {
   const dispatch = useDispatch();

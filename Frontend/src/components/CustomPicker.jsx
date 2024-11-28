@@ -40,6 +40,7 @@ const CustomPicker = ({
               height: 50,
               width: "100%",
             }}
+            itemStyle={{ color: "black" }}
             selectedValue={value}
             mode="dropdown"
             onValueChange={(itemValue) => {

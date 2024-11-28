@@ -326,7 +326,7 @@ const AdminCard = ({ item, feed, navigation, handleClothDeletion, users }) => {
             source={{
               uri: pictures[0],
             }}
-            resizeMode="cover"
+            resizeMode="contain"
           />
         </View>
         <View style={styles.content}>

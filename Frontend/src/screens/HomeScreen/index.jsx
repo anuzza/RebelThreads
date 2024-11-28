@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -22,6 +22,8 @@ const HomeScreen = ({ navigation }) => {
   const [text, setText] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
+  const [isLayoutReady, setIsLayoutReady] = useState(false);
+  const [isTopDealsReady, setIsTopDealsReady] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -49,6 +51,10 @@ const HomeScreen = ({ navigation }) => {
       };
     }, [])
   );
+
+  const handleLayout = () => {
+    setIsLayoutReady(true);
+  };
 
   const handleSearch = (text) => {
     setText(text);
@@ -126,22 +132,31 @@ const HomeScreen = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: "#4338CA" }}>
         <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.tagContainer}
-        >
-          {filterTags.map((tag) => (
-            <TouchableOpacity
-              key={tag}
-              onPress={() => handleTagSelect(tag)}
-              style={[styles.tag, selectedTag === tag && styles.selectedTag]}
+        <View style={styles.fixedTagContainer} onLayout={handleLayout}>
+          {isLayoutReady && (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={styles.tagContainer}
+              contentContainerStyle={{ alignItems: "center" }}
             >
-              <Text style={styles.tagText}>{tag}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              {filterTags.map((tag) => (
+                <TouchableOpacity
+                  key={tag}
+                  onPress={() => handleTagSelect(tag)}
+                  style={[
+                    styles.tag,
+                    selectedTag === tag && styles.selectedTag,
+                  ]}
+                >
+                  <Text style={styles.tagText}>{tag}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+        </View>
       </SafeAreaView>
+
       <SafeAreaView style={{ flex: 1 }}>
         {/* <Loader loading={loading} /> */}
         {!loading && clothes.length === 0 ? (
@@ -160,28 +175,32 @@ const HomeScreen = ({ navigation }) => {
               keyExtractor={({ _id }) => _id}
               data={filteredClothes}
               ListHeaderComponent={
-                <View>
-                  {text === "" && !selectedTag && topDeals?.length > 0 && (
-                    <View style={styles.topDealsContainer}>
-                      <Text style={styles.sectionTitle}>Top Deals</Text>
-                      <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                      >
-                        {topDeals.map((item) => (
-                          <TouchableOpacity
-                            key={item._id}
-                            onPress={() =>
-                              navigation.push("Details", { id: item._id })
-                            }
-                            style={styles.dealCard}
-                          >
-                            <Card item={item} />
-                          </TouchableOpacity>
-                        ))}
-                      </ScrollView>
-                    </View>
-                  )}
+                <View onLayout={() => setIsTopDealsReady(true)}>
+                  {text === "" &&
+                    !selectedTag &&
+                    isTopDealsReady &&
+                    topDeals?.length > 0 && (
+                      <View style={styles.topDealsContainer}>
+                        <Text style={styles.sectionTitle}>Top Deals</Text>
+                        <ScrollView
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          contentContainerStyle={{ alignItems: "center" }}
+                        >
+                          {topDeals.map((item) => (
+                            <TouchableOpacity
+                              key={item._id}
+                              onPress={() =>
+                                navigation.push("Details", { id: item._id })
+                              }
+                              style={styles.dealCard}
+                            >
+                              <Card item={item} />
+                            </TouchableOpacity>
+                          ))}
+                        </ScrollView>
+                      </View>
+                    )}
 
                   {/* Title for the list of other items */}
                   <Text style={styles.listingTitle}>
@@ -209,7 +228,7 @@ const HomeScreen = ({ navigation }) => {
                         }
                         activeOpacity={1}
                         underlayColor="#eee"
-                        style={{ width: "48%" }} // Adjust the width of the card
+                        style={{ width: "48%" }}
                       >
                         <Card navigation={navigation} item={item} />
                       </TouchableOpacity>
@@ -222,7 +241,7 @@ const HomeScreen = ({ navigation }) => {
                           }
                           activeOpacity={1}
                           underlayColor="#eee"
-                          style={{ width: "48%" }} // Adjust the width of the card
+                          style={{ width: "48%" }}
                         >
                           <Card
                             navigation={navigation}
@@ -251,10 +270,15 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
+  fixedTagContainer: {
+    zIndex: 1, // Ensure it's above other components
+    height: 40, // Set a fixed height
+  },
+
   tagContainer: {
     flexDirection: "row",
-    padding: 10,
-    minHeight: "auto",
+    padding: 5,
+    height: "100%",
   },
   tag: {
     backgroundColor: "#fafafa",
