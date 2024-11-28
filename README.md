@@ -42,7 +42,7 @@ RebelThreads is a cross-platform mobile application designed for University of M
 - Ensure access to:
   - **MongoDB Atlas** or a local MongoDB instance.
   - **AWS S3 Bucket** for image storage.
-- Install Expo Go in your mobile device for live testing
+- Install Expo Go in your phone for live testing
 - Install Xcode to run the app in a simulator
 ---
 
