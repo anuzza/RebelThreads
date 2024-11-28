@@ -68,7 +68,7 @@ RebelThreads is a cross-platform mobile application designed for University of M
        ```
 
 3. **Configure Environment Variables**
-   - In the `backend` folder, create a `.env` file and add the following variables:
+   - In the `backend` folder, create a `dev.env` file under a `config` folder and add the following variables:
      ```
      PORT=<PORTNUMBER>
      MONGODB_URL=<your-mongodb-uri>
