@@ -84,7 +84,6 @@ RebelThreads is a cross-platform mobile application designed for University of M
      const url = "http://localhost:<portnumber>";
      # OR
      const url = "http:<IpAddress>:<portnumber>";
-   ```
 
 4. **Start the Backend Server**
    - From the `backend` folder, run:
