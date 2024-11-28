@@ -22,15 +22,12 @@ RebelThreads is a cross-platform mobile application designed for University of M
 - **React Native**: Cross-platform app development.
 - **Expo**: Simplifies development and enables live testing.
 - **Redux**: Manages application state efficiently.
-- **TailwindCSS**: Enables utility-first responsive styling.
 - **React Navigation**: Provides smooth screen transitions and routing.
 
 ### **Backend**
 - **Node.js with Express**: Framework for API development and middleware.
 - **MongoDB (NoSQL)**: Dynamic database for user, listing, and request management.
 - **AWS S3**: Secure, scalable storage for user-uploaded images.
-- **Authentication**: Password hashing using `bcrypt.js` and token-based authentication using `jsonwebtoken`.
-
 ---
 
 ## Installation and Setup
@@ -45,7 +42,8 @@ RebelThreads is a cross-platform mobile application designed for University of M
 - Ensure access to:
   - **MongoDB Atlas** or a local MongoDB instance.
   - **AWS S3 Bucket** for image storage.
-
+- Install Expo Go in your mobile device for live testing
+- Install Xcode to run the app in a simulator
 ---
 
 ## Steps to Run the Project
