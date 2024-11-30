@@ -2,7 +2,20 @@
   "expo": {
     "newArchEnabled": true,
     "name": "RebelThreads",
-    "slug": "RebelThreads"
+    "slug": "rebel-threads",
+    "extra": {
+      "eas": {
+        "projectId": "987f6c82-acd5-42af-ab19-6b46dd428ede"
+      }
+    },
+    "owner": "anuzza",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/987f6c82-acd5-42af-ab19-6b46dd428ede"
+    },
+    "android": {},
+    "ios": {}
   }
-
 }

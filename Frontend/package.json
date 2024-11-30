@@ -36,7 +36,8 @@
     "react-native-web": "~0.19.6",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "expo-updates": "~0.26.9"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
