@@ -22,8 +22,7 @@ RebelThreads is a cross-platform mobile application designed for University of M
 - **React Native**: Cross-platform app development.
 - **Expo**: Simplifies development and enables live testing.
 - **Redux**: Manages application state efficiently.
-- **React Navigation**: Provides smooth screen transitions and routing.
-
+  
 ### **Backend**
 - **Node.js with Express**: Framework for API development and middleware.
 - **MongoDB (NoSQL)**: Dynamic database for user, listing, and request management.
