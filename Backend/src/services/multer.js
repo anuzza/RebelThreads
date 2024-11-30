@@ -18,7 +18,7 @@ const fileUpload = () => {
   upload = multer({
     storage,
     limits: {
-      fileSize: 3000000,
+      fileSize: 5000000,
     },
     fileFilter(req, file, cb) {
       if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|gif|png)$/)) {

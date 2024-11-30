@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useRef, useState, useEffect } from "react";
 import * as Animatable from "react-native-animatable";
 import {

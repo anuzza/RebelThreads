@@ -19,21 +19,6 @@ const LandingScreen = () => {
   return (
     <SafeAreaView className="bg-white h-full w-full" style={styles.container}>
       <StatusBar style="dark" />
-      {/* <Animated.Image
-        entering={FadeInUp.delay(200).duration(1000).springify()}
-        className="h-[900] w-full absolute"
-        source={require("../../assets/images/background.png")}
-      /> */}
-
-      {/* lights */}
-      {/* <View className="flex-row justify-around w-full absolute">
-        <Animated.Image
-          entering={FadeInUp.delay(400).duration(1000).springify()}
-          className="h-[225] w-[90]"
-          source={require("../../assets/images/light.png")}
-        />
-      </View> */}
-
       <View className="flex items-center pt-5">
         <Animated.Image
           entering={FadeInUp.delay(200).duration(1000).springify()}
