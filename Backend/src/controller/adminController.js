@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-const ClothingForSale = require("../models/clothingForSale");
+const ClothingForSale = require("../models/ClothingForSale");
 const ClothesRequested = require("../models/ClothesRequested");
 const User = require("../models/user");
 

@@ -1,4 +1,4 @@
-const ClothingForSale = require("../models/clothingForSale");
+const ClothingForSale = require("../models/ClothingForSale");
 const fileUpload = require("../services/multer");
 const upload = fileUpload();
 const deleteFileFromS3 = require("../services/deleteFile");
@@ -14,7 +14,6 @@ const uploadClothingItem = async (req, res) => {
           err.errMessage = "File size cannot be larger than 5 MB";
         }
         return res.status(403).send(err);
-      
       }
 
       if (req.files.length > 0) {
