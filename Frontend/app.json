@@ -15,7 +15,11 @@
     "updates": {
       "url": "https://u.expo.dev/987f6c82-acd5-42af-ab19-6b46dd428ede"
     },
-    "android": {},
-    "ios": {}
+    "android": {
+      "package": "com.anuzza.rebelthreads"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anuzza.rebelthreads"
+    }
   }
 }
