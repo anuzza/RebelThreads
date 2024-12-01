@@ -131,7 +131,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: "#4338CA" }}>
-        <Loader loading={loading} />
         <SearchBarHeader navigation={navigation} handleSearch={handleSearch} />
         <View style={styles.fixedTagContainer} onLayout={handleLayout}>
           {isLayoutReady && (
@@ -159,7 +158,7 @@ const HomeScreen = ({ navigation }) => {
       </SafeAreaView>
 
       <SafeAreaView style={{ flex: 1 }}>
-        {/* <Loader loading={loading} /> */}
+        <Loader loading={loading} />
         {!loading && clothes.length === 0 ? (
           <EmptyListPlaceholder>
             <Text style={{ textAlign: "center" }}>
