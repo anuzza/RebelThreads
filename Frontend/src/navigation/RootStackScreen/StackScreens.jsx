@@ -120,8 +120,7 @@ export const MyListingStackScreen = ({ navigation }) => (
 
 const AddListingStack = createNativeStackNavigator();
 export const AddListingStackScreen = ({ navigation, route }) => {
-  const { clothState } = route.params || {}; // Retrieve clothState from route params
-  const isUpdateMode = !!clothState;
+  const { clothState } = route?.params?.params;
   return (
     <AddListingStack.Navigator
       screenOptions={{
@@ -213,36 +212,40 @@ export const FeedStackScreen = ({ navigation, route }) => (
 );
 
 const AddRequestStack = createNativeStackNavigator();
-export const AddRequestStackScreen = ({ navigation }) => (
-  <AddRequestStack.Navigator
-    screenOptions={{
-      headerBackTitleVisible: false,
-      ...horizontalAnimation,
-      headerStyle: {
-        backgroundColor: "#4338ca",
-      },
-      headerTintColor: "#FFF",
-    }}
-  >
-    <AddRequestStack.Screen
-      name="RequestClothBaseScreen"
-      options={{
-        title: "Request A Cloth",
-        headerShown: true,
-        headerLeft: () => (
-          <Icon.Button
-            name="close"
-            size={25}
-            color="#fff"
-            backgroundColor="#4338ca"
-            onPress={() => navigation.goBack()}
-          ></Icon.Button>
-        ),
+export const AddRequestStackScreen = ({ navigation, route }) => {
+  const { clothState } = route?.params?.params;
+
+  return (
+    <AddRequestStack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        ...horizontalAnimation,
+        headerStyle: {
+          backgroundColor: "#4338ca",
+        },
+        headerTintColor: "#FFF",
       }}
-      component={AddRequestScreen}
-    />
-  </AddRequestStack.Navigator>
-);
+    >
+      <AddRequestStack.Screen
+        name="RequestClothBaseScreen"
+        options={{
+          title: clothState ? "Update Request" : "Request A Cloth",
+          headerShown: true,
+          headerLeft: () => (
+            <Icon.Button
+              name="close"
+              size={25}
+              color="#fff"
+              backgroundColor="#4338ca"
+              onPress={() => navigation.goBack()}
+            ></Icon.Button>
+          ),
+        }}
+        component={AddRequestScreen}
+      />
+    </AddRequestStack.Navigator>
+  );
+};
 
 const MyRequestStack = createNativeStackNavigator();
 export const MyRequestStackScreen = ({ navigation }) => (
