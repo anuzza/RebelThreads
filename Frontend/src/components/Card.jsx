@@ -358,7 +358,7 @@ const Card = ({ item, feed, bookmarks, navigation, handleClothDeletion }) => {
           {/* Brand and Size Row */}
           <View style={styles.row}>
             <Text style={styles.infoText}>Brand: {brand}</Text>
-            <Text style={styles.infoText}>Size: {size}</Text>
+            <Text style={styles.infoText}>{size}</Text>
           </View>
 
           {/* Price Row */}

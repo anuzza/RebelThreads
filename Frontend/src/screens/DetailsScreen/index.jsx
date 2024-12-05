@@ -179,18 +179,18 @@ const DetailsScreen = ({ navigation, route }) => {
           <Text style={styles.infoText}>
             Brand: <Text style={styles.brandText}>{cloth?.clothing.brand}</Text>
           </Text>
-          <Text style={styles.separator}>|</Text>
-          {/* A separator for a cleaner look */}
+
           <Text style={styles.infoText}>
             Size: <Text style={styles.sizeText}>{cloth?.clothing.size}</Text>
           </Text>
-          <Text style={styles.separator}>|</Text>
-          {/* A separator for a cleaner look */}
-          <Text style={styles.infoText}>
-            Category:{" "}
-            <Text style={styles.sizeText}>{cloth?.clothing.category}</Text>
-          </Text>
         </View>
+        {/* Category */}
+        <Text style={styles.categoryText}>
+          Category:{" "}
+          <Text style={styles.sizeText}>{cloth?.clothing.category}</Text>
+        </Text>
+        {/* A separator for a cleaner look */}
+
         <HorizontalLine marginTop={10} marginBottom={10} />
 
         {/* Price, Condition, and Gender */}
@@ -313,6 +313,7 @@ const styles = StyleSheet.create({
     color: "#666",
     marginTop: 10,
     marginBottom: 10,
+    overflowY: "scroll",
   },
   organizerInfo: {
     flexDirection: "row",
@@ -320,6 +321,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoText: {
+    color: "#666",
+    fontSize: 15,
+    textAlignVertical: "center",
+  },
+  categoryText: {
     color: "#666",
     fontSize: 15,
     textAlignVertical: "center",
@@ -373,14 +379,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center", // Ensures everything is vertically aligned
     marginTop: 10,
+    paddingBottom: 5,
+    justifyContent: "space-between",
   },
   brandText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "bold",
     color: "#333",
   },
   sizeText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "bold",
     color: "#333",
   },
