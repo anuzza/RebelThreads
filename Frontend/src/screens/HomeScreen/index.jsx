@@ -132,6 +132,7 @@ const HomeScreen = ({ navigation }) => {
           {isLayoutReady && (
             <ScrollView
               horizontal={true}
+              nestedScrollEnabled
               showsHorizontalScrollIndicator={false}
               style={styles.tagContainer}
               contentContainerStyle={{ alignItems: "center" }}
@@ -181,6 +182,7 @@ const HomeScreen = ({ navigation }) => {
                       {isTopDealsReady && (
                         <ScrollView
                           horizontal
+                          nestedScrollEnabled
                           showsHorizontalScrollIndicator={false}
                           contentContainerStyle={{ alignItems: "center" }}
                         >
