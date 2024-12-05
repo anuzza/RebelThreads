@@ -176,15 +176,13 @@ const HomeScreen = ({ navigation }) => {
               data={filteredClothes}
               ListHeaderComponent={
                 <View>
-                  <View
-                    style={styles.topDealsContainer}
-                    onLayout={() => setIsTopDealsReady(true)}
-                  >
-                    <Text style={styles.sectionTitle}>Top Deals</Text>
-                    {text === "" &&
-                      !selectedTag &&
-                      isTopDealsReady &&
-                      topDeals?.length > 0 && (
+                  {text === "" && !selectedTag && topDeals?.length > 0 && (
+                    <View
+                      style={styles.topDealsContainer}
+                      onLayout={() => setIsTopDealsReady(true)}
+                    >
+                      <Text style={styles.sectionTitle}>Top Deals</Text>
+                      {isTopDealsReady && (
                         <ScrollView
                           horizontal
                           showsHorizontalScrollIndicator={false}
@@ -203,7 +201,8 @@ const HomeScreen = ({ navigation }) => {
                           ))}
                         </ScrollView>
                       )}
-                  </View>
+                    </View>
+                  )}
 
                   {/* Title for the list of other items */}
                   <Text style={styles.listingTitle}>
