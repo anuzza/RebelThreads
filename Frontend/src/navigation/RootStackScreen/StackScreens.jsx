@@ -108,6 +108,13 @@ export const MyListingStackScreen = ({ navigation }) => (
     />
     <MyListingStack.Screen name="Details" component={DetailsScreen} />
     <MyListingStack.Screen name="Profile" component={ProfileScreen} />
+    <MyListingStack.Screen
+      name="EditProfile"
+      component={EditProfileScreen}
+      options={{
+        title: "Edit Profile",
+      }}
+    />
   </MyListingStack.Navigator>
 );
 
