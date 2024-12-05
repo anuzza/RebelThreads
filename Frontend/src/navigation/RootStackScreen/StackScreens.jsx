@@ -120,7 +120,7 @@ export const MyListingStackScreen = ({ navigation }) => (
 
 const AddListingStack = createNativeStackNavigator();
 export const AddListingStackScreen = ({ navigation, route }) => {
-  const { clothState } = route?.params?.params;
+  const clothState = route?.params?.params?.clothState || null;
   return (
     <AddListingStack.Navigator
       screenOptions={{
@@ -213,7 +213,7 @@ export const FeedStackScreen = ({ navigation, route }) => (
 
 const AddRequestStack = createNativeStackNavigator();
 export const AddRequestStackScreen = ({ navigation, route }) => {
-  const { clothState } = route?.params?.params;
+  const clothState = route?.params?.params?.clothState || null;
 
   return (
     <AddRequestStack.Navigator
