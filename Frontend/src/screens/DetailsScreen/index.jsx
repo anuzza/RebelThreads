@@ -91,6 +91,7 @@ const DetailsScreen = ({ navigation, route }) => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled
           onScroll={(event) => {
             const contentOffsetX = event.nativeEvent.contentOffset.x;
             const currentIndex = Math.round(contentOffsetX / width);
