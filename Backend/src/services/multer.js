@@ -2,6 +2,7 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const s3 = require("./aws");
 
+//upload images to s3 bucket
 const fileUpload = () => {
   let storage;
 

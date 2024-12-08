@@ -3,8 +3,10 @@ const fileUpload = require("../services/multer");
 const upload = fileUpload();
 const deleteFileFromS3 = require("../services/deleteFile");
 
+// Sign up a new user and handle validation or duplicate account scenarios
 const signupUser = async (req, res) => {
   try {
+    // Check if the email belongs to a deleted account
     const existingDeletedUser = await User.findOne({
       email: req.body.email,
       deleted: true,
@@ -15,11 +17,14 @@ const signupUser = async (req, res) => {
           "This email belongs to a deleted account. Please contact administrator if you need assistance.",
       });
     }
+
+    // Create a new user and generate an authentication token
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
+    // Handle validation or duplicate email errors
     let validationErrors = {};
     if (error.errors || error.code === 11000) {
       if (error.errors) {
@@ -56,6 +61,7 @@ const signupUser = async (req, res) => {
   }
 };
 
+// Log in an existing user and generate an authentication token
 const loginUser = async (req, res) => {
   try {
     const user = await User.findByCredentials(
@@ -63,6 +69,7 @@ const loginUser = async (req, res) => {
       req.body.password
     );
 
+    // Prevent login for deleted accounts
     if (user.deleted) {
       return res
         .status(403)
@@ -70,7 +77,6 @@ const loginUser = async (req, res) => {
     }
 
     const token = await user.generateAuthToken();
-
     res.send({ user, token });
   } catch (error) {
     if (error.message?.includes("timed out")) {
@@ -86,6 +92,7 @@ const loginUser = async (req, res) => {
   }
 };
 
+// Log out the current user by removing the current token
 const logoutUser = async (req, res) => {
   try {
     await User.updateOne(
@@ -98,15 +105,17 @@ const logoutUser = async (req, res) => {
   }
 };
 
+// Fetch logged-in user's information
 const getLoggedInUserInfo = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user; // The user is attached to the request by middleware
     res.send(user);
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
 };
 
+// Fetch a specific user's information along with their active posts
 const getUserInfo = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
@@ -121,6 +130,7 @@ const getUserInfo = async (req, res) => {
         select: "-reports",
       });
 
+    // Separate selling and sold items for profile display
     const sellingClothes = user.clothForSale.filter(
       ({ active }) => active === true
     );
@@ -141,6 +151,7 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+// Update user information with validation for allowed fields
 const updateUser = async (req, res) => {
   const updates = Object.keys(req.body);
   let validationErrors = {};
@@ -161,6 +172,7 @@ const updateUser = async (req, res) => {
 
     res.send(req.user);
   } catch (error) {
+    // Handle validation errors for specific fields
     if (error.errors || error.code === 11000) {
       if (error.errors) {
         if (error.errors.name) {
@@ -181,9 +193,10 @@ const updateUser = async (req, res) => {
   }
 };
 
+// Add a new bookmark for a clothing item
 const bookmarkACloth = async (req, res) => {
   try {
-    req.user.bookmarks.unshift(req.params.id);
+    req.user.bookmarks.unshift(req.params.id); // Add the item ID to the bookmarks list
     await req.user.save();
     res.send();
   } catch (error) {
@@ -191,6 +204,7 @@ const bookmarkACloth = async (req, res) => {
   }
 };
 
+// Remove a bookmark
 const deleteBookmark = async (req, res) => {
   try {
     req.user.bookmarks = req.user.bookmarks.filter(
@@ -203,6 +217,7 @@ const deleteBookmark = async (req, res) => {
   }
 };
 
+// Fetch all bookmarked items for the user
 const getUserBookmarks = async (req, res) => {
   try {
     const { bookmarks } = await User.findById(req.user._id).populate({
@@ -215,6 +230,7 @@ const getUserBookmarks = async (req, res) => {
   }
 };
 
+// Fetch all requested clothes for the user
 const getUserRequestedClothes = async (req, res) => {
   try {
     const { clothesRequested } = await User.findById(req.user._id).populate({
@@ -228,7 +244,7 @@ const getUserRequestedClothes = async (req, res) => {
   }
 };
 
-// New function to get clothing items sold by the user
+// Fetch all clothing items for sale by the user
 const getUserClothSold = async (req, res) => {
   try {
     const { clothForSale } = await User.findById(req.user._id).populate({
@@ -242,7 +258,7 @@ const getUserClothSold = async (req, res) => {
   }
 };
 
-// Assuming you have logic for uploading images to S3 for avatar changes
+// Change user's avatar image
 const singleUpload = upload.single("avatar");
 const changeAvatar = async (req, res) => {
   try {
@@ -257,6 +273,7 @@ const changeAvatar = async (req, res) => {
         let update = { avatar: req.file.location };
         let prevAvatar = req.user.avatar;
 
+        // Update avatar and delete previous one from S3 if it exists
         await User.findByIdAndUpdate(req.user._id, update);
         if (prevAvatar && prevAvatar !== "") {
           deleteFileFromS3(prevAvatar);
@@ -275,14 +292,15 @@ const changeAvatar = async (req, res) => {
   }
 };
 
+// Delete user's avatar
 const deleteAvatar = async (req, res) => {
   try {
     const prevAvatar = req.user.avatar;
     if (prevAvatar && prevAvatar !== "") {
-      deleteFileFromS3(prevAvatar);
+      deleteFileFromS3(prevAvatar); // Delete avatar from S3
     }
 
-    req.user.avatar = "";
+    req.user.avatar = ""; // Reset avatar field
     await req.user.save();
     res.send();
   } catch (err) {
@@ -290,10 +308,13 @@ const deleteAvatar = async (req, res) => {
   }
 };
 
+// Report another user
 const reportAUser = async (req, res) => {
   try {
     const reporter = req.user;
     const reportedUser = await User.findById(req.params.id);
+
+    // Prevent duplicate reporting of the same user
     if (
       reportedUser.reports.length > 0 &&
       reportedUser.reports.filter(
@@ -321,7 +342,6 @@ module.exports = {
   loginUser,
   getLoggedInUserInfo,
   logoutUser,
-
   getUserInfo,
   updateUser,
   bookmarkACloth,

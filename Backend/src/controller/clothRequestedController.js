@@ -1,16 +1,16 @@
 const ClothesRequested = require("../models/ClothesRequested");
 
-// Request a clothing item
+// Handle clothing requests (create or update a request)
 const requestClothing = async (req, res) => {
   try {
     const { title, brand, size, gender, description } = req.body;
     let clothesRequested;
 
     if (req.body.id) {
-      // Update existing clothing request
+      // Update an existing clothing request
       clothesRequested = await ClothesRequested.findOne({
         _id: req.body.id,
-        user: req.user,
+        user: req.user, // Ensure the request belongs to the current user
       });
 
       if (!clothesRequested) {
@@ -19,6 +19,7 @@ const requestClothing = async (req, res) => {
         });
       }
 
+      // Update the request's details
       clothesRequested.clothing = {
         title,
         brand,
@@ -27,7 +28,7 @@ const requestClothing = async (req, res) => {
         description,
       };
     } else {
-      // Check if the request already exists
+      // Check for duplicate active requests by the user
       clothesRequested = await ClothesRequested.findOne({
         "clothing.title": title,
         active: true,
@@ -40,7 +41,7 @@ const requestClothing = async (req, res) => {
         });
       }
 
-      // Create a new clothing request
+      // Create a new request if no duplicate is found
       clothesRequested = new ClothesRequested({
         clothing: {
           title,
@@ -53,7 +54,7 @@ const requestClothing = async (req, res) => {
       });
     }
 
-    await clothesRequested.save();
+    await clothesRequested.save(); // Save the request to the database
     res.send(clothesRequested);
   } catch (error) {
     res.status(500).send({
@@ -62,19 +63,19 @@ const requestClothing = async (req, res) => {
   }
 };
 
-// Get all clothing requests
+// Retrieve all active clothing requests excluding the current user's
 const getAllRequestedClothes = async (req, res) => {
   try {
     const clothesRequested = await ClothesRequested.find({
       active: true,
       deleted: false,
-      user: { $ne: req.user._id }, // Exclude requests made by the current user
+      user: { $ne: req.user._id }, // Exclude requests made by the logged-in user
     })
       .populate({
         path: "user",
-        select: "name avatar email phone", // Modify according to your User model
+        select: "name avatar email phone", // Fetch limited user details for each request
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 }); // Sort by most recent requests
 
     res.send(clothesRequested);
   } catch (error) {
@@ -84,14 +85,14 @@ const getAllRequestedClothes = async (req, res) => {
   }
 };
 
-// Mark clothing request as found
+// Mark a clothing request as found (set active to false)
 const markRequestedClothingAsFound = async (req, res) => {
   try {
     const clothesRequested = await ClothesRequested.findOne({
       _id: req.params.id,
       active: true,
       deleted: false,
-      user: req.user,
+      user: req.user, // Ensure the request belongs to the current user
     });
 
     if (!clothesRequested) {
@@ -100,7 +101,7 @@ const markRequestedClothingAsFound = async (req, res) => {
       });
     }
 
-    clothesRequested.active = false; // Mark as found
+    clothesRequested.active = false; // Mark the request as found
     await clothesRequested.save();
     res.send();
   } catch (error) {
@@ -110,12 +111,12 @@ const markRequestedClothingAsFound = async (req, res) => {
   }
 };
 
-// Delete a clothing request
+// Soft delete a clothing request by marking it inactive and deleted
 const deleteRequestedClothing = async (req, res) => {
   try {
     const clothesRequested = await ClothesRequested.findOne({
       _id: req.params.id,
-      user: req.user,
+      user: req.user, // Ensure the request belongs to the current user
     });
 
     if (!clothesRequested) {
@@ -135,23 +136,25 @@ const deleteRequestedClothing = async (req, res) => {
   }
 };
 
-// Report a clothing request
+// Report a clothing request (adds a report by the current user)
 const reportClothingRequest = async (req, res) => {
   try {
-    const reporter = req.user;
+    const reporter = req.user; // Current user reporting the request
     const reportedClothing = await ClothesRequested.findById(req.params.id);
 
+    // Check if the user has already reported this request
     if (
       reportedClothing.reports.length > 0 &&
       reportedClothing.reports.filter(
         (report) => report.reporter.toString() === reporter._id.toString()
-      )
+      ).length > 0
     ) {
       return res.status(404).send({
         error: "You have already reported this clothing request",
       });
     }
 
+    // Add a new report to the request
     reportedClothing.reports.unshift({
       reporter,
     });

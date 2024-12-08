@@ -1,5 +1,6 @@
 import axios from "axios";
 
+//use vercel url in prod and ip address during development
 const url =
   process.env.NODE_ENV === "production"
     ? "https://rebel-threads.vercel.app"

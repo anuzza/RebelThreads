@@ -1,6 +1,7 @@
 const s3 = require("./aws");
 const AmazonS3URI = require("amazon-s3-uri");
 
+//delete image from s3 if user removes it
 const deleteFileFromS3 = (url) => {
   const { key } = AmazonS3URI(url);
 

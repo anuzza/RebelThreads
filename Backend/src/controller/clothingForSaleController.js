@@ -1,15 +1,16 @@
 const ClothingForSale = require("../models/ClothingForSale");
-const fileUpload = require("../services/multer");
+const fileUpload = require("../services/multer"); // Service to handle file uploads
 const upload = fileUpload();
-const deleteFileFromS3 = require("../services/deleteFile");
+const deleteFileFromS3 = require("../services/deleteFile"); // Service to delete files from AWS S3
 
-const multiUpload = upload.array("files", 4); // Allow up to 4 images
+const multiUpload = upload.array("files", 4); // Middleware to allow uploading up to 4 files
 
 // Upload a new clothing item
 const uploadClothingItem = async (req, res) => {
   try {
     multiUpload(req, res, async function (err) {
       if (err) {
+        // Handle file upload errors
         if (err.message && err.message === "File too large") {
           err.errMessage = "File size cannot be larger than 5 MB";
         }
@@ -17,6 +18,7 @@ const uploadClothingItem = async (req, res) => {
       }
 
       if (req.files.length > 0) {
+        // Destructure required fields from the request body
         const {
           title,
           description,
@@ -28,6 +30,7 @@ const uploadClothingItem = async (req, res) => {
           gender,
         } = req.body;
 
+        // Create a new clothing item document
         const clothingItem = new ClothingForSale({
           clothing: {
             title,
@@ -38,16 +41,16 @@ const uploadClothingItem = async (req, res) => {
             category,
             gender,
           },
-          seller: req.user._id,
-          price: parseFloat(price),
+          seller: req.user._id, // Associate with the logged-in user
+          price: parseFloat(price), // Ensure price is a number
         });
 
-        // Store uploaded image URLs in the database
+        // Add uploaded image URLs to the clothing item
         for (let i = 0; i < req.files.length; i++) {
           clothingItem.pictures.push(req.files[i].location);
         }
 
-        await clothingItem.save();
+        await clothingItem.save(); // Save the item to the database
         res.status(201).send(clothingItem);
       } else {
         return res.status(404).send({
@@ -67,6 +70,7 @@ const updateClothingItem = async (req, res) => {
   try {
     multiUpload(req, res, async function (err) {
       if (err) {
+        // Handle file upload errors
         if (err.message && err.message === "File too large") {
           err.errMessage = "File size cannot be larger than 2 MB";
         }
@@ -74,6 +78,7 @@ const updateClothingItem = async (req, res) => {
       }
 
       if (req.files) {
+        // Destructure required fields from the request body
         const {
           title,
           description,
@@ -87,6 +92,7 @@ const updateClothingItem = async (req, res) => {
           deletedPictures,
         } = req.body;
 
+        // Find the clothing item by ID and seller
         const clothingItem = await ClothingForSale.findOne({
           _id: req.params.id,
           seller: req.user,
@@ -98,6 +104,7 @@ const updateClothingItem = async (req, res) => {
           });
         }
 
+        // Update clothing details
         clothingItem.clothing = {
           title,
           description,
@@ -109,7 +116,7 @@ const updateClothingItem = async (req, res) => {
         };
         clothingItem.price = parseFloat(price);
 
-        // Update pictures
+        // Update existing pictures
         clothingItem.pictures = JSON.parse(pictures);
 
         // Add new uploaded images
@@ -117,13 +124,13 @@ const updateClothingItem = async (req, res) => {
           clothingItem.pictures.push(req.files[i].location);
         }
 
-        // Handle deleted images
+        // Remove deleted images from S3
         let deletedImages = JSON.parse(deletedPictures);
         for (let i = 0; i < deletedImages.length; i++) {
           deleteFileFromS3(deletedImages[i]);
         }
 
-        await clothingItem.save();
+        await clothingItem.save(); // Save updates to the database
         res.send(clothingItem);
       } else {
         return res.status(404).send({
@@ -154,7 +161,7 @@ const markItemAsSold = async (req, res) => {
       });
     }
 
-    clothingItem.active = false; // Mark as sold
+    clothingItem.active = false; // Mark the item as sold
     await clothingItem.save();
     res.send({ message: "Item marked as sold successfully." });
   } catch (error) {
@@ -164,14 +171,14 @@ const markItemAsSold = async (req, res) => {
   }
 };
 
-// Get all clothing items for sale
+// Get all clothing items for sale (excluding items posted by the current user)
 const getAllItemsForSale = async (req, res) => {
   try {
     const clothingItems = await ClothingForSale.find({
       active: true,
       deleted: false,
-      seller: { $ne: req.user._id }, // Exclude items sold by the current user
-    }).sort({ createdAt: -1 }); // Sort by creation date
+      seller: { $ne: req.user._id }, // Exclude items from the current user
+    }).sort({ createdAt: -1 }); // Sort by most recent first
 
     res.send(clothingItems);
   } catch (error) {
@@ -181,7 +188,7 @@ const getAllItemsForSale = async (req, res) => {
   }
 };
 
-// Get a single clothing item for sale
+// Get details of a single clothing item for sale
 const getOneItemForSale = async (req, res) => {
   try {
     const clothingItem = await ClothingForSale.findOne({
@@ -190,7 +197,7 @@ const getOneItemForSale = async (req, res) => {
       deleted: false,
     }).populate({
       path: "seller",
-      select: "name email phone isAdmin",
+      select: "name email phone isAdmin", // Include seller's basic details
     });
 
     if (!clothingItem) {
@@ -206,7 +213,7 @@ const getOneItemForSale = async (req, res) => {
   }
 };
 
-// Delete a clothing item
+// Delete a clothing item and its associated images
 const deleteClothingItem = async (req, res) => {
   try {
     const clothingItem = await ClothingForSale.findOne({
@@ -221,13 +228,13 @@ const deleteClothingItem = async (req, res) => {
       });
     }
 
-    // Delete associated images from S3
+    // Delete all images from S3
     for (let i = 0; i < clothingItem.pictures.length; i++) {
       deleteFileFromS3(clothingItem.pictures[i]);
     }
 
-    clothingItem.active = false; // Mark as inactive
-    clothingItem.deleted = true; // Mark as deleted
+    clothingItem.active = false; // Mark the item as inactive
+    clothingItem.deleted = true; // Mark the item as deleted
     await clothingItem.save();
     res.send({ message: "Clothing item deleted successfully." });
   } catch (error) {
@@ -240,8 +247,10 @@ const deleteClothingItem = async (req, res) => {
 // Report a clothing item
 const reportClothingItem = async (req, res) => {
   try {
-    const reporter = req.user;
+    const reporter = req.user; // Current user reporting the item
     const reportedClothing = await ClothingForSale.findById(req.params.id);
+
+    // Check if the user has already reported the item
     if (
       reportedClothing.reports.length > 0 &&
       reportedClothing.reports.filter(
@@ -253,6 +262,7 @@ const reportClothingItem = async (req, res) => {
       });
     }
 
+    // Add the report to the item's reports array
     reportedClothing.reports.unshift({
       reporter,
     });
