@@ -12,7 +12,6 @@ RebelThreads is a cross-platform mobile application designed for University of M
 <img src="https://github.com/user-attachments/assets/ad6cb9b2-de1e-4af8-8569-f86e350d6949" alt="Home Screen" width="200" height="400">
 <img src="https://github.com/user-attachments/assets/140dcf12-f74b-4756-aaa4-5e10492ef505" alt="Home Screen" width="200" height="400">
 <img src="https://github.com/user-attachments/assets/487f3140-3a95-40c2-aaac-056235b03359" alt="Home Screen" width="200" height="400">
-<img src="https://github.com/user-attachments/assets/a3353cd8-efa2-457d-88c6-5ba05f5fe7ac" alt="Home Screen" width="200" height="400">
 
 ## Features
 
